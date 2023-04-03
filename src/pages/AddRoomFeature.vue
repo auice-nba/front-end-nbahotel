@@ -20,11 +20,9 @@ export default {
   },
   data() {
     return {
-      model: [
-        {
-          room_number: "A101",
-        },
-      ],
+      model: {
+        id: "",
+      },
     };
   },
 };

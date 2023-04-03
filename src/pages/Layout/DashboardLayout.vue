@@ -128,7 +128,7 @@
         </template>
       </sidebar-link>
 
-      <sidebar-link to="/dashboard?enableRTL=true">
+      <!-- <sidebar-link to="/dashboard?enableRTL=true">
         <i class="tim-icons icon-world"></i>
 
         <template v-if="!isRTL">
@@ -138,7 +138,7 @@
         <template v-else>
           <p>دعم RTL</p>
         </template>
-      </sidebar-link>
+      </sidebar-link> -->
 
       <!-- <sidebar-link to="/upgradeToPro" class="active-pro">
         <i class="tim-icons icon-spaceship"></i>

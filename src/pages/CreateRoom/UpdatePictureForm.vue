@@ -6,7 +6,7 @@
       <div v-if="preview.length > 0">
         <div class="row">
 
-          <div class="col-4 mb-3 px-3" v-for="(srcUrl, index) in preview" :key="index">
+          <div class="col-6 col-sm-6 col-md-4 col-lg-3 mb-3 px-3" v-for="(srcUrl, index) in preview" :key="index">
             <div class="img-preview">
               <img :src="srcUrl" width="100%" />
               <div :id="'img-preview'+index" class="delete-preview">
@@ -39,7 +39,7 @@
 
               <base-input>
               <input type="file" accept="image/png, image/jpeg" multiple @change="selectImage" />
-              <div class="btn btn-primary w-100">เพิ่มรูปภาพ</div>
+              <div class="btn bg-secondary w-100">เพิ่มรูปภาพ</div>
             </base-input>
           </div>
           <div class="d-inline">
@@ -49,7 +49,7 @@
           </div>
         </div>
           <base-button class="mt-3 mr-3" @click.native="back">ย้อนกลับ</base-button>
-          <base-button v-if="image.length>0" class="mt-3" type="success" @click.native="$router.push('/addroomfeature')">อัพโหลดรูป</base-button>
+          <base-button v-if="image.length>0" class="mt-3" type="primary" @click.native="$router.push('/addroomfeature')">อัพโหลดรูป</base-button>
       </form>
     </div>
   </Card>
@@ -139,16 +139,21 @@ input:hover{
 .delete-preview{
   position:absolute;
   display:none;
-  color:rgb(138, 138, 138);
+  color:rgb(238, 238, 238);
   top:0.5rem;
   right:1rem;
 }
 
 .img-preview:hover{
   .delete-preview{
-    display:block
-  }
-}
 
+    display:block;
+    z-index: 99;
+  }
+  .delete-preview:hover{
+    cursor: pointer;
+  }
+
+}
 
 </style>
