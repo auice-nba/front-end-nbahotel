@@ -35,7 +35,11 @@
                   <tbody>
                     <tr class="item-row" v-for="(room, index) in rooms" :key="index">
                       <caption>{{ room }}</caption>
-                      <td class="item-cell" :id="`item-` + index" v-for="(cell, index) in body_cell" :key="index">{{ cell }}
+                      <td class="item-cell" :id="`item-${room}-${index+1}`"  v-for="(cell, index) in body_cell" :key="index">
+                        <div class="booked-cell" v-if="isBooked(cell,room)">
+                        
+                          {{ isBooked(cell,room) }}
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -57,12 +61,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/th";
 
 export default {
-  methods: {
-    dateformat(day) {
-      const result = dayjs(day).format("DD/MM");
-      return result;
-    },
-  },
+  
   mounted() {
     //set header cell array
     var months_th = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",];
@@ -83,19 +82,25 @@ export default {
     // console.log("rooms", this.rooms);
     //set body cell array
     for (var i = 0; i < this.last_day.getDate(); i++) {
-      // console.log(item);
-      const dayondate = new Date(this.first_day.getFullYear(), this.first_day.getMonth(), i + 1);
-      console.log(dayondate);
-      const currentDay = new Date(this.first_day.getFullYear(), this.first_day.getMonth(), i + 1).getTime();
-      console.log('start day',new Date(this.event[i].start_day));
-      console.log('end day',new Date(this.event[i].end_day));
-         
-      const booking = this.event.filter(event => new Date(event.start_day).getTime()>=currentDay && new Date(event.end_day).getTime()>currentDay);
-
-      console.log(booking,'day',i+1)
-        
+      const currentDay = new Date(this.first_day.getFullYear(),this.first_day.getMonth(),i+1);
+     this.body_cell.push(currentDay);
   
       }
+  },
+  methods: {
+    dateformat(day) {
+      const result = dayjs(day).format("DD/MM");
+      return result;
+    },
+    isBooked(day,room){
+     const booked = this.event.find(event => event.room===room && new Date(event.start_day)<=day && new Date(event.end_day)>=day)
+      if(booked){
+        return booked.name;
+      }
+      else {
+        return "";
+      }
+    }
   },
   data() {
     return {
@@ -106,24 +111,49 @@ export default {
       days: [],
       rooms: [],
       body_cell: [],
+      booked:"item-cell",
       event: [
         {
           id: 1,
           room: "A101",
+          name:"auice",
           start_day: "04/01/2023",
           end_day: "04/03/2023",
         },
         {
           id: 2,
           room: "A102",
+          name:"pay",
           start_day: "04/5/2023",
           end_day: "04/06/2023",
         },
         {
           id: 3,
           room: "A103",
+          name:"pay",
           start_day: "04/10/2023",
           end_day: "04/12/2023",
+        },
+        {
+          id: 4,
+          room: "A104",
+          name:"ae",
+          start_day: "04/02/2023",
+          end_day: "04/05/2023",
+        },
+        {
+          id: 5,
+          room: "A104",
+          name:"ae",
+          start_day: "04/07/2023",
+          end_day: "04/09/2023",
+        },
+        {
+          id: 6,
+          room: "A104",
+          name:"auice",
+          start_day: "04/10/2023",
+          end_day: "04/30/2023",
         },
       ],
     };
@@ -178,6 +208,7 @@ export default {
 .header-cell {
   background-color: #2bffc6;
   padding: 0.5rem 1rem 0.5rem 1rem;
+  border-right:solid 1px #f4f5f7;
 }
 
 .table-scheduler {
@@ -187,7 +218,6 @@ export default {
 
 table {
   width: 100%;
-  font-family: "Fraunces", serif;
   white-space: nowrap;
   border: none;
   border-collapse: separate;
@@ -195,13 +225,12 @@ table {
   table-layout: fixed;
 }
 
-table td,
-
 table th {
   padding: 0.5rem 1rem;
 }
 
 table thead th {
+  font-weight: 400;
   padding: 3px;
   position: sticky;
   top: 0;
@@ -210,9 +239,26 @@ table thead th {
 }
 
 table td {
+  padding:0;
   text-align: center;
   background-color: #ebebeb;
   border-bottom: solid 1px #f4f5f7;
+  border-right: solid 1px #f4f5f7;
+}
+
+.item-cell{
+  text-align: center;
+  background-color: #ebebeb;
+  border-bottom: solid 1px #f4f5f7;
+  border-right: solid 1px #f4f5f7;
+}
+
+.booked-cell{
+  color:white;
+  text-align: center;
+  background-color: #09b8e4;
+  width:100%;
+  height: 100%;
 }
 
 .item-1cell {
@@ -241,11 +287,12 @@ table tbody th {
 }
 
 caption {
-  text-align: left;
-  background-color: rgb(228, 118, 255);
+  text-align: center;
+  background-color: rgb(214, 255, 236);
   color: black;
   width: 10rem;
   padding: 0.5rem 1rem 0.5rem 1rem;
+  border-bottom: solid 1px #f4f5f7;
   position: sticky;
   left: 0;
   z-index: 2;

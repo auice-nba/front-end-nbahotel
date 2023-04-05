@@ -49,7 +49,7 @@
           </div>
         </div>
           <base-button class="mt-3 mr-3" @click.native="back">ย้อนกลับ</base-button>
-          <base-button v-if="image.length>0" class="mt-3" type="primary" @click.native="$router.push('/addroomfeature')">อัพโหลดรูป</base-button>
+          <base-button v-if="image.length>0" class="mt-3" type="primary" @click.native="uploadPicture">อัพโหลดรูป</base-button>
       </form>
     </div>
   </Card>
@@ -57,7 +57,15 @@
 <!-- eslint-disable prettier/prettier -->
 <script>
 import { Card, BaseInput } from "@/components/index";
+import { Room } from "@/functions/roomservice";
+
 export default {
+  setup(){
+    const room = new Room();
+    return {
+      room
+    }
+  },
   components: {
     Card,
     BaseInput,
@@ -69,6 +77,9 @@ export default {
         return {};
       },
     },
+  },
+  mounted(){
+   this.id = this.$route.params.id;
   },
   methods: {
     selectImage(e) {
@@ -97,6 +108,11 @@ export default {
     },
     back(){
       this.$router.push(`/addroomfeature/${this.id}`)
+    },
+    uploadPicture(){
+      this.room.uploadRoomPicture(this.id,this.preview).then(result=>{
+        console.log(result);
+      })
     }
   },
   data() {

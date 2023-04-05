@@ -37,12 +37,12 @@ const routes = [
         component: CreateRoom,
       },
       {
-        path: "addroomfeature",
+        path: "addroomfeature/:id",
         name: "AddRoomFeature",
         component: AddRoomFeature,
       },
       {
-        path:"updateroompicture",
+        path: "updateroompicture/:id",
         name: "UpdateRoomPicture",
         component: UpdateRoomPicture,
       },
