@@ -1,7 +1,10 @@
 /* eslint-disable prettier/prettier */
 export class Room {
+
   context;
+  // baseUrl = "https://nba-backend-6jk5.onrender.com/";
   baseUrl = "http://localhost:3000/";
+
   constructor(context) {
     this.data = context;
   }
@@ -20,6 +23,21 @@ export class Room {
       .catch((err) => room = err);
 
       return room;
+  }
+  //get room by id;
+  async getRoomById(id){
+    let room;
+    const initdata = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credential: true,
+    }
+    await fetch(this.baseUrl + "room/"+id, initdata)
+    .then((response) => room = response.json())
+    .then((result) => room = result)
+    .then((err)=>room=err);
+
+    return room;
   }
 
   //update room by id
@@ -203,29 +221,23 @@ export class Room {
   }
 
   //upload room picture
-  async uploadRoomPicture(id,data){
-    console.log(data);
+  async uploadRoomPicture(id,formData){
+
     let room;
-    const formdata = new FormData();
-    data.forEach(el=>{
-
-      formdata.append("imgCollection",el);
-
-    })
-    
     const initdata ={
       method:"POST",
-      credential:true,
-      body:formdata
+      headers: {
+      },
+      credential:"include",
+      body:formData,
+      redirect:'follow'
     }
 
-    await fetch(`${this.baseUrl}room/${id}/picture`,initdata)
+   await fetch(`${this.baseUrl}room/${id}/picture`,initdata)
     .then((response)=>response.json())
     .then((result)=>room=result)
     .catch((err)=>room=err);
 
     return room;
   }
-
-
 }

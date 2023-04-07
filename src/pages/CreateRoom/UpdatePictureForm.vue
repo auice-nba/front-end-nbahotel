@@ -82,19 +82,63 @@ export default {
    this.id = this.$route.params.id;
   },
   methods: {
-    selectImage(e) {
-      let input = e.target;
+    selectImage(event) {
+      let input = event.target;
       let count = input.files.length;
       let index = 0;
 
+      this.original_image=event.target.files;
+
       if (input.files) {
         while (count--) {
+          
+          console.log('index',index);
+          const imageType =input.files[index].type;
           var reader = new FileReader();
           reader.onload = (e) => {
-            this.preview.push(e.target.result);
+          //  this.preview.push(e.target.result);
+             //resize image
+          const image = new Image();
+          image.src = e.target.result;
+   
+          image.addEventListener('load',() =>{
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const maxDimension = 650;
+            let width = image.width;
+            let height = image.height;
+
+            if(width > height && width > maxDimension){
+              height *= maxDimension/width;
+              width = maxDimension;
+            }
+            else if (height > maxDimension){
+              width *= maxDimension/width;
+              height = maxDimension;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            ctx.drawImage(image,0,0,width,height);
+            const resizeImage = canvas.toDataURL(e.target.result.type);
+
+            this.preview.push(resizeImage);
+            const trailing = imageType.toString().replace("image/","")
+        
+            console.log(trailing);
+            const newName = (Math.random() + 1).toString(36).substring(7)+"."+trailing;
+            const newFile = new File([
+              new Blob([resizeImage],{type:imageType})
+            ],newName,{type:imageType})
+            this.image.push(newFile);
+          })
+
+            
           };
-          this.image.push(input.files[index]);
           reader.readAsDataURL(input.files[index]);
+            
           index++;
         }
       }
@@ -109,17 +153,30 @@ export default {
     back(){
       this.$router.push(`/addroomfeature/${this.id}`)
     },
-    uploadPicture(){
-      this.room.uploadRoomPicture(this.id,this.preview).then(result=>{
+    async uploadPicture(){
+
+      const formData = new FormData();
+      console.log(this.image);
+      for(let i = 0 ; i < this.image.length ; i++){
+        formData.append('imgCollection',this.original_image[i],this.original_image[i].name);
+      }
+
+      await this.room.uploadRoomPicture(this.id,formData).then(result=>{
         console.log(result);
+        if(result.message === "สร้างรูปภาพเสร็จเเล้ว"){
+          this.$router.push(`/createroomcompleted/${this.id}`);
+        }
+
       })
     }
+
   },
   data() {
     return {
       id:'',
       url: [],
       preview: [],
+      original_image:[],
       image: [],
     };
   },
