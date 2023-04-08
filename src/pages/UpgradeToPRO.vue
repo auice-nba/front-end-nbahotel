@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="content">
     <div class="row justify-content-center">
@@ -84,5 +85,6 @@
     </div>
   </div>
 </template>
+<!-- eslint-disable prettier/prettier -->
 <script></script>
 <style></style>

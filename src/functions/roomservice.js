@@ -2,8 +2,8 @@
 export class Room {
 
   context;
-  baseUrl = "https://nba-backend-6jk5.onrender.com/";
-  // baseUrl = "http://localhost:3000/";
+  // baseUrl = "https://nba-backend-6jk5.onrender.com/";
+  baseUrl = "http://localhost:3000/";
 
   constructor(context) {
     this.data = context;
@@ -107,6 +107,21 @@ export class Room {
 
       return data;
   }
+
+  //get aircondition type
+  async getAirconditionType(){
+    let data;
+    const initdata = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credential: true,
+    };
+    await fetch(this.baseUrl + "room/aircondition",initdata)
+     .then((response) => response.json())
+     .then((result) => data=result)
+     .catch((err) => data=err);
+    return data;
+    }
 
   //get all room Bath Types
   async getBathType(){

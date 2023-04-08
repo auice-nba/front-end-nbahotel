@@ -52,12 +52,12 @@
           <div class="col-md-4">
             <base-input label="เครื่องปรับอากาศ">
             <select
-                v-model="data.aircondition_type"
+                v-model="data.aircondition"
                 class="form-control"
                 id="bath-type"
               >
-                <option value="642cf3a95c26c12382ad7122">ห้องแอร์</option>
-                <option value="642cf3bf5c26c12382ad7124">ห้องพัดลม</option>
+                <option v-for="(air,index) in airtype" :key="index" :value="air._id">{{ air.name }}</option>
+           
               </select>
           </base-input>
           </div>
@@ -119,10 +119,10 @@
           </div>
           <div class="col-2">
             <base-input label="หน่วย">
-              <select class="form-control" id="bed-type">
-                <option>ต่อวัน</option>
-                <option>ต่อคืน</option>
-                <option>ต่อชั่วโมง</option>
+              <select v-model="data.unit" class="form-control" id="bed-type">
+                <option value="ต่อวัน">ต่อวัน</option>
+                <option value="ต่อคืน">ต่อคืน</option>
+                <option value="ต่อชั่วโมง">ต่อชั่วโมง</option>
               </select>
             </base-input>
           </div>
@@ -136,7 +136,7 @@
           </div>
         </div>
         <div class="col-4">
-          <base-checkbox class="mb-3" v-model="data.children">
+          <base-checkbox class="mb-3" v-model="children_type">
             บริการฟรีสำหรับเด็กที่อายุต่ำกว่า 6 ปี ที่มากับผุ้ปกครอง
           </base-checkbox>
         </div>
@@ -175,12 +175,17 @@ export default {
     this.bedtype = result;
    })
 
+   await this.room.getAirconditionType().then((result)=>{
+    this.airtype = result;
+   })
+
    await this.room.getBathType().then((result)=>{
     this.bathtype = result;
    })
 
    await this.room.getViewType().then((result)=>{
     this.viewtype = result;
+    console.log(this.viewtype);
    })
 
    await this.room.getRoomStatusType().then((result)=>{
@@ -198,8 +203,14 @@ export default {
   },
   methods: {
     async createRoom() {
+      if(this.children_type){
+        this.data.children = "บริการฟรีสำหรับเด็กที่อายุต่ำกว่า 6 ปี ที่มากับผุ้ปกครอง"
+      }
+      else{
+        this.data.children = ""
+      }
       const result = await this.room.createRoom(this.data);
-      if (result) {
+      if (result._id != undefined) {
         const url = `/addroomfeature/${result._id}`;
         this.$router.push(url);
       }
@@ -215,9 +226,11 @@ export default {
       },
       roomtype:null,
       bedtype:null,
+      airtype:null,
       bathtype:null,
       smoketyp:null,
       viewtype:null,
+      children_type:false,
       roomstatustype:null,
       data: {
         room_number: "",
@@ -226,10 +239,12 @@ export default {
         imageURl: [],
         detail: "",
         price: 0,
+        unit:"",
         size: 0,
         bed_type: "",
+        aircondition:"",
         max_person: 0,
-        children: false,
+        children: "",
         view_type: "",
         bath_type: "",
         smoke_type: false,

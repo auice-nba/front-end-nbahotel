@@ -18,7 +18,6 @@
           </div>
         </div>
       </div>
-
       <form>
         <div class="row">
 
@@ -33,7 +32,7 @@
             </div>
           </div>
         </div>
-        <div v-if="preview.length > 0">
+        <div v-if="preview.length > 0 && !loading">
           <div class="flex">
             <div class="d-inline">
 
@@ -48,10 +47,18 @@
             </div>
           </div>
         </div>
-        <base-button class="mt-3 mr-3" @click.native="back">ย้อนกลับ</base-button>
-        <base-button v-if="image.length > 0" class="mt-3" type="primary"
+        <base-button v-if="!loading" class="mt-3 mr-3" @click.native="back">ย้อนกลับ</base-button>
+        <base-button v-if="image.length > 0 && !loading" class="mt-3" type="primary"
           @click.native="uploadPicture">อัพโหลดรูป</base-button>
       </form>
+      <div class="row">
+        <div class="col-12">
+          <div v-if="loading" class="loader mt-5">
+  <div class="loaderBar"></div>
+</div>
+        </div>
+      </div>
+     
     </div>
   </Card>
 </template>
@@ -138,10 +145,9 @@ export default {
               for (let i = 0; i < length; i++) {
                 uint8Array[i] = binaryData.charCodeAt(i);
               }
-              const newFile = new File([uint8Array], newName, { type: imageType })
+              const newFile = new File([uint8Array], newName, { type: imageType });
               this.image.push(newFile);
             })
-
 
           };
           reader.readAsDataURL(input.files[index]);
@@ -161,7 +167,7 @@ export default {
       this.$router.push(`/addroomfeature/${this.id}`)
     },
     async uploadPicture() {
-
+      this.loading = true;
       const formData = new FormData();
       console.log(this.image);
       for (let i = 0; i < this.image.length; i++) {
@@ -171,7 +177,8 @@ export default {
       await this.room.uploadRoomPicture(this.id, formData).then(result => {
         console.log(result);
         if (result.message === "สร้างรูปภาพเสร็จเเล้ว") {
-          this.$router.push(`/createroomcompleted/${this.id}`);
+          this.loading = false;
+          // this.$router.push(`/createroomcompleted/${this.id}`);
         }
 
       })
@@ -180,6 +187,7 @@ export default {
   },
   data() {
     return {
+      loading:false,
       id: '',
       url: [],
       preview: [],
@@ -189,6 +197,7 @@ export default {
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .contents {
   min-height: 90vh;
@@ -237,5 +246,60 @@ input:hover {
   .delete-preview:hover {
     cursor: pointer;
   }
+}
 
-}</style>
+.loader { 
+
+  width:500px;
+  background-color: rgb(173, 173, 173);
+  margin:0 auto;
+  border-radius:10px;
+  border:4px solid transparent;
+  position:relative;
+  padding:1px;
+}
+.loader:before {
+  // content:'';
+  border:1px solid #c00b0b; 
+  border-radius:10px;
+  position:absolute;
+  top:-4px; 
+  right:-4px; 
+  bottom:-4px; 
+  left:-4px;
+}
+.loader .loaderBar { 
+  position:absolute;
+  border-radius:10px;
+  top:0;
+  right:100%;
+  bottom:0;
+  left:0;
+  background:#ffffff; 
+  width:0;
+  animation:borealisBar 2s linear infinite;
+}
+
+@keyframes borealisBar {
+  0% {
+    left:0%;
+    right:100%;
+    width:0%;
+  }
+  10% {
+    left:0%;
+    right:75%;
+    width:25%;
+  }
+  90% {
+    right:0%;
+    left:75%;
+    width:25%;
+  }
+  100% {
+    left:100%;
+    right:0%;
+    width:0%;
+  }
+}
+</style>
