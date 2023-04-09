@@ -1,9 +1,8 @@
-<!-- eslint-disable vue/no-use-v-if-with-v-for -->
-
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div>
     <div class="manager-button">
-      <button>สร้างห้อง</button>
+      <base-button type="primary" @click="$router.push('/createroom')">สร้างห้อง</base-button>
     </div>
     <table class="table tablesorter" :class="tableClass">
       <thead :class="theadClasses">
@@ -21,10 +20,10 @@
               {{ item.room_number }}
             </td>
             <td>
-              {{ item.name_th }}
+              {{ item.type.name_th}}
             </td>
             <td>
-              {{ item.bed_type }}
+              {{ item.bed_type.name }}
             </td>
             <td>
               {{ item.price }}
@@ -36,10 +35,11 @@
               {{ item.children }}
             </td>
             <td>
-              {{ item.status }}
+              {{ item.status.name }}
             </td>
             <td>
-              <button>แก้ไข</button>
+              <base-button type="info" @click="$router.push(`/updateroom/${item._id}`)">แก้ไข</base-button>
+              <base-button class="ml-2" type="danger" @click="deleteRoom(item._id)">ลบห้อง</base-button>
             </td>
           </slot>
         </tr>
@@ -47,10 +47,18 @@
     </table>
   </div>
 </template>
-
+<!-- eslint-disable prettier/prettier -->
 <script>
+import {Room} from "@/functions/roomservice"
 export default {
+  setup(){
+    const room = new Room();
+    return {
+      room
+    }
+  },
   name: "room-table",
+
   props: {
     tableClass: {
       type: String,
@@ -73,6 +81,17 @@ export default {
       default: () => [],
     },
   },
+  methods:{
+    async deleteRoom(id){
+      console.log(id);
+      this.room.deleteRoom(id).then(result => {
+
+        console.log(result);
+        window.location.reload();
+
+      })
+    }
+  }
 };
 </script>
 

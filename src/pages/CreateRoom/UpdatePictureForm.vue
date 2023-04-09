@@ -178,7 +178,7 @@ export default {
         console.log(result);
         if (result.message === "สร้างรูปภาพเสร็จเเล้ว") {
           this.loading = false;
-          // this.$router.push(`/createroomcompleted/${this.id}`);
+           this.$router.push(`/createroomcompleted/${this.id}`);
         }
 
       })

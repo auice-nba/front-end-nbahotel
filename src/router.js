@@ -16,6 +16,7 @@ import HotelProfile from "@/pages/HotelProfile.vue";
 import AddRoomFeature from "@/pages/AddRoomFeature.vue";
 import UpdateRoomPicture from "@/pages/UpdateRoomPicture.vue";
 import CreateRoomCompleted from "@/pages/CreateRoomCompleted.vue";
+import UpdateRoom from "@/pages/UpdateRoom.vue";
 
 const routes = [
   {
@@ -52,6 +53,11 @@ const routes = [
         path:"createroomcompleted/:id",
         name: "CreateRoomCompleted",
         component: CreateRoomCompleted,
+      },
+      {
+        path:"updateroom/:id",
+        name: "UpdateRoom",
+        component: UpdateRoom,
       },
       {
         path: "dashboard",

@@ -60,16 +60,35 @@ export class Room {
 
       return room;
   }
+  //delete room by id
+  async deleteRoom(id){
+    let room;
+    console.log(id);
+    const initdata = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credential: true,
+    };
+    await fetch(`${this.baseUrl}room/${id}`, initdata)
+     .then((response) => response.json())
+     .then((result) => room = result)
+     .catch((err) => room = err);
+     return room;
+    }
 
   //get all room by hotel id <= wait create api
-  async getRoomByHotelId(id){
+  async getHotelRoom(id){
     let room;
       const initdata = {
         method:"GET",
         headers: { "Content-Type": "application/json" },
         credential: true,
       }
-    console.log(id,initdata);
+      await fetch(`${this.baseUrl}room/hotel/${id}`, initdata)
+      .then((response) => response.json())
+      .then((result) => room = result)
+      .catch((err) => room = err);
+
     return room;
   }
 
@@ -255,4 +274,46 @@ export class Room {
 
     return room;
   }
+
+  async ChangeImage(roomId,pictureId,formData){
+
+    let load;
+    let data;
+
+    await this.uploadRoomPicture(roomId,formData).then(result=>{
+      load = result;
+    });
+    if(load.message ==='สร้างรูปภาพเสร็จเเล้ว'){
+
+      //delete old picture
+     await this.deleteRoomPicture(roomId,pictureId).then(result=>{
+       
+        if(result){
+
+          data = result;
+        }
+
+      })
+    }
+    return {load,data};
+  }
+
+  //delete room picture
+  async deleteRoomPicture(roomId,pictureId){
+
+    let data;
+
+    const initdata = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credential: true,
+    };
+    await fetch(`${this.baseUrl}room/${roomId}/picture/${pictureId}`,initdata)
+    .then(response=>response.json())
+    .then(result => data = result)
+    .catch(err => data = err);
+
+    return data;
+  }
+
 }

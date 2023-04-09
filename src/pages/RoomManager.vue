@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="content">
     <div class="row">
@@ -8,8 +9,8 @@
           </template>
           <div class="table-responsive text-left">
             <room-table
-              :data="table1.data"
-              :columns="table1.columns"
+              :data="roomdata"
+              :columns="table.columns"
               thead-classes="text-primary"
             >
             </room-table>
@@ -19,9 +20,10 @@
     </div>
   </div>
 </template>
+<!-- eslint-disable prettier/prettier -->
 <script>
 import { Card } from "@/components/index";
-
+import {Room} from '@/functions/roomservice';
 import RoomTable from "@/components/RoomTable";
 
 const tableColumns = [
@@ -33,65 +35,32 @@ const tableColumns = [
   "เด็กพักฟรี",
   "สถาณะ",
 ];
-const tableData = [
-  {
-    id: "6423be8c7987777e422d4dc4",
-    room_number: "A101",
-    name_th: "สแตนดาร์ด",
-    price: 1500,
-    bed_type: "เตียงเดี่ยว",
-    max_person: 3,
-    children: true,
-    status: "พร้อมให้บริการ",
-  },
-  {
-    id: "6423be8c7987777e422d4dc5",
-    room_number: "A102",
-    name_th: "สแตนดาร์ด",
-    price: 1500,
-    bed_type: "เตียงเดี่ยว",
-    max_person: 3,
-    children: true,
-    status: "พร้อมให้บริการ",
-  },
-  {
-    id: "6423be8c7987777e422d4dc5",
-    room_number: "A103",
-    name_th: "สแตนดาร์ด",
-    price: 1500,
-    bed_type: "เตียงเดี่ยว",
-    max_person: 3,
-    children: true,
-    status: "พร้อมให้บริการ",
-  },
-  {
-    id: "6423be8c7987777e422d4dc5",
-    room_number: "A104",
-    name_th: "สแตนดาร์ด",
-    price: 1500,
-    bed_type: "เตียงเดี่ยว",
-    max_person: 3,
-    children: true,
-    status: "พร้อมให้บริการ",
-  },
-];
+
 
 export default {
+  setup(){
+    const room = new Room();
+    return {
+      room
+    }
+  },
   components: {
     Card,
     RoomTable,
   },
+  async mounted(){
+    await this.room.getHotelRoom(this.hotel_id).then(room=>{
+      this.roomdata = room;
+    })
+  },
   data() {
     return {
-      table1: {
+      hotel_id:'642b8a17992d04163858b7cf',
+      roomdata:null,
+      table: {
         title: "Simple Table",
         columns: [...tableColumns],
-        data: [...tableData],
-      },
-      table2: {
-        title: "Table on Plain Background",
-        columns: [...tableColumns],
-        data: [...tableData],
+        data: [],
       },
     };
   },
