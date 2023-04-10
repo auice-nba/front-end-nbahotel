@@ -175,6 +175,7 @@
                                         {{ r.status.name }}
                                     </div>
                                 </div>
+                                <base-button type="default" class="my-5" @click="$router.push(`/updateroom/${id}`)">แก้ไขรายละเอียด</base-button>
                                 <base-button type="primary" class="my-5" @click="$router.push('/roommanager')">กลับหน้าแรก</base-button>
                             </Card>
                         </div>

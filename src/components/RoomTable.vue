@@ -14,27 +14,28 @@
       </thead>
 
       <tbody :class="tbodyClasses">
-        <tr v-for="(item, index) in data" :key="index">
-          <slot :row="item">
-            <td>
-              {{ item.room_number }}
-            </td>
-            <td>
-              {{ item.type.name_th}}
-            </td>
-            <td>
-              {{ item.bed_type.name }}
-            </td>
-            <td>
-              {{ item.price }}
-            </td>
-            <td>
-              {{ item.max_person }}
-            </td>
-            <td>
-              {{ item.children }}
-            </td>
-            <td>
+        <tr v-for="(item, index) in data" :id="`room-${item.room_number}`" :key="index" v-on:click="rowClick(item._id)">
+          <template>
+            <slot :row="item">
+              <td>
+                {{ item.room_number }}
+              </td>
+              <td>
+                {{ item.type.name_th}}
+              </td>
+              <td>
+                {{ item.bed_type.name }}
+              </td>
+              <td>
+                {{ item.price }}
+              </td>
+              <td>
+                {{ item.max_person }}
+              </td>
+              <td>
+                {{ item.children }}
+              </td>
+              <td>
               {{ item.status.name }}
             </td>
             <td>
@@ -42,6 +43,7 @@
               <base-button class="ml-2" type="danger" @click="deleteRoom(item._id)">ลบห้อง</base-button>
             </td>
           </slot>
+        </template>
         </tr>
       </tbody>
     </table>
@@ -90,6 +92,9 @@ export default {
         window.location.reload();
 
       })
+    },
+    rowClick(id){
+      this.$router.push(`/updateroom/${id}`)
     }
   }
 };
@@ -102,5 +107,9 @@ button {
   color: white;
   border: none;
   border-radius: 0.2rem;
+}
+table > tbody > tr:hover {
+  cursor: pointer;
+  background-color: rgb(238, 238, 238);
 }
 </style>

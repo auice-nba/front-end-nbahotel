@@ -254,7 +254,30 @@ export class Room {
       return data;
   }
 
+  //get all room security
+  async getSecurityType(){
+    let data;
+
+    const initdata = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credential: true,
+    };
+    await fetch(this.baseUrl + "room/security",initdata)
+    .then((response) => response.json())
+    .then((result)=>data= result)
+    .catch(err=>data=err);
+
+    return data;
+  }
+
   //upload room picture
+  /**
+ * Represents a book.
+ * @constructor
+ * @param {string} id - The room id.
+ * @param {FormData} formData  - send {'imgCollection',FileList[index]}.
+ */
   async uploadRoomPicture(id,formData){
 
     let room;

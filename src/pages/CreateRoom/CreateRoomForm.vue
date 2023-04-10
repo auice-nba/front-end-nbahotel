@@ -83,8 +83,7 @@
           <div class="col-4">
             <base-input label="ระบบรักษาความปลอดภัย">
               <select v-model="data.security" class="form-control" id="bed-type">
-                <option value="true">กล้องวงจรปิด</option>
-                <option value="false">ไม่มีการใช้งานระบบกล้องวงจรปิด</option>
+                <option v-for="(security,index) in securitytype" :key="index" :value="security._id">{{ security.name }}</option>
               </select>
             </base-input>
           </div>
@@ -192,6 +191,10 @@ export default {
     this.roomstatustype = result;
    })
 
+   await this.room.getSecurityType().then((result)=>{
+    this.securitytype = result;
+   })
+
   },
   props: {
     model: {
@@ -230,6 +233,7 @@ export default {
       bathtype:null,
       smoketyp:null,
       viewtype:null,
+      securitytype:null,
       children_type:false,
       roomstatustype:null,
       data: {
@@ -253,7 +257,7 @@ export default {
         amenities: [],
         wifi: false,
         entertainment: [],
-        security: false,
+        security: "",
         promotions: [],
         status: "642cf50d5c26c12382ad7127",
       },

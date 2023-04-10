@@ -36,7 +36,6 @@ const tableColumns = [
   "สถาณะ",
 ];
 
-
 export default {
   setup(){
     const room = new Room();
