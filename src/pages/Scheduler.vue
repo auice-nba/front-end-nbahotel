@@ -34,11 +34,24 @@
                   </thead>
                   <tbody>
                     <tr class="item-row" v-for="(room, index) in rooms" :key="index">
-                      <caption>{{ room }}</caption>
-                      <td class="item-cell" :id="`item-${room}-${index+1}`"  v-for="(cell, index) in body_cell" :key="index">
-                        <div class="booked-cell" v-if="isBooked(cell,room)">
+                      <div class="caption">
                         
-                          {{ isBooked(cell,room) }}
+                          {{ room }}
+                        </div>
+                      <td class="item-cell" :id="`item-${room}-${index+1}`"  v-for="(cell, index) in body_cell" :key="index">
+                        <div class="booked-cell" v-if="isBooked(cell,room)" @click="popDetail(cell,room)">
+                        
+                          {{ isBooked(cell,room).name }}
+                          <div class="popBooking" id="booking-detail" v-if="cell===popBook.cell && room === popBook.room">
+                            <p>booking id </p>
+                            <p>{{ isBooked(cell,room).id }}</p>
+                            <p>ห้อง</p>
+                            <p>{{ isBooked(cell,room).room }}</p>
+                            <p>เข้าพัก</p>
+                            <p>{{ isBooked(cell,room).start_day }}</p>
+                            <p>ถึงวันที</p>
+                            <p>{{ isBooked(cell,room).end_day }}</p>
+                          </div>
                         </div>
                       </td>
                     </tr>
@@ -95,11 +108,14 @@ export default {
     isBooked(day,room){
      const booked = this.event.find(event => event.room===room && new Date(event.start_day)<=day && new Date(event.end_day)>=day)
       if(booked){
-        return booked.name;
+        return {id:booked.id,name:booked.name,room:booked.room,start_day:booked.start_day,end_day:booked.end_day};
       }
       else {
         return "";
       }
+    },
+    popDetail(day,room){
+      this.popBook={cell:day,room:room}
     }
   },
   data() {
@@ -112,6 +128,7 @@ export default {
       rooms: [],
       body_cell: [],
       booked:"item-cell",
+      popBook:'',//bookid
       event: [
         {
           id: 1,
@@ -182,7 +199,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .scheduler {
   min-height: 80vh;
   width: 100%;
@@ -256,7 +273,7 @@ table thead th {
   position: sticky;
   top: 0;
   z-index: 1;
-  width: 5rem;
+  width: 6rem;
 }
 
 table td {
@@ -275,6 +292,7 @@ table td {
 }
 
 .booked-cell{
+  cursor:pointer;
   color:white;
   text-align: center;
   background-color: #09b8e4;
@@ -307,14 +325,28 @@ table tbody th {
   z-index: 1;
 }
 
-caption {
+.caption {
   text-align: center;
   background-color: rgb(214, 255, 236);
   color: black;
   width: 10rem;
+  height:100%;
   padding: 0.5rem 1rem 0.5rem 1rem;
   border-bottom: solid 1px #f4f5f7;
   position: sticky;
   left: 0;
   z-index: 2;
-}</style>
+}
+
+.popBooking{
+  background-color:#cff5ff;
+
+  p{
+    color:black;
+    text-align:start;
+    font-size:smaller;
+    margin-left:0.5rem;
+  }
+}
+
+</style>

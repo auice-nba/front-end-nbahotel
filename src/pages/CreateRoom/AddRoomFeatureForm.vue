@@ -81,17 +81,31 @@ export default {
     this.furnitureType = fur.map(el=>({"id":el._id,"name":el.name,"description":el.description,"check":false}));
 
     const amen = await this.room.getAmenitiesType();
-    this.amenitiesType = amen.map(el=>({"id":el._id,"name":el.name,"description":el.description,"check":false}));
+    this.amenitiesType = amen.map(el=>({
+      "id":el._id,
+      "name":el.name,
+      "description":el.description,
+      "check":false}));
 
     const rs = await this.room.getRoomServiceType();
-    this.roomserviceType = rs.map(el=>({"id":el._id,"name":el.name,"description":el.description,"servicetime":el.service_time,"check":false}));
+    this.roomserviceType = rs.map(el=>({
+      "id":el._id,
+      "name":el.name,
+      "description":el.description,
+      "servicetime":el.service_time,
+      "check":false}));
 
     const en = await this.room.getEntertainmentType();
-    this.entertainmentType = en.map(el=>({"id":el._id,"name":el.name,"description":el.description,"servicetime":el.service_time,"check":false}))
+    this.entertainmentType = en.map(el=>({
+      "id":el._id,
+      "name":el.name,
+      "description":el.description,
+      "servicetime":el.service_time,
+      "check":false}));
 
   },
   methods:{
-    addRoomFeature(){
+   async addRoomFeature(){
       const fur = this.furnitureType.filter(el=>el.check===true);
       const amen = this.amenitiesType.filter(el=>el.check===true);
       const rs = this.roomserviceType.filter(el=>el.check===true);
@@ -104,7 +118,7 @@ export default {
         entertainment:ent.map(el=>el.id)
       }
       console.log(updateData);
-      this.room.updateRoom(this.roomid,updateData).then((result)=>{
+      await this.room.updateRoom(this.roomid,updateData).then((result)=>{
         if(result){
           this.$router.push(`/updateroompicture/${this.roomid}`);
         }

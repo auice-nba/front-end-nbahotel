@@ -87,14 +87,15 @@ export default {
     async deleteRoom(id){
       console.log(id);
       this.room.deleteRoom(id).then(result => {
+        if(result){
 
-        console.log(result);
-        window.location.reload();
+          this.$router.push('/roommanager');
+        }
 
       })
     },
     rowClick(id){
-      this.$router.push(`/updateroom/${id}`)
+      this.$router.push(`/createroomcompleted/${id}`)
     }
   }
 };

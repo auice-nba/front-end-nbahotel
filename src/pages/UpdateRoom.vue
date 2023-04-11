@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-12">
                 <h2 class="title">แก้ไขรายละเอียดห้อง</h2>
-                <form id="edit-form" name="edit-form" @submit="SubmitForm">
+                
                 <div v-if="dataloading" class="content">
                     <div class="row">
                         <div class="col-6">
@@ -69,36 +69,34 @@
                                         <h4>เฟอร์นิเจอร์</h4>
                                       <div v-for="(fur, index) in furnitureType" :key="index" class="row ml-2">
 
-                                            <!-- <base-checkbox :id="fur.name"  :checked="(dataUpdate.furniture.find(el => el._id==fur._id)?true:false)">{{ fur.name }}</base-checkbox> -->
-                                            <base-checkbox :id="fur.name"  :checked="DefineRoomFurniture(fur)">{{ fur.name }}</base-checkbox>
+                                             <base-checkbox :id="fur.name" class="furniture-list" v-model="fur.check">{{ fur.name }}</base-checkbox>
 
                                         </div>
                                     </div>
                                     <div  class="col-6">
                                         <h4>เครื่องอำนวยความสะดวก</h4>
                                         <div v-for="(amen, index) in amenitiesType" :key="index" class="row ml-2">
-                                            
-                                            <base-checkbox :id="amen.name" :checked="DefineRoomAmenities(amen)">{{ amen.name }}</base-checkbox>
+                                            <base-checkbox :id="amen.name"  v-model="amen.check">{{ amen.name }}</base-checkbox>
                                         </div>
                                     </div>
                                     <div  class="col-6">
                                         <h4>รูมเซอร์วิส</h4>
                                         <div v-for="(service, index) in roomServiceType" :key="index" class="row ml-2">
                                             
-                                            <base-checkbox :id="service.description"  :checked="DefineRoomService(service)">{{ service.description }}</base-checkbox>
+                                            <base-checkbox :id="service.description"  v-model="service.check">{{ service.description }}</base-checkbox>
                                         </div>
                                     </div>
                                     <div  class="col-6">
                                         <h4>สิ่งบันเทิง</h4>
                                         <div v-for="(ent, index) in roomEntertainmentType" :key="index" class="row ml-2">
-                                            <base-checkbox :id="ent.name"  :checked="DefineRoomEntertainment(ent)">{{ ent.name }}</base-checkbox>
+                                            <base-checkbox :id="ent.name"  v-model="ent.check">{{ ent.name }}</base-checkbox>
                                         </div>
                                     </div>
                                 </div>
                             </Card>
                         </div>
                         <div class="col-6">
- 
+                            <form id="edit-form" name="edit-form" @submit="SubmitForm">
                             <Card>
                                 <div class="row">
                                     <div class="col-6">
@@ -132,7 +130,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="bed_type">
+                                            <select class="form-control" name="bed_type" @change="roomUpdate.bed_type=setData($event)">
                                                 <option v-for="(bed, index) in bedType" :key="index" :value="bed._id" :selected="(bed._id===dataUpdate.bed_type._id?true:false)">
                                                     {{ bed.name }}</option>
                                             </select>
@@ -145,7 +143,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="bath_type">
+                                            <select class="form-control" name="bath_type" @change="roomUpdate.bath_type=setData($event)">
                                                 <option v-for="(bath, index) in bathType" :key="index" :value="bath._id" :selected="(bath._id===dataUpdate.bath_type._id?true:false)">
                                                     {{ bath.name }}</option>
                                             </select>
@@ -158,7 +156,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="aircondition">
+                                            <select class="form-control" name="aircondition" @change="roomUpdate.aircondition=setData($event)">
                                                 <option v-for="(air, index) in airType" :key="index" :value="air._id" :selected="(air._id===dataUpdate.aircondition._id?true:false)">
                                                     {{ air.name }}</option>
                                             </select>
@@ -171,7 +169,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="smoke_type">
+                                            <select class="form-control" id="smoke_type" name="smoke_type" @change="roomUpdate.smoke_type=setData($event)">
                                                 <option value="true" :selected="(dataUpdate.smoke_type==true?true:false)">เขตปลอดบุหรี่</option>
                                                 <option value="false" :selected="(dataUpdate.smoke_type==true?true:false)">อนุญาติให้สูบบุหรี่</option>
                                             </select>
@@ -184,7 +182,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="wifi">
+                                            <select class="form-control" name="wifi" @change="roomUpdate.wifi=setData($event)">
                                                 <option value="true" :selected="(dataUpdate.wifi==true?true:false)">มีบริการ wifi</option>
                                                 <option value="false" :selected="(dataUpdate.wifi==true?true:false)">ไม่มีบริการอินเตอร์เน็ตไร้สาย</option>
                                             </select>
@@ -197,7 +195,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="security">
+                                            <select class="form-control" name="security" @change="roomUpdate.security=setData($event)">
                                                 <option v-for="(security, index) in securityType" :key="index" :value="security._id" :selected="(security._id===dataUpdate.security._id?true:false)">
                                                     {{ security.name }}</option>
                                             </select>
@@ -210,7 +208,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" v-on:change="updateRoomType" name="view_type">
+                                            <select class="form-control"  name="view_type" @change="roomUpdate.view_type=setData($event)">
                                                 <option v-for="(view, index) in viewType" :key="index" :value="view._id" :selected="(view._id===dataUpdate.view_type._id?true:false)">
                                                     {{ view.name }}</option>
                                             </select>
@@ -223,7 +221,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <!-- {{ r.size }} ตรม. -->
-                                        <base-input :value="dataUpdate.size" name="size"/>
+                                        <base-input :value="roomUpdate.size!=null?roomUpdate.size:dataUpdate.size" name="size" @input="roomUpdate.size = Number(setInputData($event))"/>
                                     </div>
                                     <div class="col-6">
                                         <p><span class="material-symbols-outlined">
@@ -231,7 +229,20 @@
                                             </span>จำนวนผู้เข้าพักสูงสุด </p>
                                     </div>
                                     <div class="col-6 d">   
-                                        <base-input :value ="dataUpdate.max_person" name="max_person"/>
+                                        <base-input :value ="roomUpdate.max_person!=null?roomUpdate.max_person:dataUpdate.max_person" name="max_person" @input="roomUpdate.max_person=Number(setInputData($event))"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><span class="material-symbols-outlined">
+child_care
+</span>เด็กเล็กพักฟรี</p>
+                                    </div>
+                                    <div class="col-6 d">   
+                                        <base-input>
+                                            <select class="form-control" name="children" @change="roomUpdate.children=setData($event)">
+                                                <option value="true" :selected="(dataUpdate.children==true?true:false)">เด็กพักฟรี</option>
+                                                <option value="false" :selected="(dataUpdate.children==true?true:false)">มีค่าบริการสำหรับเด็ก</option>
+                                            </select>
+                                        </base-input>
                                     </div>
                                     <div class="col-6">
                                         <p><span class="material-symbols-outlined">
@@ -240,7 +251,7 @@
                                     </div>
                                     <div class="col-6 d">
                                       
-                                        <base-input :value = "dataUpdate.detail" name="detail"/>
+                                        <base-input :value = "roomUpdate.detail!=null?roomUpdate.detail:dataUpdate.detail" name="detail" @input="roomUpdate.detail=setInputData($event)"/>
                                     </div>
                                     <div class="col-6">
                                         <p><span class="material-symbols-outlined">
@@ -248,7 +259,7 @@
                                             </span>ราคา </p>
                                     </div>
                                     <div class="col-6 d">
-                                        <base-input :value="dataUpdate.price" name="price"/>
+                                        <base-input :value="roomUpdate.price!=null?roomUpdate.price:dataUpdate.price" name="price" @input="roomUpdate.price = Number(setInputData($event))"/>
                                     </div>
                                     <div class="col-6">
                                         <p><span class="material-symbols-outlined">
@@ -257,7 +268,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="status">
+                                            <select class="form-control" name="status" @change="roomUpdate.status=setData($event)">
                                                 <option v-for="(status, index) in statusType" :key="index" :value="status._id" :selected="(status._id===dataUpdate.status._id?true:false)">
                                                     {{ status.name }}</option>
                                             </select>
@@ -268,10 +279,11 @@
                                     @click="$router.push('/roommanager')">กลับหน้าแรก</base-button>
                                 <button type="submit" id="submit-form" class="btn btn-primary">แก้ไขรายละเอียดห้อง</button>
                             </Card>
+                        </form>
                         </div>
                     </div>
                 </div>
-            </form>
+            
             </div>
         </div>
     </div>
@@ -300,7 +312,6 @@ export default {
         //get room type
         await this.room.getRoomType().then(result => {
             this.roomType = result;
-            console.log('get roomtype',this.roomType)
 
         });
 
@@ -330,42 +341,77 @@ export default {
         })
 
         await this.room.getFurnitureType().then((result)=>{
-            this.furnitureType = result;
+            // this.furnitureType = result;
+            this.furnitureType = result
+           
         })
 
         await this.room.getAmenitiesType().then((result)=>{
-            this.amenitiesType = result;
-            console.log('amenity',this.amenitiesType);
+            // this.amenitiesType = result;
+            this.amenitiesType = result
+          
         })
 
         await this.room.getRoomServiceType().then((result)=>{
-            this.roomServiceType = result;
-            console.log('service',this.roomServiceType);
+            this.roomServiceType = result
         })
 
         await this.room.getEntertainmentType().then((result)=>{
-            this.roomEntertainmentType = result;
-            console.log('entertainment',this.roomEntertainmentType);
+            // this.roomEntertainmentType = result;
+
+                this.roomEntertainmentType = result
+            
         })
 
         await this.room.getRoomById(this.id).then(result => {
+            this.dataloading=false;
             if (result) {
 
                 this.r = result;
                 this.loading = true;
                 this.active_image = this.r.imageURl[0];
                 this.dataUpdate = this.r;
-                this.dataUpdate.room_type = this.roomType[0].name_th;
+           
+                //set initial data
+                this.roomUpdate.furniture = this.r.furniture.map(el=>el._id);
+                this.roomUpdate.amenities = this.r.amenities.map(el=>el._id);
+                this.roomUpdate.room_service = this.r.room_service.map(el=>el._id);
+                this.roomUpdate.entertainment = this.r.entertainment.map(el=>el._id);
+
+                //set checkbox to init state
+               this.furnitureType = this.furnitureType.map(el=>({
+                    id:el._id,
+                    name:el.name,
+                    description:el.description,
+                    check:(this.DefineRoomFurniture(el))
+                }))
+
+                this.amenitiesType =  this.amenitiesType.map(el=>({
+                    id:el._id,
+                    name:el.name,
+                    description:el.description,
+                    check:(this.DefineRoomAmenities(el))
+                }))
+
+                this.roomServiceType = this.roomServiceType.map(el=>({
+                    id:el._id,
+                    name:el.name,
+                    description:el.description,
+                    servicetime:el.service_time,
+                    check:(this.DefineRoomService(el))
+                }))
+
+                this.roomEntertainmentType = this.roomEntertainmentType.map(el=>({
+                    id:el._id,
+                    name:el.name,
+                    description:el.description,
+                    servicetime:el.service_time,
+                    check:(this.DefineRoomEntertainment(el))
+                }))
+
                 this.dataloading = true;
             }
         });
-        console.log('roomType array',this.roomType);
-        console.log('roomtype',this.dataUpdate.room_type);
-
-        console.log('dataupdate',this.dataUpdate);
-
-
-
     },
     methods: {
         selectImage(index) {
@@ -426,42 +472,95 @@ export default {
             if(e.target.options.selectedIndex > -1) {
           
             const data =e.target.options[e.target.options.selectedIndex].value;
-            console.log(data);
+         
             return data;
         }
     },
+    setInputData(e){
+        
+        return e;
+    },
+
     DefineRoomFurniture(furniture){
-      const result = (this.dataUpdate.furniture.find(el => el._id==furniture._id)?true:false);
-      console.log('result',result);
-      return result;
+
+        let result;
+
+        if(this.r.furniture){
+             result =  this.r.furniture.find(el => el._id===furniture._id)?true:false;
+        }
+   
+
+      return result
     },
     DefineRoomService(roomservice){
-      const result = (this.dataUpdate.room_service.find(el => el._id==roomservice._id)?true:false);
-      console.log('result',result);
+        let result;
+        if(this.r.room_service){
+
+            result =  this.r.room_service.find(el => el._id===roomservice._id)?true:false;
+        }
+     console.log('result',result);
       return result;
     },
     DefineRoomAmenities(amenities){
-      const result = (this.dataUpdate.amenities.find(el => el._id==amenities._id)?true:false);
-      console.log('result',result);
+        let result;
+        if(this.r.amenities){
+
+             result = this.r.amenities.find(el => el._id===amenities._id)?true:false;
+        }
       return result;
     },
     DefineRoomEntertainment(entertainment){
-      const result = (this.dataUpdate.entertainment.find(el => el._id==entertainment._id)?true:false);
-      console.log('result',result);
+        let result;
+        if(this.r.entertainment){
+            result = this.r.entertainment.find(el => el._id===entertainment._id)?true:false;
+        }
       return result;
     },
-    SubmitForm(e){
+    async SubmitForm(e){
         e.preventDefault();
-            console.log(e);
-            const form = document.getElementById('edit-form');
-            console.log(form);
-        const formData = new FormData(form);
 
-        console.log([...formData]);
+        const furUpdate = [];
+        const amenitiesUpdate = [];
+        const roomserviceUpdate = [];
+        const entertainmentUpdate = [];
+
+        this.furnitureType.forEach(el=>{
+            if(el.check){
+                furUpdate.push(el.id);
+            }
+        });
+        this.roomUpdate.furniture=furUpdate;
+
+        this.amenitiesType.forEach(el=>{
+            if(el.check){
+                amenitiesUpdate.push(el.id);
+            }
+        })
+        this.roomUpdate.amenities=amenitiesUpdate;
+
+        this.roomServiceType.forEach(el=>{
+            if(el.check){
+                roomserviceUpdate.push(el.id);
+            }
+        })
+        this.roomUpdate.room_service=roomserviceUpdate;
+
+        this.roomEntertainmentType.forEach(el=>{
+            if(el.check){
+                entertainmentUpdate.push(el.id);
+            }
+            this.roomUpdate.entertainment=entertainmentUpdate;
+        })
+        
+        console.log('roomUpdate',this.roomUpdate);
+       await this.room.updateRoom(this.id,this.roomUpdate).then(result=>{
+            if(result){
+                this.$router.push(`/createroomcompleted/${this.id}`)
+            }
+        })
        
     }
     },
-    
     data() {
         return {
             dataloading:false,
@@ -476,12 +575,13 @@ export default {
             airType: null,
             viewType: null,
             securityType:null,
-            furnitureType: null,
-            amenitiesType: null,
-            roomServiceType: null,
-            roomEntertainmentType: null,
+            furnitureType: [],
+            amenitiesType: [],
+            roomServiceType: [],
+            roomEntertainmentType: [],
             statusType: null,
             dataUpdate: {},
+            amenitiesUPdate:[],
             roomUpdate:{
                 
             "detail":null, //string
