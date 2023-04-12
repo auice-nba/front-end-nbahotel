@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <card>
     <template slot="header">
@@ -7,8 +8,8 @@
       <div class="col-md-5 pr-md-1 text-left">
         <base-input
           label="ชื่อโรงแรม"
-          placeholder="Company"
-          v-model="model.company"
+          placeholder="ชื่อโรงแรม"
+          v-model="model.name"
           disabled
         >
         </base-input>
@@ -17,7 +18,7 @@
         <base-input
           label="Email address"
           type="email"
-          placeholder="mike@email.com"
+          placeholder="email@email.com"
           disabled
         >
         </base-input>
@@ -106,6 +107,7 @@
     </template>
   </card>
 </template>
+<!-- eslint-disable prettier/prettier -->
 <script>
 import { Card, BaseInput } from "@/components/index";
 

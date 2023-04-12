@@ -6,7 +6,7 @@ export class Room {
   baseUrl = "http://localhost:3000/";
 
   constructor(context) {
-    this.data = context;
+    this.context = context;
   }
 
   async createRoom(data) {

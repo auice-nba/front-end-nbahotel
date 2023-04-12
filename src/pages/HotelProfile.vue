@@ -1,39 +1,50 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="content">
-    <div class="row">
+    <Card>
+      <h2 class="title mt-3">รายละเอียดโรงแรม</h2>
+    </Card>
+    <div v-if="loading" class="row">
       <div class="col-md-8">
-        <edit-profile-form :model="model"> </edit-profile-form>
+        <edit-hotel-form :model="model"> </edit-hotel-form>
       </div>
       <div class="col-md-4">
-        <user-card :user="user"></user-card>
+        <UpdateHotelPicture :hotel="model"/>
       </div>
     </div>
   </div>
 </template>
+<!-- eslint-disable prettier/prettier -->
 <script>
-import EditProfileForm from "./Profile/EditProfileForm.vue";
-import UserCard from "./Profile/UserCard.vue";
-
+import EditHotelForm from "./Profile/EditHotelForm.vue";
+import {Hotel} from "@/functions/hotelservice";
+import UpdateHotelPicture from "./Profile/UpdateHotelPicture.vue";
+import { Card } from "@/components/index";
 export default {
+  setup(){
+    const hotel = new Hotel();
+    return {
+      hotel
+    }
+  },
   components: {
-    EditProfileForm,
-    UserCard,
+   Card,EditHotelForm,UpdateHotelPicture
+  },
+  async mounted(){
+    //get hotel data
+    await this.hotel.getHotel(this.id).then(result=>{
+      console.log('model',result);
+      if(result){
+        this.model=result;
+        this.loading=true;
+      }
+    })
   },
   data() {
     return {
-      model: {
-        company: "บ้านรีวิวรีสอร์ท2",
-        email: "mike@email.com",
-        username: "michael23",
-        firstName: "อุ๋ย",
-        lastName: "บ้านน้ำใส",
-        address: "บ้านน้ำใส",
-        tumbon: "บ้านน้ำใส",
-        amphure: "แสนใจดี",
-        city: "เชียงใหม่",
-        country: "ประเทศไทย",
-        about: "รีสอร์ทริมน้ำใส สำหรับพักผ่อน",
-      },
+      loading:false,
+      id:"642b8a17992d04163858b7cf",
+      model: null,
       user: {
         fullName: "อุ๋ย",
         title: "พนักงาน",
@@ -44,4 +55,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.title{
+  color:black;
+  text-align: start;
+}
+</style>
