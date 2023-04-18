@@ -165,7 +165,7 @@ export default {
     BaseInput,
   },
   async mounted() {
-    this.data.hotel_id = "642b8a17992d04163858b7cf";
+    this.data.hotel_id = "643e55439c48ebe52204a5a2";
     await this.room.getRoomType().then((result)=>{
     this.roomtype = result;
    })

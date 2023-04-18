@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      hotel_id:'642b8a17992d04163858b7cf',
+      hotel_id:'643e55439c48ebe52204a5a2',
       roomdata:null,
       table: {
         title: "Simple Table",

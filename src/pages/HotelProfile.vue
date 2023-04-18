@@ -33,7 +33,6 @@ export default {
   async mounted(){
     //get hotel data
     await this.hotel.getHotel(this.id).then(result=>{
-      console.log('model',result);
       if(result){
         this.model=result;
         this.loading=true;
@@ -43,7 +42,7 @@ export default {
   data() {
     return {
       loading:false,
-      id:"642b8a17992d04163858b7cf",
+      id:"643e55439c48ebe52204a5a2",
       model: null,
       user: {
         fullName: "อุ๋ย",

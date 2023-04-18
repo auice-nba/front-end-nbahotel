@@ -33,7 +33,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr class="item-row" v-for="(room, index) in rooms" :key="index">
+                    <tr class="item-row" v-for="(room, index) in room_number" :key="index">
                       <div class="caption">
                         
                           {{ room }}
@@ -72,10 +72,45 @@
 <script>
 import dayjs from "dayjs";
 import "dayjs/locale/th";
+import {Booking} from "@/functions/bookingservice";
+import {Room} from "@/functions/roomservice";
 
 export default {
+  setup(){
+    const bookingservice = new Booking();
+    const roomservice = new Room();
+
+    return{
+      bookingservice,roomservice
+    }
+  },
   
-  mounted() {
+ async mounted() {
+
+    //get all rooms
+    await this.roomservice.getHotelRoom(this.hotel_id).then(result => {
+      console.log(result);
+      this.rooms = result;
+      this.room_number = result.map(el=>el.room_number);
+    });
+
+
+    //get all booking data;
+    await this.bookingservice.getBooking(this.hotel_id).then(result =>{
+      console.log(result);
+      if(result.status==="ok"){
+
+        this.result.data.forEach(el=> el.room.forEach(room=>{
+          this.booking.push({
+            id:el._id,
+            room:(this.rooms.find(el=>el._id === room))
+          })
+        }))
+        console.log(this.booking)
+      }
+      
+    });
+
     //set header cell array
     var months_th = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",];
     // var months_th_mini = [ "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.", ];
@@ -87,11 +122,8 @@ export default {
     for (let i = 0; i < this.last_day.getDate(); i++) {
       this.days.push(new Date(this.first_day.getTime() + (i * 24 * 60 * 60 * 1000)).toDateString());
     }
-    //set room as body row
-    for(let i=1;i<=30;i++){
 
-      this.rooms.push(`A10${i}`);
-    }
+  
     // console.log("rooms", this.rooms);
     //set body cell array
     for (var i = 0; i < this.last_day.getDate(); i++) {
@@ -120,12 +152,15 @@ export default {
   },
   data() {
     return {
+      hotel_id:"643e55439c48ebe52204a5a2",
       today: null,
       first_day: null,
       last_day: null,
       this_month: null,
       days: [],
-      rooms: [],
+      rooms: null,
+      room_number:null,
+      booking:[],
       body_cell: [],
       booked:"item-cell",
       popBook:'',//bookid

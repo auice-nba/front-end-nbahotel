@@ -6,7 +6,7 @@
             <div class="col-12 main">
                 <div class="image-edit">
                     <img class="image-main mb-2"
-                    :src="hotel.image_url?`https://drive.google.com/uc?export=view&id=${active_image}` : '/images/hotel.jpg'" />
+                    :src="(imagesrc?`https://drive.google.com/uc?export=view&id=${active_image}` : '/images/hotel.jpg')" />
                     <div class="delete-btn">
                         <drop-down tag="div">
                             <button aria-label="edit" data-toggle="dropdown"
@@ -67,12 +67,17 @@ export default {
         Card
     },    
     mounted(){
+        if(this.hotel.image_url.length>0){
+            this.imagesrc=true;
+        }
+        
         this.active_image = this.hotel.image_url[0];
     },
     data() {
             return {
 
                 active_image: 0,
+                imagesrc:false,
                 uploading:false,
                 loading:false,
             }
@@ -106,6 +111,10 @@ export default {
 
                     this.active_image = result.result[0];
                     this.uploading = false;
+                    this.imagesrc =true;
+                }
+                else{
+                    this.uploading = false;
                 }
             })
         },
@@ -132,6 +141,9 @@ export default {
                     this.hotel.image_url = result;
                     this.active_image = this.hotel.image_url[0];
                     this.uploading = false;
+                    if(this.hotel.image_url.length<=0){
+                        this.imagesrc=false;
+                    }
                 }
             })
         },
@@ -144,6 +156,9 @@ export default {
 </script>
 
 <style scoped>
+input{
+    width: 100%;
+}
 .main {
     margin: 0;
     padding: 0;
@@ -228,6 +243,10 @@ export default {
     cursor: pointer;
     background-color: #acacac;
     color: #ffffff;
+}
+
+.change-image{
+    width: 100%;
 }
 
 .change-image:hover {

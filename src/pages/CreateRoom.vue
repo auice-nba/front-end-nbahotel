@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
   <div class="content">
     <div class="row">
@@ -11,6 +12,7 @@
     </div>
   </div>
 </template>
+<!-- eslint-disable prettier/prettier -->
 <script>
 import CreateRoomForm from "./CreateRoom/CreateRoomForm.vue";
 

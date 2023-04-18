@@ -167,4 +167,21 @@ async getAmenities(){
     return data;
   }
 
+  //update hotel information
+  async updateHotel(id,updatedata){
+    let data;
+    const initdata = {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body:JSON.stringify(updatedata),
+      credential: true,
+    }
+    await fetch(`${this.baseUrl}hotel/${id}`,initdata)
+    .then(response => response.json())
+    .then(result=>data = {status:"ok",data:result})
+    .catch(err=>data = {status:false,error:err})
+
+    return data;
+  }
+
 }
