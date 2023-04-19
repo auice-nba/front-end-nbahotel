@@ -15,6 +15,7 @@ export class Booking {
         headers: {
           "Content-Type": "application/json",
         },
+        Credential:"includes"
       };
 
       await fetch(`${this.baseUrl}booking/${hotel_id}`,initdata)
@@ -24,6 +25,25 @@ export class Booking {
 
       return data;
     }
-   
+
+  //get Booking by id
+  async getBookingById(hotelId,id) {
+    var data;
+    const initdata = {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        Credential:"includes"
+      };
+
+      await fetch(`${this.baseUrl}booking/${hotelId}/${id}`,initdata)
+      .then(response => response.json())
+      .then(result => data = {status:"ok",data:result})
+      .catch(err=>data = {status:false,error:err})
+
+      return data;
+    }
+
   
 }

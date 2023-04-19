@@ -26,6 +26,17 @@
           <p>Scheduler</p>
         </template>
       </sidebar-link>
+
+      <sidebar-link to="/bookingmanager">
+        <i class="tim-icons icon-book-bookmark"></i>
+        <template v-if="!isRTL">
+          <p>Booking manager</p>
+        </template>
+        <template v-else>
+          <p>Booking manager</p>
+        </template>
+      </sidebar-link>
+
       <sidebar-link to="/roommanager">
         <i class="tim-icons icon-settings"></i>
         <template v-if="!isRTL">

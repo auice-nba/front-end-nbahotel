@@ -6,8 +6,8 @@
         <!-- toolbar -->
         <div class="row tool-bar">
           <div class="col justify-content-start">
-            <button class="back-forword">&lt;&lt;</button>
-            <button class="back-forword">>></button>
+            <button class="back-forword" @click="backingDay">&lt;&lt;</button>
+            <button class="back-forword" @click="forwardDay">>></button>
           </div>
           <div class="col">
             <h2 class="month-display">{{ this_month }}</h2>
@@ -29,7 +29,7 @@
                   <thead>
                     <tr class="header">
                       <th class="header-1cell">Room</th>
-                      <th class="header-cell" v-for="(day, index) in days" :key="index">{{ dateformat(day) }}</th>
+                      <th class="header-cell" v-for="(day, index) in days" :key="index" :style="dateformat(day)==dateformat(new Date())?`background-color:violet`:''">{{ dateformat(day) }}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -39,18 +39,20 @@
                           {{ room }}
                         </div>
                       <td class="item-cell" :id="`item-${room}-${index+1}`"  v-for="(cell, index) in body_cell" :key="index">
-                        <div class="booked-cell" v-if="isBooked(cell,room)" @click="popDetail(cell,room)">
+                        <div class="booked-cell" v-if="isBooked(cell,room)" @mouseenter="popDetail(cell,room)" @mouseleave="popBook.cell = false">
                         
                           {{ isBooked(cell,room).name }}
-                          <div class="popBooking" id="booking-detail" v-if="cell===popBook.cell && room === popBook.room">
-                            <p>booking id </p>
-                            <p>{{ isBooked(cell,room).id }}</p>
+                          <div class="popBooking px-3 py-3" id="booking-detail" v-if="cell===popBook.cell && room === popBook.room">
                             <p>ห้อง</p>
                             <p>{{ isBooked(cell,room).room }}</p>
                             <p>เข้าพัก</p>
-                            <p>{{ isBooked(cell,room).start_day }}</p>
+                            <p>{{ new Date(isBooked(cell,room).start_day).toLocaleDateString() }}</p>
                             <p>ถึงวันที</p>
-                            <p>{{ isBooked(cell,room).end_day }}</p>
+                            <p>{{ new Date(isBooked(cell,room).end_day).toLocaleDateString() }}</p>
+                            <div class="btn btn-primary" @click="$router.push(`bookingdetail/${isBooked(cell,room).id}`)">
+                              ดูรายละเอียด
+                              <!-- <p>{{ isBooked(cell,room).id }}</p> -->
+                            </div>
                           </div>
                         </div>
                       </td>
@@ -86,38 +88,49 @@ export default {
   },
   
  async mounted() {
+   //get all booking data;
+   await this.bookingservice.getBooking(this.hotel_id).then(result =>{
+      console.log('booking collection',result);
+      this.booking = result.data;
+    });
 
     //get all rooms
     await this.roomservice.getHotelRoom(this.hotel_id).then(result => {
-      console.log(result);
-      this.rooms = result;
-      this.room_number = result.map(el=>el.room_number);
-    });
+      console.log('room',result);
+      if(result){
 
+        this.rooms = result;
+        this.room_number = result.map(el=>el.room_number);
+        for(let room of this.rooms){
+          for(let booking of room.bookings){
 
-    //get all booking data;
-    await this.bookingservice.getBooking(this.hotel_id).then(result =>{
-      console.log(result);
-      if(result.status==="ok"){
-
-        this.result.data.forEach(el=> el.room.forEach(room=>{
-          this.booking.push({
-            id:el._id,
-            room:(this.rooms.find(el=>el._id === room))
-          })
-        }))
-        console.log(this.booking)
+            const data = {
+              id:booking.booking_id,
+              room:room.room_number,
+              name:(this.booking.find(el=>el._id === booking.booking_id).customer_name),
+              start_day:booking.date_from,
+              end_day:booking.date_to
+            }
+            this.event.push(data)
+          }
+        }
       }
-      
+      else{
+        console.log('not found room')
+      }
     });
+
+    console.log('event',this.event)
+
+   
 
     //set header cell array
     var months_th = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",];
     // var months_th_mini = [ "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.", ];
-    const today = new Date();
-    this.first_day = new Date(today.getFullYear(), today.getMonth(), 1);
-    this.last_day = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-    this.this_month = months_th[today.getMonth()];
+    this.today = new Date();
+    this.first_day = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate()+this.backing_day);
+    this.last_day = new Date(this.today.getFullYear(), this.today.getMonth() + 1, 0);
+    this.this_month = months_th[this.today.getMonth()];
     console.log('first_day', this.first_day, 'last_day', this.last_day);
     for (let i = 0; i < this.last_day.getDate(); i++) {
       this.days.push(new Date(this.first_day.getTime() + (i * 24 * 60 * 60 * 1000)).toDateString());
@@ -127,11 +140,15 @@ export default {
     // console.log("rooms", this.rooms);
     //set body cell array
     for (var i = 0; i < this.last_day.getDate(); i++) {
-      const currentDay = new Date(this.first_day.getFullYear(),this.first_day.getMonth(),i+1);
+      const currentDay = new Date(this.first_day.getFullYear(),this.first_day.getMonth(),this.today.getDate()+i+this.backing_day);
      this.body_cell.push(currentDay);
   
       }
   },
+  computed:{
+
+  },
+ 
   methods: {
     dateformat(day) {
       const result = dayjs(day).format("DD/MM");
@@ -148,12 +165,21 @@ export default {
     },
     popDetail(day,room){
       this.popBook={cell:day,room:room}
+    },
+    forwardDay(){
+      this.backing_day +=1;
+      
+    },
+    backingDay(){
+      this.backing_day -=1;
+
     }
   },
   data() {
     return {
       hotel_id:"643e55439c48ebe52204a5a2",
       today: null,
+      backing_day:-3,
       first_day: null,
       last_day: null,
       this_month: null,
@@ -164,71 +190,7 @@ export default {
       body_cell: [],
       booked:"item-cell",
       popBook:'',//bookid
-      event: [
-        {
-          id: 1,
-          room: "A101",
-          name:"auice",
-          start_day: "04/01/2023",
-          end_day: "04/03/2023",
-        },
-        {
-          id: 2,
-          room: "A102",
-          name:"pay",
-          start_day: "04/5/2023",
-          end_day: "04/06/2023",
-        },
-        {
-          id: 3,
-          room: "A103",
-          name:"pay",
-          start_day: "04/10/2023",
-          end_day: "04/12/2023",
-        },
-        {
-          id: 4,
-          room: "A104",
-          name:"ae",
-          start_day: "04/02/2023",
-          end_day: "04/05/2023",
-        },
-        {
-          id: 5,
-          room: "A104",
-          name:"ae",
-          start_day: "04/07/2023",
-          end_day: "04/09/2023",
-        },
-        {
-          id: 6,
-          room: "A104",
-          name:"auice",
-          start_day: "04/10/2023",
-          end_day: "04/30/2023",
-        },
-        {
-          id: 7,
-          room: "A108",
-          name:"auice",
-          start_day: "04/7/2023",
-          end_day: "04/9/2023",
-        },
-        {
-          id: 8,
-          room: "A109",
-          name:"auice",
-          start_day: "04/3/2023",
-          end_day: "04/10/2023",
-        },
-        {
-          id: 9,
-          room: "A1011",
-          name:"auice",
-          start_day: "04/5/2023",
-          end_day: "04/8/2023",
-        },
-      ],
+      event: [],
     };
   },
 };
@@ -327,7 +289,9 @@ table td {
 }
 
 .booked-cell{
+
   cursor:pointer;
+  position:relative;
   color:white;
   text-align: center;
   background-color: #09b8e4;
@@ -375,6 +339,9 @@ table tbody th {
 
 .popBooking{
   background-color:#cff5ff;
+  position: absolute;
+  top:21px;
+  z-index: 99;
 
   p{
     color:black;

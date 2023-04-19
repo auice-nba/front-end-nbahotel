@@ -10,6 +10,8 @@ import TableList from "@/pages/TableList.vue";
 import Typography from "@/pages/Typography.vue";
 import UpgradeToPRO from "@/pages/UpgradeToPRO.vue";
 import Scheduler from "@/pages/Scheduler.vue";
+import BookingManager from "@/pages/BookingManager.vue";
+import BookingDetail from "@/pages/BookingDetail.vue";
 import RoomManager from "@/pages/RoomManager.vue";
 import CreateRoom from "@/pages/CreateRoom.vue";
 import HotelProfile from "@/pages/HotelProfile.vue";
@@ -28,6 +30,16 @@ const routes = [
         path: "scheduler",
         name: "Scheduler",
         component: Scheduler,
+      },
+      {
+        path:"bookingmanager",
+        name: "BookingManager",
+        component: BookingManager,
+      },
+      {
+        path:"bookingdetail/:id",
+        name: "BookingDetail",
+        component: BookingDetail,
       },
       {
         path: "roommanager",
