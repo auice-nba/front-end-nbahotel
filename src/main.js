@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /*!
 
 =========================================================
@@ -24,6 +25,10 @@ import App from "./App.vue";
 import "@/assets/scss/white-dashboard.scss";
 import "@/assets/css/nucleo-icons.css";
 import "@/assets/demo/demo.css";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+// Import Bootstrap and BootstrapVue CSS files (order is important)
+// import 'bootstrap/dist/css/bootstrap.css'
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
 import GlobalComponents from "./globalComponents";
 import GlobalDirectives from "./globalDirectives";
@@ -51,6 +56,8 @@ Vue.use(GlobalDirectives);
 Vue.use(RTLPlugin);
 Vue.use(SideBar);
 Vue.use(Notify);
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
 
 new Vue({
   router,
