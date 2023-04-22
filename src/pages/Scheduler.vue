@@ -18,7 +18,7 @@
             <button class="back-forword" >เดือน</button>
             <div class="calendar-dialog" v-if="calendar" >
 
-              <CalendarScheduler :data="{first_day:first_day,last_day:last_day}" @datepicker="(date)=>datepicker = date.selectedDate"/>
+              <CalendarScheduler :data="{first_day:first_day,last_day:last_day}" @datepicker="dateController"/>
             </div>
           </div>
         </div>
@@ -240,22 +240,7 @@ export default {
     this.days = this.computedDay();
     this.EventCell();
 
-  },
-  updated() {
-   
-    if (this.datepicker !== null) {
-
-      if ((new Date(this.today).toLocaleDateString() !== new Date(this.datepicker).toLocaleDateString())) {
-        this.today = new Date(this.datepicker);
-        this.first_day = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate() -3);
-        this.last_day = new Date(this.today.getFullYear(), this.today.getMonth()+1,0);
-        this.this_month = this.months_th[this.today.getMonth()];
-
-        this.days = this.computedDay();
-        this.EventCell();
-  
-      }
-    }
+    document.addEventListener('datepicker',this.dateController);
 
   },
 
@@ -330,6 +315,19 @@ export default {
       this.booking_detail = this.booking.find(el => el._id === id);
   
       this.moreDetail = true;
+    },
+    dateController(event) {
+      this.backing_day=-3;
+      if (event.selectedDate !== null) {
+
+        if ((new Date(this.today).toLocaleDateString() !== new Date(event.selectedDate).toLocaleDateString())) {
+          this.today = new Date(event.selectedDate);
+          console.log('today',this.today);
+          this.first_day = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate() + this.backing_day);
+        }
+          this.days = this.computedDay();
+          this.EventCell();
+      }
     }
   },
   data() {
