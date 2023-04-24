@@ -2,8 +2,7 @@
 export class Room {
 
   context;
-  // baseUrl = "https://nba-backend-6jk5.onrender.com/";
-  baseUrl = "http://localhost:3000/";
+  baseUrl = process.env.VUE_APP_API;
 
   constructor(context) {
     this.context = context;

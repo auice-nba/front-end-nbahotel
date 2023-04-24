@@ -1,6 +1,5 @@
-/* eslint-disable prettier/prettier */
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
-
+import LandingPage from "@/pages/LandingPage.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
@@ -26,6 +25,7 @@ const routes = [
     component: DashboardLayout,
     redirect: "dashboard",
     children: [
+      
       {
         path: "scheduler",
         name: "Scheduler",
@@ -118,6 +118,14 @@ const routes = [
       },
     ],
   },
+  {
+    path:"/landingpage",
+    name:"LandingPage",
+    component:LandingPage,
+  },
+ 
 ];
+
+
 
 export default routes;
