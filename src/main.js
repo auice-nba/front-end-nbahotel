@@ -68,7 +68,8 @@ const checkAuth = () => {
 }
 
 router.beforeEach((to, from, next) => {
-  if (to.name !== 'LandingPage' && !checkAuth()) next({ name: 'LandingPage' })
+  const public_page = ['LandingPage','CreateAccount','Invitations']
+  if ( !public_page.includes(to.name) && !checkAuth()) next({ name: 'LandingPage' })
   else next()
 })
 

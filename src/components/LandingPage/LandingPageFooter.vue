@@ -3,7 +3,7 @@
         
             <div class="col">
                 <div class="row align-items-center">
-                    <div class="d-none d-md-block col-md-1 justify-content-center " v-for="(item,index) in url" :key="index">
+                    <div class="d-none d-md-block col-md-2 col-lg-1 justify-content-center " v-for="(item,index) in url.slice(6)" :key="index">
                         <img  class="my-3" width="100%" :src="item.url"/>
                     </div>
 

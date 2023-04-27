@@ -1,5 +1,7 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 import LandingPage from "@/pages/LandingPage.vue";
+import Invitations from "@/pages/landingpage/Invitations.vue";
+import CreateAccount from "@/pages/landingpage/CreateAccount.vue";
 import Dashboard from "@/pages/Dashboard.vue";
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
@@ -122,7 +124,67 @@ const routes = [
     path:"/landingpage",
     name:"LandingPage",
     component:LandingPage,
+    redirect:'/landingpage/invitations',
+    children:[
+      {
+        path:'invitations',
+        name:"Invitations",
+        component: Invitations,
+      },
+      {
+    path:"createaccount",
+    name:"CreateAccount",
+    component:CreateAccount,
   },
+  {
+    path:'confirm-otp',
+    name:'ConfirmOtp',
+    component:()=>import('@/pages/landingpage/ConfirmOtp.vue')
+  },
+  {
+    path:'firstlogin',
+    name:'FirstLogin',
+    component:()=>import('@/pages/landingpage/FirstLogin.vue')
+  },
+  {
+    path:'create-service',
+    name:'CreateService',
+    component:()=>import('@/pages/landingpage/CreateService.vue'),
+    redirect:'/landingpage/create-service/hotel-service',
+    children:[
+      {
+        path:'hotel-service',
+        name:'HotelService',
+        component:()=>import('@/pages/landingpage/hotel/HotelService.vue')
+      },
+     
+      
+    ]
+  },
+  {
+    path:'hotel-service-detail',
+    name:'HotelServiceDetail',
+    component:()=>import('@/pages/landingpage/HotelServiceDetail.vue')
+  },
+  {
+    path:'hotel-service-detail2',
+    name:'HotelServiceDetail2',
+    component:()=>import('@/pages/landingpage/HotelServiceDetail2.vue')
+  },
+  {
+    path:'service-map',
+    name:'ServiceMap',
+    component:()=>import('@/pages/landingpage/ServiceMap.vue')
+  },
+  {
+    path:'service-image',
+    name:'ServiceImage',
+    component:()=>import('@/pages/landingpage/ServiceImage.vue')
+  }
+  
+    ]
+  },
+  
  
 ];
 

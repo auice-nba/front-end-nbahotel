@@ -3,34 +3,29 @@
         <div class="navbar pt-3 pb-3">
 
             <div class="row w-100">
-                <div class="col-12 col-md-3 text-center text-md-left">
-                    <h1 class="ml-3 mt-2">NBA BOOKING</h1>
+                <div class="col-12 col-md-6 col-lg-4 text-center text-md-left">
+                    <a href="/">
+
+                        <h1 class="ml-3 mt-2">NBA BOOKING</h1>
+                    </a>
                 </div>
-                <div class="col-12 col-md-6 text-center">
-                    <div class="btn-group d-none d-md-block" role="group">
+                <div class="d-none d-lg-block col-lg-4 text-center">
+                    <div class="btn-group" role="group">
                         <button type="button" class="btn menu" >บริการ และ เงื่อนไข</button>
                             <button type="button" class="btn menu" >รายงานและร้องเรียน</button>
                             <button type="button" class="btn menu" >เกี่ยวกับเรา</button>
                             </div>
                         </div>
-                <div class="d-none d-md-block col-12 col-md-3 text-center text-md-right">
+                <div class="d-none d-md-block col-12 col-md-6 col-lg-4  text-center text-md-right w-100">
                     <button v-if="!userlogin" class="btn btn-primary" @click="login">Login</button>
                 </div>
             </div>
 
         </div>
-        <div class="title">
-            <div style="width: 50rem;">
-                <h3 class="card-title mb-3">เป็นพาร์ทเนอร์กับเรา</h3>
-                <h2>พร้อมกับรับสิทธิพิเศษมากมาย</h2>
-                <!-- <p>
-                    <blockquoate class="card-text text-xl">Some quick example text to build on the card title and make up
-                        the bulk of the card's content.</blockquoate>
-                </p> -->
-
-                <a href="#" class="btn btn-primary mt-3">สมัครสมาชิก</a>
-            </div>
+        <div class="view">
+            <router-view/>
         </div>
+       
         <div class="footer">
             
             <LandingPageFooter/>
@@ -38,7 +33,8 @@
     </div>
 </template>
 <script>
-import LandingPageFooter from "@/components/LandingPage/LandingPageFooter"
+import LandingPageFooter from "@/components/LandingPage/LandingPageFooter";
+
 export default {
 
     components: {
@@ -58,6 +54,7 @@ export default {
                 this.$router.push('/dashboard');
             
         },
+        
     }
 
 }
@@ -99,16 +96,14 @@ h3 {
 }
 
 
-.title {
-    position: absolute;
-    width: auto;
-    max-width: 10rem;
-    top: 35%;
-    left: 15%;
-}
 
-.card-title {
-    font-size: 3rem;
+
+.view{
+display:flex;
+width: 100%;
+height: 80%;
+justify-content: center;
+align-items: center;
 
 }
 
@@ -120,9 +115,6 @@ h3 {
 }
 
 @media (max-width: 650px) {
-  .card-title{
-    font-size: 2rem;
-  }
   h2{
     font-size: 1.2rem;
   }

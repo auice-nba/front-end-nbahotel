@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="content">
     <div class="row">
       <div class="col-12">
@@ -19,6 +19,14 @@
                   <h2 class="card-title">أداء</h2>
                 </template>
               </div>
+
+
+
+
+
+
+
+              
               <div class="col-sm-6">
                 <div
                   class="btn-group btn-group-toggle"
@@ -359,4 +367,4 @@ export default {
   },
 };
 </script>
-<style></style> -->
+<style></style>
