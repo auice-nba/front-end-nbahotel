@@ -85,7 +85,7 @@ export default {
   },
   methods:{
     async deleteRoom(id){
-      console.log(id);
+     
       this.room.deleteRoom(id).then(result => {
         if(result){
 
