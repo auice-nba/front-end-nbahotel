@@ -19,7 +19,7 @@ export class Province {
 
     getTambon(proviceId,amphureId){
        const tambon = this.getAmphure(proviceId).find(el=>el.id === amphureId).tambon;
-       console.log(amphureId);
+      
        return tambon;
     }
    
