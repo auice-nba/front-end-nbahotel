@@ -12,7 +12,7 @@ export default async function resizeImage(event) {
     if (input.files) {
       while (count--) {
 
-        console.log('index', index);
+      
         const imageType = input.files[index].type;
         var reader = new FileReader();
         reader.onload = (e) => {
@@ -48,7 +48,7 @@ export default async function resizeImage(event) {
 
             const trailing = imageType.toString().replace("image/", "")
 
-            console.log(trailing);
+           
             const newName = (Math.random() + 1).toString(36).substring(7) + "." + trailing;
 
             const binaryData = atob(resizeImage.split(',')[1]);
