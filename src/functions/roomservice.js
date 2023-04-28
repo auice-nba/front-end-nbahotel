@@ -62,7 +62,7 @@ export class Room {
   //delete room by id
   async deleteRoom(id){
     let room;
-    console.log(id);
+   
     const initdata = {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
