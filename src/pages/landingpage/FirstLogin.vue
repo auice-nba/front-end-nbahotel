@@ -1,23 +1,61 @@
 <template>
     <div class="card text-left px-5 py-5 mt-3">
         <h2>เข้าสู่ระบบเพื่อลงทะเบียนการให้บริการ</h2>
-        <base-input type="text" label="เบอร์โทรศัทพ์"/>
-        <base-input type="text" label="รหัสผ่าน"/>
-        <base-button type="primary" @click="firstLogin">เข้าสู่ระบบ</base-button>
+        <base-input v-model="user.username" type="text" label="เบอร์โทรศัทพ์"/>
+        <base-input v-model="user.password" :type="togglePassword()" label="รหัสผ่าน"/>
+        <base-checkbox v-model="password_visible">แสดงรหัสผ่าน</base-checkbox>
+        <base-button class="mt-3" type="primary" @click="firstLogin">เข้าสู่ระบบ</base-button>
+        <small v-if="error" class="error-text mt-3">รหัสผ่านหรือเบอร์โทรศัทพ์ไม่ถูกต้อง</small>
         <small class="mt-2">ลืมรหัสผ่าน</small>
 
         </div>
 </template>
 <script>
-import {BaseInput} from "@/components/index"
+import {BaseInput} from "@/components/index";
+import { User } from "@/functions/userservice";
+
 export default {
+    setup(){
+        const userservice = new User();
+        return {
+            userservice
+        }
+    },
     components:{
         BaseInput
     },
+    data(){
+        return {
+            user:{
+                username:null,
+                password:null
+            },
+            password_visible:false,
+            error:false
+        }
+    },
     methods:{
         firstLogin(){
-            this.$router.push('/landingpage/create-service');
+            if(this.user.username===null || this.user.username==='' || this.user.password===null || this.user.password===''){
+                this.error=true;
+            }
+            else{
+
+                this.userservice.SignIn(this.user).then(result=>{
+                    if(result.status === true){
+                        
+                        this.$router.push('/landingpage/create-service');
+                    }
+                    else{
+                        this.error=true;
+                    }
+                })
+            }
+        },
+        togglePassword(){
+            return this.password_visible?"text":"password";
         }
+
     }
 }
 </script>
@@ -28,6 +66,9 @@ export default {
     width: 100%;
     max-width: 450px;
     justify-content: center;
+}
+.error-text{
+    color: red;
 }
 
 </style>

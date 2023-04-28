@@ -95,9 +95,6 @@ h3 {
     border: 0;
 }
 
-
-
-
 .view{
 display:flex;
 width: 100%;
