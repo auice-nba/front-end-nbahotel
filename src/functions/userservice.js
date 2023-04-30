@@ -1,6 +1,7 @@
 export class User {
 
     baseUrl = process.env.VUE_APP_API;
+    token = localStorage.getItem('token');
 
     constructor(context){
         this.context = context;
@@ -33,6 +34,25 @@ export class User {
           body: JSON.stringify(data),
         };
         await fetch(this.baseUrl + "signin", initdata)
+          .then((response) => response.json())
+          .then((result) => user = result)
+          .catch((err) => user = err);
+    
+          return user;
+    }
+
+    //Me
+    async Me(){
+      let user;
+        const initdata = {
+          method: "POST",
+          headers: { 
+            "Content-Type": "application/json" ,
+            "token":this.token
+          },
+          credential: true,
+        };
+        await fetch(this.baseUrl + "users/me", initdata)
           .then((response) => response.json())
           .then((result) => user = result)
           .catch((err) => user = err);

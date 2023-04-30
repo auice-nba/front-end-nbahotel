@@ -1,7 +1,7 @@
 <template>
     <div class="card text-left px-5 py-5 mt-3">
         <h2>สร้างบัญชีผู้ใช้</h2>
-        <div class="row">
+        <!-- <div class="row">
             <div class="col">
 
                 <base-input v-model="user.firstname" type="text" label="ชื่อ"/>
@@ -10,13 +10,23 @@
                 <base-input v-model="user.lastname" type="text" label="นามสกุล"/>
 
             </div>
-        </div>
+        </div> -->
         <base-input v-model="user.email" type="email" label="อีเมลล์"/>
         <base-input v-model="user.telephone" type="tel" label="เบอร์โทรศัทพ์"/>
         <base-input v-model="user.telephone_inviter" type="tel" label="เบอร์โทรศัทพ์ ผู้แนะนำ"/>
-        <base-input v-model="user.password" :type="togglePassword()" label="รหัสผ่าน"/>
+        <div class="row">
+            <div class="col">
+                
+                <base-input v-model="user.password" :type="togglePassword()" label="รหัสผ่าน"/>
+            </div>
+            <div class="col">
+                
+                <base-input v-model="confirmpassword" :type="togglePassword()" label="ยืนยันรหัสผ่าน"/>
+            </div>
+        </div>
         <base-checkbox v-model="password_visible" >แสดงรหัสผ่าน</base-checkbox>
         <base-button class="mt-3" type="primary" @click="createUser">สร้าง</base-button>
+        <p v-if="error_message!==null"><small class="error-message">{{ error_message }}</small></p>
 
         </div>
 </template>
@@ -45,16 +55,46 @@ export default {
                 password:null,
                 roles:"partner"
             },
-            password_visible:false
+            confirmpassword:null,
+            password_visible:false,
+            error_message:null
         }
     },
     methods:{
         async createUser(){
+            this.error_message = '';
+
+            if(!this.validateTephone()){
+                this.error_message = 'เบอร์โทรศัพท์ไม่ถูกต้อง กรุณาระบุเบอร์โทรศัทพ์ 10 ตัวอักษร เช่น 0808008000';
+                return;
+            };
+
+            if(!this.validatePassword()){
+                this.error_message = "รหัสผ่านไม่ปลอดภัย กรุณากำหนดรหัสผ่านมากกว่า 8 ตัวอักษรและประกอบไปด้วยตัวอักษรภาษาอังกฤษพิมพ์เล็กพิมพ์ใหญ่และตัวเลข"
+                return ;
+            }
+            if(this.user.password !== this.confirmpassword){
+                this.error_message = 'รหัสผ่านและรหัสยืนยันไม่ตรงกัน'
+                return;
+            }
             await this.userservice.CreateUser(this.user).then(result=>{
                 if(result.status === true){
                     this.$router.push('/landingpage/confirm-otp');
                 }
+                else{
+                    this.error_message = result.message;
+                }
             })
+        },
+        validateTephone(){
+            if(!(/[0-9]/.test(this.user.telephone)) || this.user.telephone.length!=10){
+                return false;
+            }
+            return true;
+        },
+        validatePassword(){
+            const pw = this.user.password;
+            return ('ch', (/[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw)) && pw.length>8 )
         },
         togglePassword(){
 
@@ -70,6 +110,15 @@ export default {
     width: 100%;
     max-width: 450px;
     justify-content: center;
+}
+
+.error-message{
+    color: red;
+}
+@media screen and (max-width:450px) {
+    .card{
+        width: 90%;
+    }
 }
 
 </style>

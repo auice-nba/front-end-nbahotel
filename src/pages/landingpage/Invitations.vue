@@ -33,12 +33,18 @@
         align-items: center;
         width: 100%;
         max-width: 550px;
-        height: 80vh;
+        min-height: calc(100vh - 206px);
     }
     
     .title {
     width: auto;
     width: 100%;
 
+}
+
+@media screen and (max-width:450px) {
+    .invitation{
+        width: 80%;
+    }
 }
     </style>

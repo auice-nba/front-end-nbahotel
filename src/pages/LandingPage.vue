@@ -71,14 +71,14 @@ h3 {
 }
 
 .banner {
-    position: relative;
+
     background-image: url("/images/view1.avif");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
 
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
 }
 
@@ -98,7 +98,7 @@ h3 {
 .view{
 display:flex;
 width: 100%;
-height: 80%;
+min-height: 80vh;
 justify-content: center;
 align-items: center;
 
@@ -116,4 +116,6 @@ align-items: center;
     font-size: 1.2rem;
   }
 }
+
+
 </style>

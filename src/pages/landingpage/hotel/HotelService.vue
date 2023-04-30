@@ -8,21 +8,34 @@
         </base-input>
         <base-input type="text" label="ชื่อโรงแรม" />
         <base-input type="text" label="ที่อยู่" />
-        <base-input type="text" label="ตำบล">
+        <div class="row">
+            <div class="col-lg-4">
+              <base-input type="text" label="ตำบล">
             <select name="tambon" class="form-control" @change="setTambon($event)">
                 <option v-for="(item, index) in tambon" :key="index" :value="item.id">{{ item.name_th }}</option>
             </select>
-        </base-input>
-        <base-input type="text" label="อำเภอ">
+        </base-input>  
+            </div>
+            <div class="col-lg-4">
+
+                <base-input type="text" label="อำเภอ">
             <select name="amphure" class="form-control" @change="setAmphure($event)">
                 <option v-for="(item, index) in amphure" :key="index" :value="item.id">{{ item.name_th }}</option>
             </select>
         </base-input>
-        <base-input type="text" label="จังหวัด">
+            </div>
+            <div class="col-lg-4">
+
+                <base-input type="text" label="จังหวัด">
             <select name="province" class="form-control" @change="setProvince($event)">
                 <option v-for="(item, index) in province" :key="index" :value="item.id">{{ item.name_th }}</option>
             </select>
         </base-input>
+            </div>
+        </div>
+        
+        
+        
         <div class="row">
             <div class="col">
                 <base-input type="tel" label="เบอร์โทรติดต่อ 1" />
@@ -112,4 +125,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+
+@media screen and (min-width: 900px) {
+  .card{
+    min-width: 650px;
+
+}
+}
+
+</style>

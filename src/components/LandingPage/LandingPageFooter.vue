@@ -3,8 +3,8 @@
         
             <div class="col">
                 <div class="row align-items-center">
-                    <div class="d-none d-md-block col-md-2 col-lg-1 justify-content-center " v-for="(item,index) in url.slice(6)" :key="index">
-                        <img  class="my-3" width="100%" :src="item.url"/>
+                    <div class="col-2 col-md-2 col-lg-1 justify-content-center " v-for="(item,index) in url.slice(6)" :key="index">
+                        <img class="partner-logo"  width="100%" :src="item.url"/>
                     </div>
 
                 </div>
@@ -77,11 +77,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.partner-logo{
+    margin-top:1rem;
+    margin-bottom:1rem;
+}
 .content{
     font-family: 'Noto Sans Thai', sans-serif;
-    margin-left: 5rem;
-    margin-right: 5rem;
+    margin-left: 10rem;
+    margin-right: 10rem;
     background-color: white;
     border-top-right-radius: 2rem;
     border-top-left-radius: 2rem;
@@ -99,6 +102,32 @@ p{
         padding-right: 1.5rem;
         display: flex;
         align-items:center;   
+}
+@media screen and (max-width:450px) {
+    .content {
+        margin-left:2rem !important ;
+        margin-right:2rem !important;
+        border-top-right-radius: 2rem;
+        border-top-left-radius: 2rem;
+    }
+    .row{
+        margin: 0;
+    }
+    .col-2{
+
+        padding-left: 0.2rem !important;
+        padding-right: 0.2rem !important;
+    }
+
+    .partner-logo{
+       padding: 0.2rem 0 0.2rem 0;
+    }
+}
+@media screen and (max-width: 900px) {
+  .content {
+    margin-left: 5rem;
+    margin-right: 5rem;
+  }
 }
     
 </style>

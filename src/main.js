@@ -28,6 +28,9 @@ import '@/assets/demo/demo.css'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+import { User } from '@/functions/userservice';
+const userservice = new User();
+
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
 import RTLPlugin from './RTLPlugin'
@@ -57,18 +60,18 @@ Vue.use(Notify)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
-const checkAuth = () => {
-  if(localStorage.getItem('user')==="user"){
+const checkAuth = async () => {
+  const me = await userservice.Me();
+  if(me.status===true){
     return true
   }
-  else{
-
-    return false
+  else {
+    return false;
   }
 }
 
 router.beforeEach((to, from, next) => {
-  const public_page = ['LandingPage','CreateAccount','Invitations']
+  const public_page = ['LandingPage','ConfirmOtp','FirstLogin','CreateAccount','Invitations']
   if ( !public_page.includes(to.name) && !checkAuth()) next({ name: 'LandingPage' })
   else next()
 })
