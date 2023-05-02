@@ -1,6 +1,6 @@
 <template>
-    <div class="card text-left px-5 py-5">
-        <h2>เข้าสู่ระบบเพื่อลงทะเบียนการให้บริการ</h2>
+    <div class="card text-left px-5 py-5 ">
+        <h2>เข้าสู่ระบบ</h2>
         <base-input v-model="user.username" type="text" label="เบอร์โทรศัทพ์"/>
         <base-input v-model="user.password" :type="togglePassword()" label="รหัสผ่าน"/>
         <base-checkbox v-model="password_visible">แสดงรหัสผ่าน</base-checkbox>
@@ -41,12 +41,21 @@ export default {
             }
             else{
 
-              await this.userservice.SignIn(this.user).then(result=>{
+               await this.userservice.SignIn(this.user).then(async (result)=>{
                     if(result.status === true){
-             
+                     
                         localStorage.setItem('token',result.accessToken);
 
-                        this.$router.push('/landingpage/create-service/hotel-service');
+                        await this.userservice.Me().then(me=>{
+                            console.log(me);
+                            if(!me.approved){
+                                this.$router.replace('/landingpage/userinfo')
+                            }
+                            else{
+                                this.$router.replace('/dashboard');
+                            }
+                        })
+
                     }
                     else{
                         this.error=true;
@@ -65,7 +74,7 @@ export default {
 .card{
     display: flex;
     width: 100%;
-    max-width: 400px !important;
+    max-width: 450px;
     justify-content: center;
 }
 .error-text{
@@ -75,9 +84,10 @@ export default {
 @media screen and (max-width:450px){
     .card{
         margin: 0;
-        min-height: calc(100vh - 70px);
-        border-radius:0 ;
-        border-top:solid 3px var(--primary);
+        min-height: calc(100vh - 56px);
+        border-radius: 0;
+        border-top:solid 3px var(--primary) ;
+
     }
 }
 

@@ -127,9 +127,19 @@ const routes = [
     redirect:'/landingpage/invitations',
     children:[
       {
+        path:'login',
+        name:'Login',
+        component:()=> import('@/pages/landingpage/LoginPage.vue')
+      },
+      {
         path:'invitations',
         name:"Invitations",
         component: Invitations,
+      },
+      {
+        path:'userinfo',
+        name:'UserInfo',
+        component: () => import('@/pages/landingpage/UserInfo.vue')
       },
       {
     path:"createaccount",

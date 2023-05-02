@@ -43,6 +43,9 @@ export class User {
 
     //Me
     async Me(){
+      if(!this.token){
+        return {status:false, message:'Not Authenticated'};
+      }
       let user;
         const initdata = {
           method: "POST",

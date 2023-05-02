@@ -1,7 +1,8 @@
 <template>
-    <div class="card text-left px-5 py-5 mt-3">
+    <div class="card text-left px-4 py-4">
+
         <h2>สร้างบัญชีผู้ใช้</h2>
-        <!-- <div class="row">
+        <div class="row">
             <div class="col">
 
                 <base-input v-model="user.firstname" type="text" label="ชื่อ"/>
@@ -10,7 +11,7 @@
                 <base-input v-model="user.lastname" type="text" label="นามสกุล"/>
 
             </div>
-        </div> -->
+        </div>
         <base-input v-model="user.email" type="email" label="อีเมลล์"/>
         <base-input v-model="user.telephone" type="tel" label="เบอร์โทรศัทพ์"/>
         <base-input v-model="user.telephone_inviter" type="tel" label="เบอร์โทรศัทพ์ ผู้แนะนำ"/>
@@ -117,7 +118,10 @@ export default {
 }
 @media screen and (max-width:450px) {
     .card{
-        width: 90%;
+        width: 100%;
+       min-height: 100vh;
+       border-radius: 0;
+       border-top:solid 3px violet ;
     }
 }
 

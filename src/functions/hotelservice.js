@@ -3,9 +3,28 @@ export class Hotel {
   context;
 
   baseUrl = process.env.VUE_APP_API;
-
+  token = localStorage.getItem('token');
   constructor(context) {
     this.context = context;
+  }
+
+  //create hotel
+  async createHotel(data){
+    let hotel;
+    const initdata = {
+      method:"POST",
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token 
+      },
+      credential: true,
+      data:JSON.stringify(data)
+    }
+    await fetch(this.baseUrl+'hotel',initdata)
+    .then((response) => response.json())
+    .then((result)=> hotel={status:true,data:result})
+    .catch((error) => hotel = {status:false,error:error});
+    return hotel;
   }
 
   //get hotel by id

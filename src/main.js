@@ -62,18 +62,42 @@ Vue.use(IconsPlugin)
 
 const checkAuth = async () => {
   const me = await userservice.Me();
-  if(me.status===true){
-    return true
-  }
-  else {
-    return false;
-  }
+  console.log('me',me);
+  return me;
 }
 
-router.beforeEach((to, from, next) => {
-  const public_page = ['LandingPage','ConfirmOtp','FirstLogin','CreateAccount','Invitations']
-  if ( !public_page.includes(to.name) && !checkAuth()) next({ name: 'LandingPage' })
-  else next()
+router.beforeEach(async (to, from, next) => {
+  const public_page = ['LandingPage','UserInfo','ConfirmOtp','FirstLogin','CreateAccount','Invitations','Login'];
+  const first_login_page = ['CreateService','HotelService']
+  const login = await checkAuth();
+  const target = to.name;
+
+  if(!login && !public_page.includes(target)){
+    next({name:'LandingPage'});
+  }
+
+else if ( !first_login_page.includes(target) && login.status && login.data.approved ){
+
+   next();
+   
+} 
+else if( public_page.includes(target)) {
+  next();
+}
+
+else if (first_login_page.includes(target) && login.status && login.data.service_id===""){
+
+  next();
+}
+
+else if (to.name!=="Login" && login.status &&  !login.data.approved && login.data.service_id!=""){
+  
+  next({name:'UserInfo'});
+}
+else{
+
+  next({name:'LandingPage'})
+}
 })
 
 new Vue({

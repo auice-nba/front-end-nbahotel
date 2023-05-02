@@ -1,6 +1,6 @@
 <template>
 
-<div class="invitation">
+<div class="invitation px-3">
 
 
         <div class="title">
@@ -11,7 +11,7 @@
                     the bulk of the card's content.</blockquoate>
                 </p> -->
                 
-                <base-button type="primary" class="mt-3" @click="createAccount">สมัครสมาชิก</base-button>
+                <button type="primary" class="btn btn-primary mt-3" @click="createAccount">สมัครสมาชิก</button>
             </div>
        
     </div>
@@ -35,7 +35,6 @@
         max-width: 550px;
         min-height: calc(100vh - 206px);
     }
-    
     .title {
     width: auto;
     width: 100%;
@@ -44,7 +43,7 @@
 
 @media screen and (max-width:450px) {
     .invitation{
-        width: 80%;
+        width: 100%;
     }
 }
     </style>

@@ -85,6 +85,7 @@ export default {
     font-family: 'Noto Sans Thai', sans-serif;
     margin-left: 10rem;
     margin-right: 10rem;
+    height: 120px;
     background-color: white;
     border-top-right-radius: 2rem;
     border-top-left-radius: 2rem;

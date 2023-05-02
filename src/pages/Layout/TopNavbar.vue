@@ -178,8 +178,8 @@ export default {
       this.showMenu = !this.showMenu;
     },
     logout(){
-      localStorage.removeItem("user");
-      this.$router.push('/landingpage');
+      localStorage.removeItem("token");
+      this.$router.push('/landingpage/login');
     }
   },
   computed: {
