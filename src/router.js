@@ -24,8 +24,8 @@ import UpdateRoom from "@/pages/UpdateRoom.vue";
 const routes = [
   {
     path: "/",
-    component: DashboardLayout,
     redirect: "dashboard",
+    component: DashboardLayout,
     children: [
       
       {
@@ -123,27 +123,31 @@ const routes = [
   {
     path:"/landingpage",
     name:"LandingPage",
-    component:LandingPage,
     redirect:'/landingpage/invitations',
+    component:LandingPage,
     children:[
       {
         path:'login',
         name:'Login',
+        meta:{public:true},
         component:()=> import('@/pages/landingpage/LoginPage.vue')
       },
       {
         path:'invitations',
         name:"Invitations",
+        meta:{public:true},
         component: Invitations,
       },
       {
         path:'userinfo',
         name:'UserInfo',
+        meta:{public:true},
         component: () => import('@/pages/landingpage/UserInfo.vue')
       },
       {
     path:"createaccount",
     name:"CreateAccount",
+    meta:{public:true},
     component:CreateAccount,
   },
   {
@@ -154,6 +158,7 @@ const routes = [
   {
     path:'firstlogin',
     name:'FirstLogin',
+    meta:{public:true},
     component:()=>import('@/pages/landingpage/FirstLogin.vue')
   },
   {
@@ -190,7 +195,13 @@ const routes = [
     path:'service-image',
     name:'ServiceImage',
     component:()=>import('@/pages/landingpage/ServiceImage.vue')
+  },
+  {
+    path:'create-service-success',
+    name:'CreateServiceSuccess',
+    component:()=>import('@/pages/landingpage/CreateServiceSuccess.vue')
   }
+
   
     ]
   },

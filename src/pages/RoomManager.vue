@@ -22,6 +22,7 @@
 </template>
 <!-- eslint-disable prettier/prettier -->
 <script>
+import { User } from "@/functions/userservice";
 import { Card } from "@/components/index";
 import {Room} from '@/functions/roomservice';
 import RoomTable from "@/components/RoomTable";
@@ -39,8 +40,9 @@ const tableColumns = [
 export default {
   setup(){
     const room = new Room();
+    const userservice = new User();
     return {
-      room
+      room,userservice
     }
   },
   components: {
@@ -48,13 +50,17 @@ export default {
     RoomTable,
   },
   async mounted(){
+    await this.userservice.Me().then(user =>{
+
+      this.hotel_id = user.data.service_id;
+    })
     await this.room.getHotelRoom(this.hotel_id).then(room=>{
       this.roomdata = room;
     })
   },
   data() {
     return {
-      hotel_id:'643e55439c48ebe52204a5a2',
+      hotel_id:null,
       roomdata:null,
       table: {
         title: "Simple Table",

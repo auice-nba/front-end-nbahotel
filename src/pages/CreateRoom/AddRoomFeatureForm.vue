@@ -5,7 +5,7 @@
       <h3>เพิ่มลัษณะพิเศษของห้อง</h3>
       <form>
         <div class="row">
-          <div class="col-3">
+          <div class="col-6 col-md-3">
             <base-input label="เฟอร์นิเจอร์">
               <base-checkbox v-for="(furniture,index) in furnitureType" :key="index" class="mb-3" v-model="furniture.check">
                 {{ furniture.name }}
@@ -14,7 +14,7 @@
             </base-input>
           </div>
 
-          <div class="col-3">
+          <div class="col-6 col-md-3">
             <base-input label="สิ่งอำนวยความสะดวก">
               <base-checkbox v-for="(amenities,index) in amenitiesType" :key="index" class="mb-3" v-model="amenities.check">
                 {{ amenities.name }}
@@ -22,7 +22,7 @@
             </base-input>
           </div>
 
-          <div class="col-3">
+          <div class="col-6 col-md-3">
             <base-input label="รูมเซอร์วิส">
               <base-checkbox v-for="(roomservice,index) in roomserviceType" :key="index" class="mb-3" v-model="roomservice.check">
                 {{ roomservice.description }} 
@@ -31,7 +31,7 @@
             </base-input>
           </div>
 
-          <div class="col-3">
+          <div class="col-6 col-md-3">
             <base-input label="สิ่งบันเทิง">
               <base-checkbox v-for="(entertainment,index) in entertainmentType" :key="index" class="mb-3" v-model="entertainment.check">
                 {{ entertainment.name }} 
@@ -60,11 +60,13 @@
 <!-- eslint-disable prettier/prettier -->
 <script>
 import { Card, BaseInput } from "@/components/index";
-import { Room } from "@/functions/roomservice"
+import { Room } from "@/functions/roomservice";
+
 
 export default {
   setup(){
     const room = new Room();
+
     return {
       room
     }
@@ -74,7 +76,7 @@ export default {
     BaseInput,
   },
   async mounted(){
-   
+
     this.roomid =this.$route.params.id;
 
     const fur = await this.room.getFurnitureType();
@@ -151,4 +153,5 @@ export default {
   text-align: start;
   padding: 1rem;
 }
+
 </style>

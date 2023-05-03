@@ -1,9 +1,9 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div class="content">
-    <Card>
+
       <h2 class="title mt-3">รายละเอียดโรงแรม</h2>
-    </Card>
+   
     <div v-if="loading" class="row">
       <div class="col-md-8">
         <edit-hotel-form :model="model"> </edit-hotel-form>
@@ -19,7 +19,6 @@
 import EditHotelForm from "./Profile/EditHotelForm.vue";
 import {Hotel} from "@/functions/hotelservice";
 import UpdateHotelPicture from "./Profile/UpdateHotelPicture.vue";
-import { Card } from "@/components/index";
 export default {
   setup(){
     const hotel = new Hotel();
@@ -28,7 +27,7 @@ export default {
     }
   },
   components: {
-   Card,EditHotelForm,UpdateHotelPicture
+  EditHotelForm,UpdateHotelPicture
   },
   async mounted(){
     //get hotel data

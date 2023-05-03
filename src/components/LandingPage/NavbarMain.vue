@@ -36,7 +36,7 @@
                
                 </div>
                 <div class="menu-expend" :style="menuExpend?'display:block':'display:none'">
-                        <ul class="card text-left">
+                        <ul class="menu text-left">
                             <li v-for="(item,index) in menuItem" :key="index" class="menu-item">
                                 <router-link to="item.link">
                                     <div class="row text-white">
@@ -51,9 +51,12 @@
                                 </router-link>
                             </li>
                             <li class="menu-item bg-primary btn-login">
-                                <div class="row text-white">
-                                        <div class="col-9 text-left bg">
+                                <div v-if="loading" class="row text-white">
+                                        <div v-if="!user.status" class="col-9 text-left bg">
                                             <base-button class="mx-2 text-white" link  @click="login">เข้าสู่ระบบ</base-button>
+                                        </div>
+                                        <div v-if="user.status" class="col-9 text-left bg">
+                                            <base-button class="mx-2 text-white" link  @click="logout">ออกจากระบบ</base-button>
                                         </div>
                                         <div class="col-3 text-right">
                                             
@@ -71,11 +74,22 @@
 </template>
 
 <script>
+import { User } from '@/functions/userservice';
 
 export default {
+    setup(){
+        const userservice = new User();
+        return {
+            userservice
+        }
+    },
+    mounted(){
+        this.getUser();
+    },
     data(){
         return{
-
+            loading:false,
+            user:null,
             menuExpend:false,
             menuItem:[
                 {
@@ -105,8 +119,24 @@ export default {
         }
     },
     methods: {
+        async getUser(){
+            await this.userservice.Me().then(result=>{
+                if(result){
+
+                    this.user = result;
+    
+                    this.loading = true;
+                }
+            })
+        },
         login() {
             this.$router.push("/landingpage/login");
+        },
+        logout(){
+            localStorage.removeItem('token');
+            this.menuExpend=false;
+            this.user.status=false;
+            this.$router.push('/landingpage');
         },
         menuClick(){
             this.menuExpend = !this.menuExpend;
@@ -117,7 +147,11 @@ export default {
 </script>
 
 <style scoped>
+.menu{
+    background-color: white;
+    border-radius: 0.4rem;
 
+}
 .nav-bar{
     align-items: center;
     height: 70px;

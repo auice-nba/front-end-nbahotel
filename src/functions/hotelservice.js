@@ -9,7 +9,7 @@ export class Hotel {
   }
 
   //create hotel
-  async createHotel(data){
+  async createHotel(data,userId){
     let hotel;
     const initdata = {
       method:"POST",
@@ -18,9 +18,9 @@ export class Hotel {
         "token":this.token 
       },
       credential: true,
-      data:JSON.stringify(data)
+      body:JSON.stringify(data)
     }
-    await fetch(this.baseUrl+'hotel',initdata)
+    await fetch(`${this.baseUrl}hotel/${userId}`,initdata)
     .then((response) => response.json())
     .then((result)=> hotel={status:true,data:result})
     .catch((error) => hotel = {status:false,error:error});
@@ -190,7 +190,10 @@ async getAmenities(){
     let data;
     const initdata = {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+       },
       body:JSON.stringify(updatedata),
       credential: true,
     }

@@ -21,7 +21,7 @@
       <form>
         <div class="row">
 
-          <div class="col-8">
+          <div class="col-md-8">
             <div class="my-3" v-if="preview.length == 0">
               <base-input>
                 <div class="image-input">เลือกรูปภาพ</div>
@@ -249,8 +249,8 @@ input:hover {
 }
 
 .loader { 
-
-  width:500px;
+  width:100%;
+  max-width:500px;
   background-color: rgb(173, 173, 173);
   margin:0 auto;
   border-radius:10px;

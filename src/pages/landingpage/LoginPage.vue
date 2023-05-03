@@ -42,20 +42,15 @@ export default {
             else{
 
                await this.userservice.SignIn(this.user).then(async (result)=>{
+
                     if(result.status === true){
-                     
-                        localStorage.setItem('token',result.accessToken);
-
-                        await this.userservice.Me().then(me=>{
-                            console.log(me);
-                            if(!me.approved){
-                                this.$router.replace('/landingpage/userinfo')
-                            }
-                            else{
-                                this.$router.replace('/dashboard');
-                            }
-                        })
-
+                      localStorage.setItem('token',result.accessToken);
+                      await this.userservice.Me().then(result=>{
+                        if(result){
+                            
+                            this.$router.push('/dashboard');
+                        }
+                      })
                     }
                     else{
                         this.error=true;

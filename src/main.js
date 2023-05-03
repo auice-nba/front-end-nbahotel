@@ -29,7 +29,7 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { User } from '@/functions/userservice';
-const userservice = new User();
+
 
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
@@ -60,44 +60,31 @@ Vue.use(Notify)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
-const checkAuth = async () => {
-  const me = await userservice.Me();
-  console.log('me',me);
-  return me;
-}
 
-router.beforeEach(async (to, from, next) => {
-  const public_page = ['LandingPage','UserInfo','ConfirmOtp','FirstLogin','CreateAccount','Invitations','Login'];
-  const first_login_page = ['CreateService','HotelService']
-  const login = await checkAuth();
-  const target = to.name;
 
-  if(!login && !public_page.includes(target)){
-    next({name:'LandingPage'});
-  }
+router.beforeEach(async (to,from,next) => {
 
-else if ( !first_login_page.includes(target) && login.status && login.data.approved ){
+console.log(to.name,'meta','from',from,'meta',to.meta);
+const userservice = new User();
 
-   next();
-   
-} 
-else if( public_page.includes(target)) {
+await userservice.Me().then(user=>{
+console.log('user',user);
+
+if(to.meta.public){
   next();
 }
-
-else if (first_login_page.includes(target) && login.status && login.data.service_id===""){
-
-  next();
+else if(!to.meta.public && user.status && !user.data.approved){
+  next({name:'UserInfo'})
 }
-
-else if (to.name!=="Login" && login.status &&  !login.data.approved && login.data.service_id!=""){
-  
-  next({name:'UserInfo'});
+else if(!to.meta.public && user.status && user.data.approved){
+  next();
 }
 else{
-
   next({name:'LandingPage'})
 }
+
+});
+
 })
 
 new Vue({

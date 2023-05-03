@@ -43,9 +43,9 @@ export class User {
 
     //Me
     async Me(){
-      if(!this.token){
-        return {status:false, message:'Not Authenticated'};
-      }
+     if(!this.token){
+      return {status:false,message:'No Authentication'};
+     }
       let user;
         const initdata = {
           method: "POST",
@@ -56,7 +56,7 @@ export class User {
           credential: true,
         };
         await fetch(this.baseUrl + "users/me", initdata)
-          .then((response) => response.json())
+          .then(response => response.json())
           .then((result) => user = result)
           .catch((err) => user = err);
     

@@ -3,6 +3,7 @@ export class Room {
 
   context;
   baseUrl = process.env.VUE_APP_API;
+  token = localStorage.getItem('token');
 
   constructor(context) {
     this.context = context;
@@ -12,7 +13,10 @@ export class Room {
     let room;
     const initdata = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+       },
       credential: true,
       body: JSON.stringify(data),
     };
@@ -28,7 +32,10 @@ export class Room {
     let room;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token" :this.token
+       },
       credential: true,
     }
     await fetch(this.baseUrl + "room/"+id, initdata)
@@ -47,7 +54,10 @@ export class Room {
 
     const initdata = {
       method:"PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json" ,
+        "token" : this.token
+      },
       credential: true,
       body: JSON.stringify(data),
       redirect:'follow'
@@ -65,7 +75,10 @@ export class Room {
    
     const initdata = {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token" : this.token
+       },
       credential: true,
     };
     await fetch(`${this.baseUrl}room/${id}`, initdata)
@@ -80,7 +93,10 @@ export class Room {
     let room;
       const initdata = {
         method:"GET",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json" ,
+          "token" : this.token
+        },
         credential: true,
       }
       await fetch(`${this.baseUrl}room/hotel/${id}`, initdata)
@@ -97,7 +113,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token" : this.token
+       },
       credential: true,
     };
     await fetch(this.baseUrl + "room/type",initdata)
@@ -115,7 +134,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/bedtype",initdata)
@@ -131,7 +153,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/aircondition",initdata)
@@ -146,7 +171,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/bathtype",initdata)
@@ -162,7 +190,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/furnituretype",initdata)
@@ -178,7 +209,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/amenities",initdata)
@@ -194,7 +228,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/entertainment",initdata)
@@ -210,7 +247,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/service",initdata)
@@ -226,7 +266,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/status",initdata)
@@ -242,7 +285,10 @@ export class Room {
     let data;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/view",initdata)
@@ -259,7 +305,10 @@ export class Room {
 
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(this.baseUrl + "room/security",initdata)
@@ -327,7 +376,10 @@ export class Room {
 
     const initdata = {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "token":this.token
+    },
       credential: true,
     };
     await fetch(`${this.baseUrl}room/${roomId}/picture/${pictureId}`,initdata)

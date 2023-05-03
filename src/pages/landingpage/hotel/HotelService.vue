@@ -44,7 +44,8 @@
                 <base-input v-model="hotel.phone_number[1]" type="tel" label="เบอร์โทรติดต่อ 2" />
             </div>
         </div>
-        <base-button type="primary" @click="createHotel">ไปขั้นตอนต่อไป</base-button>
+        <base-button link @click="back">กลับ</base-button>
+        <base-button type="primary" @click="createHotel">บันทึก</base-button>
     </div>
 </template>
 
@@ -66,8 +67,11 @@ export default {
     },
    async mounted() {
         await this.userservice.Me().then(result=>{
-            console.log(result);
-            this.hotel.host_id=result.data.user_id;
+            if(result){
+
+                this.user=result.data;
+                this.hotel.host_id=this.user.user_id;
+            }
         })
         await this.getCategories();
         this.province = this.provinceservice.getProvince();
@@ -84,6 +88,7 @@ export default {
     data() {
         return {
             loading: false,
+            user:null,
             province: null,
             amphure: null,
             tambon: null,
@@ -102,22 +107,22 @@ export default {
                 latitude: null,
                 longitude: null
             }
-            
-
         }
     },
     methods: {
         async createHotel() {
-            console.log(this.hotel);
-            await this.hotelservice.createHotel(this.hotel).then(result => {
-                console.log(result)
+         
+            await this.hotelservice.createHotel(this.hotel,this.hotel.host_id).then(result => {
+                if(result){
+
+                    this.$router.push('/landingpage/create-service-success');
+                }
             })
-            // this.$router.push('/landingpage/hotel-service-detail');
         },
         async getCategories() {
             await this.hotelservice.getCatetory().then(result => {
                 this.categories = result;
-                console.log(result);
+             
                 this.hotel.category_id=result[0]._id;
 
             })
@@ -156,6 +161,9 @@ export default {
                 return data;
             }
         },
+        back(){
+
+        }
     }
 }
 </script>

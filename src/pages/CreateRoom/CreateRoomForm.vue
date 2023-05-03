@@ -5,14 +5,14 @@
       <h3>สร้างห้อง</h3>
       <form>
         <div class="row">
-          <div class="col-4">
+          <div class="col-12 col-md-6">
             <base-input
               label="เลขที่ห้อง"
               v-model="data.room_number"
               placeholder="เลขที่"
             />
           </div>
-          <div class="col-4">
+          <div class="col-6 col-md-4">
             <base-input label="ประเภท">
               <select
                 v-model="data.room_type"
@@ -23,7 +23,7 @@
               </select>
             </base-input>
           </div>
-          <div class="col-4">
+          <div class="col-6 col-md-4">
             <base-input label="เตียง">
               <select
                 v-model="data.bed_type"
@@ -64,7 +64,7 @@
         </div>
 
         <div class="row">
-          <div class="col-4">
+          <div class="col-md-4">
             <base-input label="เขตปลอดบุหรี่">
               <select v-model="data.smoke_type" class="form-control" id="smoke">
                 <option value="true">ปลอดบุหรี</option>
@@ -72,7 +72,7 @@
               </select>
             </base-input>
           </div>
-          <div class="col-4">
+          <div class="col-md-4">
             <base-input label="อินเตอร์เน็ตไร้สาย">
               <select v-model="data.wifi" class="form-control" id="internet">
                 <option value="true">wifi</option>
@@ -80,7 +80,7 @@
               </select>
             </base-input>
           </div>
-          <div class="col-4">
+          <div class="col-md-4">
             <base-input label="ระบบรักษาความปลอดภัย">
               <select v-model="data.security" class="form-control" id="bed-type">
                 <option v-for="(security,index) in securitytype" :key="index" :value="security._id">{{ security.name }}</option>
@@ -89,17 +89,17 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-4">
+          <div class="col-md-4">
             <base-input label="วิว และ บรรยากาศ">
               <select v-model="data.view_type" class="form-control" id="bed-type">
                 <option v-for="(view,index) in viewtype" :key="index" :value="view._id">{{ view.name }}</option>
               </select>
             </base-input>
           </div>
-          <div class="col-4">
+          <div class="col-6 col-md-4">
             <base-input label="ขนาด" v-model="data.size" placeholder="ตรม." />
           </div>
-          <div class="col-4">
+          <div class="col-6 col-md-4">
             <base-input
               label="จำนวนผู้เข้าพักสูงสุด"
               v-model="data.max_person"
@@ -113,10 +113,10 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-4">
+          <div class="col-6 col-md-4">
             <base-input label="ราคา" v-model="data.price" placeholder="บาท" />
           </div>
-          <div class="col-2">
+          <div class="col-6 col-md-2">
             <base-input label="หน่วย">
               <select v-model="data.unit" class="form-control" id="bed-type">
                 <option value="ต่อวัน">ต่อวัน</option>
@@ -125,7 +125,7 @@
               </select>
             </base-input>
           </div>
-          <div class="col-3">
+          <div class="col-md-3">
             <base-input label="สถาณะปัจจุบัน">
             <select class="form-control" id="bed-type">
                 <option v-for="(status,index) in roomstatustype" :key="index" :value="status._id">{{ status.name }}</option>
@@ -134,7 +134,7 @@
           </base-input>
           </div>
         </div>
-        <div class="col-4">
+        <div class="col-md-4">
           <base-checkbox class="mb-3" v-model="children_type">
             บริการฟรีสำหรับเด็กที่อายุต่ำกว่า 6 ปี ที่มากับผุ้ปกครอง
           </base-checkbox>
@@ -152,12 +152,14 @@
 <script>
 import { Card, BaseInput } from "@/components/index";
 import { Room } from "../../functions/roomservice";
+import { User } from "@/functions/userservice";
 
 export default {
   setup() {
     const room = new Room();
+    const userservice = new User();
     return {
-      room,
+      room,userservice
     };
   },
   components: {
@@ -165,7 +167,9 @@ export default {
     BaseInput,
   },
   async mounted() {
-    this.data.hotel_id = "643e55439c48ebe52204a5a2";
+    await this.userservice.Me().then(result=>{
+      this.data.hotel_id = result.data.service_id;
+    })
     await this.room.getRoomType().then((result)=>{
     this.roomtype = result;
    })
@@ -184,7 +188,7 @@ export default {
 
    await this.room.getViewType().then((result)=>{
     this.viewtype = result;
-    console.log(this.viewtype);
+
    })
 
    await this.room.getRoomStatusType().then((result)=>{
