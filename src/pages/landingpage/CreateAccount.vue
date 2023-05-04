@@ -81,7 +81,7 @@ export default {
             await this.userservice.CreateUser(this.user).then(result=>{
                 console.log(result);
                 if(result.status === true){
-                    this.$router.push('/landingpage/confirm-otp');
+                    this.$router.push(`/landingpage/firstlogin`);
                 }
                 else{
                     this.error_message = result.message;

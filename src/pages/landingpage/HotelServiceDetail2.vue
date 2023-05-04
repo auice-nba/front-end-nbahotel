@@ -6,7 +6,7 @@
                 <h4>ไฮไลท์</h4>
                 <div class="row">
 
-                    <base-checkbox v-for="(item,index) in highlight" :key="index" class="col-4"  >
+                    <base-checkbox v-for="(item,index) in highlight" :key="index" class="col-4" v-model="item.check" >
                     {{ item.name }}
                 </base-checkbox> 
             </div>
@@ -15,7 +15,7 @@
                 <h4>เครื่องอำนวยความสะดวก</h4>
                 <div class="row">
 
-                    <base-checkbox v-for="(item,index) in amenities" :key="index" class="col-4 " >
+                    <base-checkbox v-for="(item,index) in amenities" :key="index" class="col-4 " v-model="item.check" >
                     {{ item.name }}
                 </base-checkbox> 
             </div>
@@ -24,7 +24,7 @@
                 <h4>ใบรับรอง</h4>
                 <div class="row">
 
-                    <base-checkbox v-for="(item,index) in certificate" :key="index" class="col-6 mb-3" >
+                    <base-checkbox v-for="(item,index) in certificate" :key="index" class="col-6 mb-3" v-model="item.check">
                     {{ item.name }}
                 </base-checkbox> 
             </div>
@@ -51,13 +51,16 @@ export default {
        
     },
     mounted(){
+        this.userId = this.$route.query.host;
+        this.hotelId = this.$route.params.id;
         this.getHighlight();
         this.getAmenities();
         this.getCertificate();
     },
     data(){
         return{
-
+            userId:null,
+            hotelId:null,
             highlight:null,
             amenities:null,
             certificate:null
@@ -66,22 +69,48 @@ export default {
     methods:{
         async getHighlight(){
             await this.hotelservice.getHighlight().then(result=>{
-                this.highlight= result
-            })
+
+                this.highlight= result.map(el=>({
+                                "id":el._id,
+                                "name":el.name,
+                                "description":el.description,
+                                "check":false}));
+
+                                 })
+                
         },
         async getAmenities(){
             await this.hotelservice.getAmenities().then(result=>{
-                this.amenities= result
+                this.amenities= result.map(el=>({
+                                "id":el._id,
+                                "name":el.name,
+                                "description":el.description,
+                                "check":false}));
             })
         },
         async getCertificate(){
             await this.hotelservice.getCertificate().then(result=>{
-                this.certificate= result
+                this.certificate= result.map(el=>({
+                                "id":el._id,
+                                "name":el.name,
+                                "description":el.description,
+                                "check":false}));
             })
         },
 
-        addDetail(){
-            this.$router.push('/landingpage/service-map');
+        async addDetail(){
+            const dataupdate = {
+                highlight:this.highlight.filter(el=>el.check===true).map(el=>el.id),
+                amenities:this.amenities.filter(el=>el.check===true).map(el=>el.id),
+                certificate:this.certificate.filter(el=>el.check===true).map(el=>el.id)
+            }
+            console.log('dataupdate',dataupdate);
+            await this.hotelservice.updateHotel(this.hotelId,this.userId,dataupdate).then(result=>{
+                if(result){
+                   
+                    this.$router.push(`/landingpage/create-service-success/${this.hotelId}?host=${this.userId}`);
+                }
+            })
         }
     }
 }

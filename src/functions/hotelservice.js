@@ -22,7 +22,7 @@ export class Hotel {
     }
     await fetch(`${this.baseUrl}hotel/${userId}`,initdata)
     .then((response) => response.json())
-    .then((result)=> hotel={status:true,data:result})
+    .then((result)=> hotel= result)
     .catch((error) => hotel = {status:false,error:error});
     return hotel;
   }
@@ -186,7 +186,7 @@ async getAmenities(){
   }
 
   //update hotel information
-  async updateHotel(id,updatedata){
+  async updateHotel(hotelId,userId,updatedata){
     let data;
     const initdata = {
       method: "PATCH",
@@ -197,9 +197,9 @@ async getAmenities(){
       body:JSON.stringify(updatedata),
       credential: true,
     }
-    await fetch(`${this.baseUrl}hotel/${id}`,initdata)
+    await fetch(`${this.baseUrl}hotel/${hotelId}/${userId}`,initdata)
     .then(response => response.json())
-    .then(result=>data = {status:"ok",data:result})
+    .then(result=>data = result)
     .catch(err=>data = {status:false,error:err})
 
     return data;

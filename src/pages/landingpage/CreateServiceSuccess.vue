@@ -13,13 +13,35 @@
     </div>
 </template>
 <script>
+import { User } from "@/functions/userservice";
 export default {
+    setup(){
+        const userservice = new User();
+        return {
+            userservice
+        }
+    },
+    mounted(){
+        this.hotelId = this.$route.params.id;
+        this.userId = this.$route.query.host;
+    },
+    data(){
+        return {
+            hotelId:null,
+            userId:null
+        }
+    },
     methods: {
         Edit(){
-            this.$router.push('/landingpage/firstlogin');
+            this.$router.push(`/landingpage/hotel-service-update/${this.hotelId}?host=${this.userId}`);
         },
-        back(){
-            this.$router.push('/')
+       async back(){
+            await this.userservice.SignOut().then(result=>{
+                if(result){
+                    localStorage.removeItem('token');
+                    this.$router.push('/')
+                }
+            })
         }
     }
 }

@@ -2,7 +2,7 @@
     <div class="card text-left px-5 py-5">
         <h2>รายละเอียดเพิ่มเติม</h2>
 <base-input  label="คำอธิบายเกี่ยวกับสถานที่ประกอบการ">
-<textarea v-model="updatedata.detail" class="form-control"></textarea>
+<textarea v-model="updatedata.description" class="form-control"></textarea>
 </base-input>
         <base-button  type="primary" @click="addDetail">ไปขั้นตอนต่อไป</base-button>
         </div>
@@ -23,28 +23,27 @@ export default {
        BaseInput
     },
     mounted(){
-        this.getUser();
+        this.hotel_id = this.$route.params.id;
+        this.user_id = this.$route.query.host;
     },
    data(){
     return {
-        userid:null,
+        hotel_id:null,
+        user_id:null,
         updatedata:{
-            detail:null
+            description:null
         }
     }
    },    
     methods:{
-        async getUser(){
-            await this.userservice.Me().then(result => {
-                this.userid = result.data.user_id;
-            })
-        },
        async addDetail(){
-        console.log(this.updatedata);
-            await this.hotelservice.updateHotel(this.userid,this.detail).then(result=>{
-                console.log(result);
+      
+            await this.hotelservice.updateHotel(this.hotel_id,this.user_id,this.updatedata).then(result=>{
+              if(result){
+
+                  this.$router.push(`/landingpage/hotel-service-detail2/${this.hotel_id}?host=${this.user_id}`);
+                }
             })
-            // this.$router.push('/landingpage/hotel-service-detail2');
         },
     }
 }

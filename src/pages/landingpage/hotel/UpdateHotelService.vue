@@ -44,15 +44,8 @@
                 <base-input v-model="hotel.phone_number[1]" type="tel" label="เบอร์โทรติดต่อ 2" />
             </div>
         </div>
-        <div class="text-center">
-
-            <base-button link @click="back">กลับ</base-button>
-            <base-button type="primary" @click="createHotel">บันทึก</base-button>
-            <p>
-                
-                <small class="text-danger">{{ error_message }}</small>
-            </p>
-        </div>
+        <base-button link @click="back">กลับ</base-button>
+        <base-button type="primary" @click="updateHotel">บันทึก</base-button>
     </div>
 </template>
 
@@ -113,22 +106,13 @@ export default {
                 country: "ไทย",
                 latitude: null,
                 longitude: null
-            },
-            error_message:null,
+            }
         }
     },
     methods: {
-        async createHotel() {
-            this.error_message=null;
-            if(!this.hotel.name){
-                this.error_message = 'กรุณากรอกชื่อโรงแรม';
-                return;
-            }
-            if(!this.hotel.address){
-                this.error_message = 'กรุณากรอกที่อยู่';
-                return;
-            }
-            await this.hotelservice.createHotel(this.hotel,this.hotel.host_id).then(result => {
+        async updateHotel() {
+         
+            await this.hotelservice.updateHotel(this.hotel,this.hotel.host_id).then(result => {
                 console.log(result);
                 if(result){
 

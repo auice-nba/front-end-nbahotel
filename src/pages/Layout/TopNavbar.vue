@@ -85,31 +85,7 @@
             <ul class="dropdown-menu dropdown-menu-right dropdown-navbar">
               <li class="nav-link">
                 <a href="#" class="nav-item dropdown-item">
-                  Mike John responded to your email
-                </a>
-              </li>
-
-              <li class="nav-link">
-                <a href="javascript:void(0)" class="nav-item dropdown-item">
-                  You have 5 more tasks
-                </a>
-              </li>
-
-              <li class="nav-link">
-                <a href="javascript:void(0)" class="nav-item dropdown-item">
-                  Your friend Michael is in town
-                </a>
-              </li>
-
-              <li class="nav-link">
-                <a href="javascript:void(0)" class="nav-item dropdown-item">
-                  Another notification
-                </a>
-              </li>
-
-              <li class="nav-link">
-                <a href="javascript:void(0)" class="nav-item dropdown-item">
-                  Another one
+                  Fist signin
                 </a>
               </li>
             </ul>
@@ -133,12 +109,6 @@
                 </a>
               </li>
 
-              <li class="nav-link">
-                <a href="javascript:void(0)" class="nav-item dropdown-item">
-                  Settings
-                </a>
-              </li>
-
               <li class="dropdown-divider"></li>
 
               <li class="nav-link">
@@ -157,8 +127,15 @@
 <script>
 import DropDown from "@/components/Dropdown.vue";
 import Modal from "@/components/Modal.vue";
+import { User } from "@/functions/userservice";
 
 export default {
+  setup(){
+    const userservice = new User();
+    return {
+      userservice
+    }
+  },
   components: {
     DropDown,
     Modal,
@@ -177,9 +154,13 @@ export default {
     toggleMenu() {
       this.showMenu = !this.showMenu;
     },
-    logout(){
-      localStorage.removeItem("token");
-      this.$router.push('/landingpage/login');
+    async logout(){
+      await this.userservice.SignOut().then(result=>{
+                if(result){
+                    localStorage.removeItem('token');
+                    this.$router.push('/landingpage');
+                }
+            })
     }
   },
   computed: {

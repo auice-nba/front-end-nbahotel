@@ -153,6 +153,7 @@ const routes = [
   {
     path:'confirm-otp',
     name:'ConfirmOtp',
+    meta:{public:true},
     component:()=>import('@/pages/landingpage/ConfirmOtp.vue')
   },
   {
@@ -170,6 +171,7 @@ const routes = [
       {
         path:'hotel-service',
         name:'HotelService',
+        meta:{firstlogin:true},
         component:()=>import('@/pages/landingpage/hotel/HotelService.vue')
       },
      
@@ -177,32 +179,41 @@ const routes = [
     ]
   },
   {
-    path:'hotel-service-detail',
+    path:'hotel-service-detail/:id',
     name:'HotelServiceDetail',
+    meta:{firstlogin:true},
     component:()=>import('@/pages/landingpage/HotelServiceDetail.vue')
   },
   {
-    path:'hotel-service-detail2',
+    path:'hotel-service-detail2/:id',
     name:'HotelServiceDetail2',
+    meta:{firstlogin:true},
     component:()=>import('@/pages/landingpage/HotelServiceDetail2.vue')
   },
   {
-    path:'service-map',
+    path:'service-map/:id',
     name:'ServiceMap',
+    meta:{firstlogin:true},
     component:()=>import('@/pages/landingpage/ServiceMap.vue')
   },
   {
-    path:'service-image',
+    path:'service-image/:id',
     name:'ServiceImage',
+    meta:{firstlogin:true},
     component:()=>import('@/pages/landingpage/ServiceImage.vue')
   },
   {
-    path:'create-service-success',
+    path:'create-service-success/:id',
     name:'CreateServiceSuccess',
+    meta:{firstlogin:true},
     component:()=>import('@/pages/landingpage/CreateServiceSuccess.vue')
+  },
+  {
+    path:'hotel-service-update/:id',
+    name:'HotelServiceUpdate',
+    meta:{firstlogin:true},
+    component:()=>import('@/pages/landingpage/HotelServiceUpdate.vue')
   }
-
-  
     ]
   },
   

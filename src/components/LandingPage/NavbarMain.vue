@@ -4,7 +4,7 @@
 
             <div class="row nav-bar">
                 <div class="col text-left logo">
-                    <router-link to="/">
+                    <router-link to="/landingpage/invitations">
             
                         <h3>NBA BOOKING</h3>
                     </router-link>
@@ -76,6 +76,7 @@
 <script>
 import { User } from '@/functions/userservice';
 
+
 export default {
     setup(){
         const userservice = new User();
@@ -132,11 +133,16 @@ export default {
         login() {
             this.$router.push("/landingpage/login");
         },
-        logout(){
-            localStorage.removeItem('token');
-            this.menuExpend=false;
-            this.user.status=false;
-            this.$router.push('/landingpage');
+        async logout(){
+            await this.userservice.SignOut().then(async (result)=>{
+                if(result){
+                    
+                    localStorage.removeItem('token');
+                    this.menuExpend=false;
+                    this.user.status=false;
+                    this.$router.push('/landingpage');
+                }
+            })
         },
         menuClick(){
             this.menuExpend = !this.menuExpend;
