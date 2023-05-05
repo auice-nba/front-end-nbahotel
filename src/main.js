@@ -67,19 +67,6 @@ import routes from './router';
     
     await userservice.Me().then(user=>{
 
-      console.log('to',to.name)
-
-      console.log('public',!!to.meta.public);
-      console.log('first',!!to.firstlogin);
-      console.log('approved',(!!user.status && !!user.data.approved))
-      console.log('not approved',(!!to.meta.firstlogin && !!user.status && !user.data.approved) );
-      console.log('all',(
-
-        !!to.meta.public //public go all
-        || (user.status && user.data.approved) //user approved go all
-        || (!!to.meta.firstlogin && !!user.status && !user.data.approved )  //user not approved go only first login
-      
-      ))
 
       if(
 
