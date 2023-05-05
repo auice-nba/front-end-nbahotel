@@ -113,7 +113,7 @@ export default {
         async updateHotel() {
          
             await this.hotelservice.updateHotel(this.hotel,this.hotel.host_id).then(result => {
-                console.log(result);
+              
                 if(result){
 
                     this.$router.push(`/landingpage/hotel-service-detail/${result.data._id}?host=${this.hotel.host_id}`);

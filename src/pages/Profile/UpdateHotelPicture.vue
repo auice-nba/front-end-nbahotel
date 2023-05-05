@@ -104,7 +104,7 @@ export default {
                 if (result.message === "สร้างรูปภาพเสร็จเเล้ว") {
                     //setimage
 
-                    console.log(result);
+                    
                     result.result.forEach(el => {
                         this.hotel.image_url.push(el);
                     });

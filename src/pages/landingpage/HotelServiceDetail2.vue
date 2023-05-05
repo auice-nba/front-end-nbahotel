@@ -104,7 +104,7 @@ export default {
                 amenities:this.amenities.filter(el=>el.check===true).map(el=>el.id),
                 certificate:this.certificate.filter(el=>el.check===true).map(el=>el.id)
             }
-            console.log('dataupdate',dataupdate);
+
             await this.hotelservice.updateHotel(this.hotelId,this.userId,dataupdate).then(result=>{
                 if(result){
                    

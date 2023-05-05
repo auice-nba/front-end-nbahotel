@@ -119,7 +119,7 @@ export default {
         room_service:rs.map(el=>el.id),
         entertainment:ent.map(el=>el.id)
       }
-      console.log(updateData);
+    
       await this.room.updateRoom(this.roomid,updateData).then((result)=>{
         if(result){
           this.$router.push(`/updateroompicture/${this.roomid}`);

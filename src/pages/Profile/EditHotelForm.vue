@@ -152,7 +152,7 @@ export default {
     },
   },
   async mounted() {
-    console.log(this.model)
+   
     await this.hotelservice.getCatetory().then(result => {
       this.category = result;
     })

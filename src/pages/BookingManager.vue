@@ -52,7 +52,7 @@
     async mounted(){
       await this.bookingservice.getBooking(this.hotel_id).then(result=>{
         if(result.status==="ok"){
-            console.log(result);
+      
             this.table.data=result.data;
             this.loading = true;
         }

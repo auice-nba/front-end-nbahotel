@@ -226,9 +226,7 @@ export default {
 
         this.loading = true;
       }
-      else {
-        console.log('not found room')
-      }
+    
     });
 
     const today = new Date(this.today.date);

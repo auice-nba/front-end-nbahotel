@@ -100,7 +100,6 @@ export default {
       if (input.files) {
         while (count--) {
 
-          console.log('index', index);
           const imageType = input.files[index].type;
           var reader = new FileReader();
           reader.onload = (e) => {
@@ -135,7 +134,7 @@ export default {
               this.preview.push(resizeImage);
               const trailing = imageType.toString().replace("image/", "")
 
-              console.log(trailing);
+             
               const newName = (Math.random() + 1).toString(36).substring(7) + "." + trailing;
 
               const binaryData = atob(resizeImage.split(',')[1]);
@@ -169,7 +168,7 @@ export default {
     async uploadPicture() {
       this.loading = true;
       const formData = new FormData();
-      console.log(this.image);
+    
       for (let i = 0; i < this.image.length; i++) {
         formData.append('imgCollection', this.image[i], this.image[i].name);
       }

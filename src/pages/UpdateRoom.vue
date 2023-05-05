@@ -432,7 +432,6 @@ export default {
                 if (result.message === "สร้างรูปภาพเสร็จเเล้ว") {
                     //setimage
 
-                    console.log(result);
                     result.result.forEach(el => {
                         this.r.imageURl.push(el);
                     });
@@ -498,7 +497,7 @@ export default {
 
             result =  this.r.room_service.find(el => el._id===roomservice._id)?true:false;
         }
-     console.log('result',result);
+
       return result;
     },
     DefineRoomAmenities(amenities){
@@ -552,7 +551,7 @@ export default {
             this.roomUpdate.entertainment=entertainmentUpdate;
         })
         
-        console.log('roomUpdate',this.roomUpdate);
+    
        await this.room.updateRoom(this.id,this.roomUpdate).then(result=>{
             if(result){
                 this.$router.push(`/createroomcompleted/${this.id}`)

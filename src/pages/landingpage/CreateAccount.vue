@@ -85,7 +85,7 @@ export default {
                 return;
             }
             await this.userservice.CreateUser(this.user).then(result=>{
-                console.log(result);
+              
                 if(result.status === true){
                     this.$router.push(`/landingpage/firstlogin`);
                 }

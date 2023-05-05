@@ -107,9 +107,9 @@ export default {
     async mounted() {
 
         this.id = this.$route.params.id;
-        console.log('id', this.id)
+       
         await this.bookingservice.getBookingById(this.hotelId, this.id).then(result => {
-            console.log(result)
+            
             this.booking = result.data;
             this.loading = true;
         })
