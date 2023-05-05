@@ -17,11 +17,11 @@
 
 */
 import Vue from 'vue'
+import App from './App.vue'
 import VueRouter from 'vue-router'
 import SocialSharing from 'vue-social-sharing'
 import VueGitHubButtons from 'vue-github-buttons'
 import 'vue-github-buttons/dist/vue-github-buttons.css'
-import App from './App.vue'
 import '@/assets/scss/white-dashboard.scss'
 import '@/assets/css/nucleo-icons.css'
 import '@/assets/demo/demo.css'
@@ -60,38 +60,31 @@ import routes from './router';
   Vue.use(BootstrapVue)
   Vue.use(IconsPlugin);
 
-  const userservice = new User();
-
+  
   router.beforeEach(async (to,from,next) => {
     
+    const userservice = new User();
     
     await userservice.Me().then(user=>{
 
       console.log(user);
 
 
-      if(to.meta.public){
-          next();
-        
-        }
-        else if(to.meta.firstlogin && user.status && !user.data.approved){
-            next()
-          }
-          else if(user.status && !user.data.approved){
-              next({path:`/landingpage/create-service-success/${user.data.service_id}?host=${user.data.user_id}`})
-            }
-            else if(user.status && user.data.approved){
-                next();
-              }
-              else{
-                  next({name:'LandingPage'})
-                }
+      if(
 
-                })
-                .catch((error)=>{
-                  next({name:'LandingPage'})
-                  console.log(error);
-                });
+            to.meta.public //public go all
+        || (user.status && user.data.approved) //user approved go all
+        || (to.meta.firstlogin && user.status && !user.data.approved)  //user not approved go only first login
+      
+          ){
+          next();
+        }
+        
+        else{
+          next({name:'LandingPage'});
+        }
+    
+           })
                 
                 })
 

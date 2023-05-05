@@ -108,7 +108,7 @@ export default {
             await this.hotelservice.updateHotel(this.hotelId,this.userId,dataupdate).then(result=>{
                 if(result){
                    
-                    this.$router.push(`/landingpage/create-service-success/${this.hotelId}?host=${this.userId}`);
+                    this.$router.push(`/landingpage/create-service-success/`);
                 }
             })
         }

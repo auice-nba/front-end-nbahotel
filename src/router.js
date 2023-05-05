@@ -203,7 +203,7 @@ const routes = [
     component:()=>import('@/pages/landingpage/ServiceImage.vue')
   },
   {
-    path:'create-service-success/:id',
+    path:'create-service-success',
     name:'CreateServiceSuccess',
     meta:{firstlogin:true},
     component:()=>import('@/pages/landingpage/CreateServiceSuccess.vue')

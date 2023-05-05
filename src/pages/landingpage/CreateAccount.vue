@@ -129,8 +129,9 @@ export default {
 }
 @media screen and (max-width:450px) {
     .card{
+        margin:0;
         width: 100%;
-       min-height: 100vh;
+       min-height: calc(100vh - 70px);
        border-radius: 0;
        border-top:solid 3px violet ;
     }
