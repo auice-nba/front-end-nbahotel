@@ -37,7 +37,7 @@ export class User {
           .then((response) => response.json())
           .then((result) => user = result)
           .catch((err) => user = err);
-    
+          this.user = user;
           return user;
     }
     //logout
@@ -80,4 +80,6 @@ export class User {
     
           return user;
     }
+
+
 }

@@ -37,34 +37,17 @@ import Notify from '@/components/NotificationPlugin'
 import i18n from './i18n'
 import SideBar from '@/components/SidebarPlugin'
 
+
 Vue.config.productionTip = false
 
 // router setup
 import routes from './router';
-// import routes_public from './router_public'
 
-// let route=[];
-//check login
-
-// const userservice = new User();
-// userservice.Me().then(result=>{
-//   if(result.status === false){
-//     route = routes_public
-//   }
-//   else{
-//     console.log(result);
-//     route = routes
-//   }
-//   console.log(route);
-// })
   // configure router
   const router = new VueRouter({
     routes, // short for routes: routes
     linkExactActiveClass: 'active'
   })
-  
-  
-
   
   Vue.use(VueRouter)
   Vue.use(SocialSharing)
@@ -75,15 +58,18 @@ import routes from './router';
   Vue.use(SideBar)
   Vue.use(Notify)
   Vue.use(BootstrapVue)
-  Vue.use(IconsPlugin)
-  
+  Vue.use(IconsPlugin);
+
+  const userservice = new User();
+
   router.beforeEach(async (to,from,next) => {
     
-    const userservice = new User();
     
     await userservice.Me().then(user=>{
+
       console.log(user);
-      
+
+
       if(to.meta.public){
           next();
         
@@ -91,10 +77,10 @@ import routes from './router';
         else if(to.meta.firstlogin && user.status && !user.data.approved){
             next()
           }
-          else if(!to.meta.public && user.status && !user.data.approved){
+          else if(user.status && !user.data.approved){
               next({path:`/landingpage/create-service-success/${user.data.service_id}?host=${user.data.user_id}`})
             }
-            else if(!to.meta.public && user.status && user.data.approved){
+            else if(user.status && user.data.approved){
                 next();
               }
               else{
@@ -108,11 +94,11 @@ import routes from './router';
                 });
                 
                 })
-                
+
                 new Vue({
                   router,
                   i18n,
                   render: (h) => h(App)
                 }).$mount('#app')
-                
-            
+   
+              

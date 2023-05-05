@@ -65,6 +65,12 @@ export default {
         async createUser(){
             this.error_message = '';
 
+            if(!this.validateEmail()){
+                this.error_message = 'กรุณากรอก email ที่ถูกต้อง';
+                return;
+            }
+         
+
             if(!this.validateTephone()){
                 this.error_message = 'เบอร์โทรศัพท์ไม่ถูกต้อง กรุณาระบุเบอร์โทรศัทพ์ 10 ตัวอักษร เช่น 0808008000';
                 return;
@@ -88,6 +94,10 @@ export default {
                 }
             })
         },
+        validateEmail(){
+           
+                return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-]*$/.test(this.user.email);
+},
         validateTephone(){
             if(!(/[0-9]/.test(this.user.telephone)) || this.user.telephone.length!=10){
                 return false;

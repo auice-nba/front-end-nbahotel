@@ -10,28 +10,30 @@
         <base-input v-model="hotel.address" type="text" label="ที่อยู่" />
         <div class="row">
             <div class="col-lg-4">
+
+<base-input type="text" label="จังหวัด">
+<select name="province" class="form-control" @change="hotel.province = setProvince($event)">
+<option v-for="(item, index) in province" :key="index" :value="item.id">{{ item.name_th }}</option>
+</select>
+</base-input>
+</div>
+<div class="col-lg-4">
+
+<base-input type="text" label="อำเภอ">
+<select name="amphure" class="form-control" @change="hotel.amphure = setAmphure($event)">
+<option v-for="(item, index) in amphure" :key="index" :value="item.id">{{ item.name_th }}</option>
+</select>
+</base-input>
+</div>
+            <div class="col-lg-4">
               <base-input type="text" label="ตำบล">
             <select name="tambon" class="form-control" @change="hotel.tambon = setTambon($event)">
                 <option v-for="(item, index) in tambon" :key="index" :value="item.id">{{ item.name_th }}</option>
             </select>
         </base-input>  
             </div>
-            <div class="col-lg-4">
-
-                <base-input type="text" label="อำเภอ">
-            <select name="amphure" class="form-control" @change="hotel.amphure = setAmphure($event)">
-                <option v-for="(item, index) in amphure" :key="index" :value="item.id">{{ item.name_th }}</option>
-            </select>
-        </base-input>
-            </div>
-            <div class="col-lg-4">
-
-                <base-input type="text" label="จังหวัด">
-            <select name="province" class="form-control" @change="hotel.province = setProvince($event)">
-                <option v-for="(item, index) in province" :key="index" :value="item.id">{{ item.name_th }}</option>
-            </select>
-        </base-input>
-            </div>
+           
+           
         </div>
         
         
@@ -129,7 +131,7 @@ export default {
                 return;
             }
             await this.hotelservice.createHotel(this.hotel,this.hotel.host_id).then(result => {
-                console.log(result);
+    
                 if(result){
 
                     this.$router.push(`/landingpage/hotel-service-detail/${result.data._id}?host=${this.hotel.host_id}`);
@@ -194,4 +196,4 @@ export default {
 }
 }
 
-</style>
+</style>_

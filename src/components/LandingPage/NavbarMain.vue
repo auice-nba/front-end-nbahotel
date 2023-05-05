@@ -1,5 +1,6 @@
 <template>
     <nav class="py-1">
+        
         <div class="d-none d-md-block">
 
             <div class="row nav-bar">
@@ -38,29 +39,29 @@
                 <div class="menu-expend" :style="menuExpend?'display:block':'display:none'">
                         <ul class="menu text-left">
                             <li v-for="(item,index) in menuItem" :key="index" class="menu-item">
-                                <router-link to="item.link">
+                                <router-link to="item.link" class="w-100" >
                                     <div class="row text-white">
-                                        <div class="col-9 text-left">
+                                        <div class="col-8 text-left">
                                             <p class="text-dark px-3 py-2">{{ item.label }}</p>
                                         </div>
-                                        <div class="col-3 text-right">
+                                        <div class="col-3 text-right ">
                                             
-                                            <span class="material-symbols-outlined text-dark pt-1">chevron_right</span>
+                                            <span class="material-symbols-outlined text-dark pt-1 ">chevron_right</span>
                                         </div>
                                     </div>
                                 </router-link>
                             </li>
                             <li class="menu-item bg-primary btn-login">
                                 <div v-if="loading" class="row text-white">
-                                        <div v-if="!user.status" class="col-9 text-left bg">
+                                        <div v-if="!user.status" class="col-8 text-left bg">
                                             <base-button class="mx-2 text-white" link  @click="login">เข้าสู่ระบบ</base-button>
                                         </div>
-                                        <div v-if="user.status" class="col-9 text-left bg">
+                                        <div v-if="user.status" class="col-8 text-left bg">
                                             <base-button class="mx-2 text-white" link  @click="logout">ออกจากระบบ</base-button>
                                         </div>
-                                        <div class="col-3 text-right">
+                                        <div class="col-3 text-right ">
                                             
-                                            <span class="material-symbols-outlined text-white pt-2">chevron_right</span>
+                                            <span class="material-symbols-outlined text-white pt-2 ">chevron_right</span>
                                         </div>
                                     </div>
                                 
@@ -85,6 +86,7 @@ export default {
         }
     },
     mounted(){
+
         this.getUser();
     },
     data(){
@@ -97,25 +99,25 @@ export default {
                     label:'หน้าแรก',
                     link:'/'
                 },
-                {
-                    label:"บริการ",
-                    link:'',
-                },
-                {
-                    label:"เงือนไขการใช้บริการ",
-                    link:'',
+                // {
+                //     label:"บริการ",
+                //     link:'',
+                // },
+                // {
+                //     label:"เงือนไขการใช้บริการ",
+                //     link:'',
 
-                },
-                {
-                    label:"การร้องเรียน",
-                    link:'',
+                // },
+                // {
+                //     label:"การร้องเรียน",
+                //     link:'',
 
-                },
-                {
-                    label:"ติดต่อ NBA",
-                    link:'',
+                // },
+                // {
+                //     label:"ติดต่อ NBA",
+                //     link:'',
 
-                },
+                // },
             ]
         }
     },
@@ -162,9 +164,7 @@ export default {
     align-items: center;
     height: 70px;
 }
-.card{
-    border-radius: 0.3rem;
-}
+
 .btn-login{
     border-bottom-left-radius: 0.4rem;
     border-bottom-right-radius: 0.4rem;
@@ -188,7 +188,7 @@ nav{
 
 .button-expend{
     color: white;
-    
+    z-index: 99999;
 }
 
 .collapes{
@@ -197,7 +197,7 @@ nav{
 .menu-expend{
     position: absolute;
     display:none;
-    top: 3.3rem;
+    top: 4.2rem;
     right: 0;
 
 }
@@ -212,7 +212,9 @@ ul{
 
 .menu-item{
 
-    display: block;
+    display: flex;
+    width: 100%;
+
 
 
 }
@@ -220,5 +222,6 @@ ul{
     background-color: violet;
     color: white;
 }
+
 
 </style>

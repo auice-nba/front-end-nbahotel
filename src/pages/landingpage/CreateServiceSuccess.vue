@@ -3,12 +3,12 @@
         <div class="card-content">
             <div class="message px-3 py-3">
 
-                <h4>ระบบได้รับใบสมัครเรียบร้อยแล้ว</h4>
+                <h3>ระบบได้รับใบสมัครเรียบร้อยแล้ว</h3>
                 <p>กรุณารอเจ้าหน้าที่ติดต่อกลับ หรือ ติดต่อ </p>
                 <p>nbadigitalservice call center</p>
             </div>
-            <base-button type="primary" @click="Edit">แก้ไขรายละเอียด</base-button>
-            <base-button link @click="back">กลับหน้าแรก</base-button>
+            <!-- <base-button type="primary" @click="Edit">แก้ไขรายละเอียด</base-button> -->
+            <base-button type="primary" @click="back">กลับหน้าแรก</base-button>
         </div>
     </div>
 </template>
@@ -32,9 +32,9 @@ export default {
         }
     },
     methods: {
-        Edit(){
-            this.$router.push(`/landingpage/hotel-service-update/${this.hotelId}?host=${this.userId}`);
-        },
+        // Edit(){
+        //     this.$router.push(`/landingpage/hotel-service-update/${this.hotelId}?host=${this.userId}`);
+        // },
        async back(){
             await this.userservice.SignOut().then(result=>{
                 if(result){
@@ -55,7 +55,8 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
+    padding:3rem;
+
 }
 .message{
     width: 100%;
