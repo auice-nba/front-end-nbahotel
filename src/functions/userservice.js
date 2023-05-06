@@ -13,7 +13,7 @@ export class User {
     const initdata = {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: 'include',
+      credentials: "same-origin",
       body: JSON.stringify(data),
     };
     await fetch(this.baseUrl + "signup", initdata)
@@ -31,7 +31,7 @@ export class User {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
-          credentials: 'include'
+          credentials: "same-origin"
         };
         await fetch(this.baseUrl + "signin", initdata)
           .then((response) => response.json())
@@ -49,7 +49,7 @@ export class User {
           "Content-Type": "application/json",
           "token":this.token
         },
-        credentials: 'include'
+        credentials: "same-origin"
       };
       await fetch(`${this.baseUrl}users/signout`, initdata)
         .then((response) => response.json())
