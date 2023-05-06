@@ -45,7 +45,7 @@ h3 {
 
 .body-container{
     padding: 0;
-    background-image: url("/images/view1.avif");
+    background-image: url("/images/view1.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: 50% 50%;
