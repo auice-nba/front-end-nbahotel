@@ -151,6 +151,12 @@ const routes = [
         component:()=> import('@/pages/landingpage/LoginPage.vue')
       },
       {
+        path:'forgetpassword',
+        name:'ForgetPassword',
+        meta:{public:true},
+        component:()=> import('@/pages/landingpage/ForgetPassword.vue')
+      },
+      {
         path:'invitations',
         name:"Invitations",
         meta:{public:true},

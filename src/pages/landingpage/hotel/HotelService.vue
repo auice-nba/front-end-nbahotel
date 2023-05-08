@@ -83,6 +83,7 @@ export default {
             }
         })
         await this.getCategories();
+
         this.province = this.provinceservice.getProvince();
         this.amphure = this.province[0].amphure
         this.tambon = this.amphure[0].tambon
@@ -142,7 +143,7 @@ export default {
             await this.hotelservice.getCatetory().then(result => {
                 this.categories = result;
              
-                this.hotel.category_id=result[0]._id;
+                
 
             })
         },

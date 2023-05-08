@@ -6,7 +6,7 @@
         <base-checkbox v-model="password_visible">แสดงรหัสผ่าน</base-checkbox>
         <base-button class="mt-3" type="primary" @click="firstLogin">เข้าสู่ระบบ</base-button>
         <small v-if="error" class="error-text mt-3">รหัสผ่านหรือเบอร์โทรศัทพ์ไม่ถูกต้อง</small>
-        <small class="mt-2">ลืมรหัสผ่าน <span style="color:red"><router-link to="/landingpage/createaccount">สร้างใหม่</router-link></span></small>
+        <!-- <small class="mt-2">ลืมรหัสผ่าน <span style="color:red"><router-link to="/landingpage/forgetpassword">สร้างใหม่</router-link></span></small> -->
 
         </div>
 </template>
