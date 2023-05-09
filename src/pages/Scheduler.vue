@@ -2,6 +2,9 @@
   <div class="content" v-if="loading">
     <div class="row">
       <div class="col-12">
+        <Card>
+
+     
         <!-- toolbar -->
         <div class="row tool-bar">
           <div class="col justify-content-start">
@@ -167,6 +170,7 @@
             
           </div>
         </div>
+      </Card>
       </div>
     </div>
   </div>
@@ -187,6 +191,7 @@ export default {
     const roomservice = new Room();
     const dateservice = new DateService();
 
+
     return {
       bookingservice, roomservice, dateservice
     }
@@ -196,6 +201,7 @@ export default {
   },
 
   async mounted() {
+
     this.today = await this.dateservice.getToday();
 
     //get all booking data;
@@ -356,6 +362,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .scheduler {
   min-height: 80vh;
   width: 100%;

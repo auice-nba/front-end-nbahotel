@@ -168,6 +168,14 @@
                                     </div>
                                     <div class="col-6 col-md-6">
                                         <p><span class="material-symbols-outlined">
+                                                sell
+                                            </span>โควต้า </p>
+                                    </div>
+                                    <div class="col-6 col-md-6 d">
+                                        {{ r.quota }}
+                                    </div>
+                                    <div class="col-6 col-md-6">
+                                        <p><span class="material-symbols-outlined">
                                                 add_task
                                             </span>สถาณะ </p>
                                     </div>
@@ -176,7 +184,7 @@
                                     </div>
                                 </div>
                                 <base-button type="primary" class="my-5" @click="$router.push('/roommanager')">กลับหน้าแรก</base-button>
-                                <base-button type="default" class="my-5" @click="$router.push(`/updateroom/${id}`)">แก้ไขรายละเอียด</base-button>
+                                <base-button type="default" class="my-5" @click="$router.push(`/updateroom/${hotel_id}?id=${id}`)">แก้ไขรายละเอียด</base-button>
                             </Card>
                         </div>
                     </div>
@@ -202,15 +210,17 @@ export default {
     components: {
         Card
     },
-    mounted() {
-        this.id = this.$route.params.id;
-        this.room.getRoomById(this.id).then(result => {
+   async mounted() {
+       this.hotel_id = this.$route.params.hotelId;
+        this.id = this.$route.query.id;
+    
+        await this.room.getRoomById(this.hotel_id,this.id).then(result => {
             if (result) {
 
                 this.r = result;
+                console.log(this.r);
                 this.loading = true;
                 this.active_image = this.r.imageURl[0];
-
             }
         });
 
@@ -225,6 +235,7 @@ export default {
         return {
 
             id: "",
+            hotel_id:'',
             loading: false,
             r: [],
             active_image: '',

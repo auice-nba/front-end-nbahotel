@@ -263,6 +263,14 @@ child_care
                                     </div>
                                     <div class="col-6">
                                         <p><span class="material-symbols-outlined">
+                                                sell
+                                            </span>โควต้า </p>
+                                    </div>
+                                    <div class="col-6 d">
+                                        <base-input :value="roomUpdate.quota!=null?roomUpdate.quota:dataUpdate.quota" name="quota" @input="roomUpdate.quota = Number(setInputData($event))"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <p><span class="material-symbols-outlined">
                                                 add_task
                                             </span>สถาณะ </p>
                                     </div>
@@ -306,8 +314,8 @@ export default {
         Card, BaseInput
     },
     async mounted() {
-        this.id = this.$route.params.id;
-       
+        this.hotel_id = this.$route.params.hotelId;
+       this.id= this.$route.query.id;
 
         //get room type
         await this.room.getRoomType().then(result => {
@@ -363,7 +371,7 @@ export default {
             
         })
 
-        await this.room.getRoomById(this.id).then(result => {
+        await this.room.getRoomById(this.hotel_id,this.id).then(result => {
             this.dataloading=false;
             if (result) {
 
@@ -552,9 +560,9 @@ export default {
         })
         
     
-       await this.room.updateRoom(this.id,this.roomUpdate).then(result=>{
+       await this.room.updateRoom(this.hotel_id,this.id,this.roomUpdate).then(result=>{
             if(result){
-                this.$router.push(`/createroomcompleted/${this.id}`)
+                this.$router.push(`/createroomcompleted/${this.hotel_id}?id=${this.id}`)
             }
         })
        
@@ -564,6 +572,7 @@ export default {
         return {
             dataloading:false,
             id: "",
+            hotel_id:'',
             loading: false,
             uploading: false,
             r: [],
@@ -585,6 +594,7 @@ export default {
                 
             "detail":null, //string
             "price": null, //number 
+            "quota":null,
             "size" : null,  //number
             "bed_type": null, //id
             "max_person":null, //number

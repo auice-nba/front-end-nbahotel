@@ -1,9 +1,7 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
   <div>
-    <div class="manager-button">
-      <base-button type="primary" @click="$router.push('/createroom')">สร้างห้อง</base-button>
-    </div>
+    
     <table class="table tablesorter" :class="tableClass">
       <thead :class="theadClasses">
         <tr>
@@ -82,6 +80,7 @@ export default {
       type: Array,
       default: () => [],
     },
+    hotel:String
   },
   methods:{
     async deleteRoom(id){
@@ -95,7 +94,7 @@ export default {
       })
     },
     rowClick(id){
-      this.$router.push(`/createroomcompleted/${id}`)
+      this.$router.push(`/createroomcompleted/${this.hotel}?id=${id}`)
     }
   }
 };

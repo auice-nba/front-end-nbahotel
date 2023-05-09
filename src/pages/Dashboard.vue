@@ -180,11 +180,10 @@
       <div class="col-lg-6 col-md-12">
         <card class="card">
           <h4 slot="header" class="card-title">
-            <template v-if="!isRTL"> Simple Table </template>
-            <template v-else> جدول بسيط </template>
+            <template >Booking</template>
           </h4>
           <div class="table-responsive">
-            <user-table></user-table>
+            <room-table/>
           </div>
         </card>
       </div>
@@ -198,7 +197,7 @@ import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
 import * as chartConfigs from "@/components/Charts/config";
 import TaskList from "./Dashboard/TaskList";
-import UserTable from "./Dashboard/UserTable";
+import RoomTable from "@/components/RoomTable.vue";
 import config from "@/config";
 
 export default {
@@ -207,7 +206,7 @@ export default {
     LineChart,
     BarChart,
     TaskList,
-    UserTable,
+    RoomTable,
   },
   data() {
     return {

@@ -18,6 +18,7 @@
 */
 import Vue from 'vue'
 import App from './App.vue'
+import Vuex from 'vuex'
 import VueRouter from 'vue-router'
 import SocialSharing from 'vue-social-sharing'
 import VueGitHubButtons from 'vue-github-buttons'
@@ -59,6 +60,20 @@ import routes from './router';
   Vue.use(Notify)
   Vue.use(BootstrapVue)
   Vue.use(IconsPlugin);
+  Vue.use(Vuex);  
+
+  const store = new Vuex.Store({
+    state () {
+      return {
+        user: null
+      }
+    },
+    mutations: {
+      setUser (state) {
+        state.user=state;
+      }
+    }
+  });
 
   
   router.beforeEach(async (to,from,next) => {
@@ -66,7 +81,8 @@ import routes from './router';
     const userservice = new User();
     
     await userservice.Me().then(user=>{
-
+   
+      store.state.user = user;
 
       if(
 

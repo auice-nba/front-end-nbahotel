@@ -7,10 +7,14 @@
           <template slot="header">
             <h4 class="card-title">Room managemant</h4>
           </template>
+          <div class="manager-button text-left">
+      <base-button type="primary" @click="$router.push('/createroom')">สร้างห้อง</base-button>
+    </div>
           <div class="table-responsive text-left">
             <room-table
               :data="roomdata"
               :columns="table.columns"
+              :hotel="hotel_id"
               thead-classes="text-primary"
             >
             </room-table>
@@ -41,6 +45,7 @@ export default {
   setup(){
     const room = new Room();
     const userservice = new User();
+
     return {
       room,userservice
     }
@@ -50,6 +55,7 @@ export default {
     RoomTable,
   },
   async mounted(){
+ 
     await this.userservice.Me().then(user =>{
 
       this.hotel_id = user.data.service_id;

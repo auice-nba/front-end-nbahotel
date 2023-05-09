@@ -77,7 +77,8 @@ export default {
   },
   async mounted(){
 
-    this.roomid =this.$route.params.id;
+    this.hotel_id = this.$route.params.hotelId;
+    this.roomid =this.$route.query.id;
 
     const fur = await this.room.getFurnitureType();
     this.furnitureType = fur.map(el=>({"id":el._id,"name":el.name,"description":el.description,"check":false}));
@@ -120,9 +121,9 @@ export default {
         entertainment:ent.map(el=>el.id)
       }
     
-      await this.room.updateRoom(this.roomid,updateData).then((result)=>{
+      await this.room.updateRoom(this.hotel_id,this.roomid,updateData).then((result)=>{
         if(result){
-          this.$router.push(`/updateroompicture/${this.roomid}`);
+          this.$router.push(`/updateroompicture/${this.hotel_id}/?id=${this.roomid}`);
         }
       });
     }
@@ -137,6 +138,7 @@ export default {
   },
   data() {
     return {
+      hotel_id:null,
       roomid:null,
       furnitureType:null,
       amenitiesType:null,

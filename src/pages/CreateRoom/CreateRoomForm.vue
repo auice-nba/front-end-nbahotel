@@ -5,23 +5,20 @@
       <h3>สร้างห้อง</h3>
       <form>
         <div class="row">
-          <div class="col-12 col-md-6">
-            <base-input
-              label="เลขที่ห้อง"
-              v-model="data.room_number"
-              placeholder="เลขที่"
-            />
-          </div>
-          <div class="col-6 col-md-4">
-            <base-input label="ประเภท">
+
+          <div class="col-12 col-md-4">
+    
+
+              <base-input label="ประเภท">
               <select
-                v-model="data.room_type"
-                class="form-control"
-                id="room-type"
+              v-model="data.room_type"
+              class="form-control"
+              id="room-type"
               >
-                <option v-for="(room,index) in roomtype" :key="index" :value="room._id" selected> {{ room.name_th }}</option>
-              </select>
-            </base-input>
+              <option v-for="(room,index) in roomtype" :key="index" :value="room._id" selected> {{ room.name_th }}</option>
+            </select>
+          </base-input>
+    
           </div>
           <div class="col-6 col-md-4">
             <base-input label="เตียง">
@@ -120,15 +117,16 @@
             <base-input label="หน่วย">
               <select v-model="data.unit" class="form-control" id="bed-type">
                 <option value="ต่อวัน">ต่อวัน</option>
-                <option value="ต่อคืน">ต่อคืน</option>
-                <option value="ต่อชั่วโมง">ต่อชั่วโมง</option>
               </select>
             </base-input>
           </div>
+          <div class="col-6 col-md-3">
+            <base-input type="text" label="จำนวนห้อง" v-model="data.quota"/>
+          </div>
           <div class="col-md-3">
             <base-input label="สถาณะปัจจุบัน">
-            <select class="form-control" id="bed-type">
-                <option v-for="(status,index) in roomstatustype" :key="index" :value="status._id">{{ status.name }}</option>
+            <select class="form-control" id="bed-type" v-model="data.status">
+                <option v-for="(status,index) in roomstatustype" :key="index" :value="status._id" >{{ status.name }}</option>
                 
               </select>
           </base-input>
@@ -216,9 +214,9 @@ export default {
       else{
         this.data.children = ""
       }
-      const result = await this.room.createRoom(this.data);
+      const result = await this.room.createRoom(this.data.hotel_id,this.data);
       if (result._id != undefined) {
-        const url = `/addroomfeature/${result._id}`;
+        const url = `/addroomfeature/${this.data.hotel_id}?id=${result._id}`;
         this.$router.push(url);
       }
     },
@@ -241,12 +239,12 @@ export default {
       children_type:false,
       roomstatustype:null,
       data: {
-        room_number: "",
         hotel_id: "",
         room_type: "",
         imageURl: [],
         detail: "",
         price: 0,
+        quota:0,
         unit:"",
         size: 0,
         bed_type: "",
@@ -263,7 +261,7 @@ export default {
         entertainment: [],
         security: "",
         promotions: [],
-        status: "642cf50d5c26c12382ad7127",
+        status: "",
       },
     };
   },

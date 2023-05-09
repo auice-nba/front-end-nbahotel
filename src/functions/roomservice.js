@@ -9,7 +9,7 @@ export class Room {
     this.context = context;
   }
 
-  async createRoom(data) {
+  async createRoom(hotelId,data) {
     let room;
     const initdata = {
       method: "POST",
@@ -17,28 +17,28 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
        },
-      credential: true,
+      credentials: 'include',
       body: JSON.stringify(data),
     };
-    await fetch(this.baseUrl + "room", initdata)
+    await fetch(`${this.baseUrl}room/hotel/${hotelId}`, initdata)
       .then((response) => response.json())
       .then((result) => room = result)
       .catch((err) => room = err);
 
       return room;
   }
+
   //get room by id;
-  async getRoomById(id){
+  async getRoomById(hotelId,roomId){
     let room;
     const initdata = {
       method: "GET",
       headers: { 
-        "Content-Type": "application/json",
         "token" :this.token
        },
-      credential: true,
+      credentials:'include',
     }
-    await fetch(this.baseUrl + "room/"+id, initdata)
+    await fetch(`${this.baseUrl}room/hotel/${hotelId}/${roomId}`, initdata)
     .then((response) => room = response.json())
     .then((result) => room = result)
     .then((err)=>room=err);
@@ -48,7 +48,7 @@ export class Room {
 
   //update room by id
 
-  async updateRoom(id,data){
+  async updateRoom(hotelId,roomId,data){
    
     let room;
 
@@ -58,11 +58,11 @@ export class Room {
         "Content-Type": "application/json" ,
         "token" : this.token
       },
-      credential: true,
+      credentials: 'include',
       body: JSON.stringify(data),
       redirect:'follow'
     }
-    await fetch(`${this.baseUrl}room/${id}/update`, initdata)
+    await fetch(`${this.baseUrl}room/hotel/${hotelId}/${roomId}/update`, initdata)
       .then((response) => response.json())
       .then((result) => room = result)
       .catch((err) => room = err);
@@ -79,7 +79,7 @@ export class Room {
         "Content-Type": "application/json",
         "token" : this.token
        },
-      credential: true,
+      credentials: 'include',
     };
     await fetch(`${this.baseUrl}room/${id}`, initdata)
      .then((response) => response.json())
@@ -97,7 +97,7 @@ export class Room {
           "Content-Type": "application/json" ,
           "token" : this.token
         },
-        credential: true,
+        credentials: 'include',
       }
       await fetch(`${this.baseUrl}room/hotel/${id}`, initdata)
       .then((response) => response.json())
@@ -117,7 +117,7 @@ export class Room {
         "Content-Type": "application/json",
         "token" : this.token
        },
-      credential: true,
+      credentials: 'include',
     };
     await fetch(this.baseUrl + "room/type",initdata)
       .then((response) => response.json())
@@ -138,7 +138,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+      credentials: 'include',
     };
     await fetch(this.baseUrl + "room/bedtype",initdata)
       .then((response) => response.json())
@@ -175,7 +175,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+      credentials: 'include',
     };
     await fetch(this.baseUrl + "room/bathtype",initdata)
       .then((response) => response.json())
@@ -194,7 +194,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+      credentials: 'include',
     };
     await fetch(this.baseUrl + "room/furnituretype",initdata)
       .then((response) => response.json())
@@ -213,7 +213,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+      credentials: 'include',
     };
     await fetch(this.baseUrl + "room/amenities",initdata)
       .then((response) => response.json())
@@ -232,7 +232,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+      credentials: 'include',
     };
     await fetch(this.baseUrl + "room/entertainment",initdata)
       .then((response) => response.json())
@@ -251,7 +251,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+    credentials: 'include',
     };
     await fetch(this.baseUrl + "room/service",initdata)
       .then((response) => response.json())
@@ -270,7 +270,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+    credentials: 'include',
     };
     await fetch(this.baseUrl + "room/status",initdata)
       .then((response) => response.json())
@@ -289,7 +289,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+    credentials: 'include',
     };
     await fetch(this.baseUrl + "room/view",initdata)
       .then((response) => response.json())
@@ -309,7 +309,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+    credentials: 'include',
     };
     await fetch(this.baseUrl + "room/security",initdata)
     .then((response) => response.json())
@@ -326,19 +326,20 @@ export class Room {
  * @param {string} id - The room id.
  * @param {FormData} formData  - send {'imgCollection',FileList[index]}.
  */
-  async uploadRoomPicture(id,formData){
+  async uploadRoomPicture(hotelId,roomId,formData){
 
     let room;
     const initdata ={
       method:"POST",
       headers: {
+        'token':this.token
       },
-      credential:"include",
+      credentials: "include",
       body:formData,
       redirect:'follow'
     }
 
-   await fetch(`${this.baseUrl}room/${id}/picture`,initdata)
+   await fetch(`${this.baseUrl}room/hotel/${hotelId}/${roomId}/picture`,initdata)
     .then((response)=>response.json())
     .then((result)=>room=result)
     .catch((err)=>room=err);
@@ -380,7 +381,7 @@ export class Room {
         "Content-Type": "application/json",
         "token":this.token
     },
-      credential: true,
+    credentials: "include"
     };
     await fetch(`${this.baseUrl}room/${roomId}/picture/${pictureId}`,initdata)
     .then(response=>response.json())

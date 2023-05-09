@@ -87,7 +87,8 @@ export default {
     },
   },
   mounted() {
-    this.id = this.$route.params.id;
+    this.hotel_id = this.$route.params.hotelId;
+    this.id = this.$route.query.id;
   },
   methods: {
     selectImage(event) {
@@ -173,11 +174,11 @@ export default {
         formData.append('imgCollection', this.image[i], this.image[i].name);
       }
 
-      await this.room.uploadRoomPicture(this.id, formData).then(result => {
-        console.log(result);
+      await this.room.uploadRoomPicture(this.hotel_id,this.id, formData).then(result => {
+
         if (result.message === "สร้างรูปภาพเสร็จเเล้ว") {
           this.loading = false;
-           this.$router.push(`/createroomcompleted/${this.id}`);
+           this.$router.push(`/createroomcompleted/${this.hotel_id}?id=${this.id}`);
         }
 
       })
@@ -188,6 +189,7 @@ export default {
     return {
       loading:false,
       id: '',
+      hotel_id:'',
       url: [],
       preview: [],
       original_image: [],
