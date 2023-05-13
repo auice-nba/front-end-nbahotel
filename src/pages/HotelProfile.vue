@@ -19,17 +19,21 @@
 import EditHotelForm from "./Profile/EditHotelForm.vue";
 import {Hotel} from "@/functions/hotelservice";
 import UpdateHotelPicture from "./Profile/UpdateHotelPicture.vue";
+import store from '@/stores';
+
 export default {
   setup(){
     const hotel = new Hotel();
     return {
-      hotel
+      hotel,store
     }
   },
   components: {
   EditHotelForm,UpdateHotelPicture
   },
   async mounted(){
+    //get id
+    this.id = store.state.user.service_id;
     //get hotel data
     await this.hotel.getHotel(this.id).then(result=>{
       if(result){
@@ -37,11 +41,12 @@ export default {
         this.loading=true;
       }
     })
+
   },
   data() {
     return {
       loading:false,
-      id:"643e55439c48ebe52204a5a2",
+      id:null,
       model: null,
       user: {
         fullName: "อุ๋ย",

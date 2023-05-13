@@ -32,7 +32,10 @@ export class Hotel {
     let hotel;
     const initdata = {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json" ,
+        "token":this.token,
+      },
       credential: true,
     };
     await fetch(this.baseUrl + `hotel/${id}`, initdata)

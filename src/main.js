@@ -18,7 +18,7 @@
 */
 import Vue from 'vue'
 import App from './App.vue'
-import Vuex from 'vuex'
+import Vuex from 'vuex';
 import VueRouter from 'vue-router'
 import SocialSharing from 'vue-social-sharing'
 import VueGitHubButtons from 'vue-github-buttons'
@@ -30,6 +30,8 @@ import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import { User } from '@/functions/userservice';
+
+import store from '@/stores';
 
 import GlobalComponents from './globalComponents'
 import GlobalDirectives from './globalDirectives'
@@ -60,29 +62,17 @@ import routes from './router';
   Vue.use(Notify)
   Vue.use(BootstrapVue)
   Vue.use(IconsPlugin);
-  Vue.use(Vuex);  
+  Vue.use(Vuex)
 
-  const store = new Vuex.Store({
-    state () {
-      return {
-        user: null
-      }
-    },
-    mutations: {
-      setUser (state) {
-        state.user=state;
-      }
-    }
-  });
 
-  
+  const userservice = new User();
+
   router.beforeEach(async (to,from,next) => {
     
-    const userservice = new User();
-    
     await userservice.Me().then(user=>{
-   
-      store.state.user = user;
+      
+      store.commit('setUser',user.data);
+
 
       if(
 
@@ -99,20 +89,21 @@ import routes from './router';
             next({name:'CreateServiceSuccess'})
           }
           else{
-            console.log('else');
+      
             next({name:'LandingPage'});
           }
         }
-
      
            })
                 
                 })
 
-                new Vue({
+       
+          new Vue({
                   router,
                   i18n,
+                  store,
                   render: (h) => h(App)
                 }).$mount('#app')
    
-              
+      

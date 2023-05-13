@@ -30,6 +30,7 @@ import { User } from "@/functions/userservice";
 import { Card } from "@/components/index";
 import {Room} from '@/functions/roomservice';
 import RoomTable from "@/components/RoomTable";
+import store from "@/stores"
 
 const tableColumns = [
   "เลขที่ห้อง",
@@ -47,7 +48,7 @@ export default {
     const userservice = new User();
 
     return {
-      room,userservice
+      room,userservice,store
     }
   },
   components: {
@@ -55,11 +56,9 @@ export default {
     RoomTable,
   },
   async mounted(){
- 
-    await this.userservice.Me().then(user =>{
 
-      this.hotel_id = user.data.service_id;
-    })
+      this.hotel_id = store.state.user.service_id;
+
     await this.room.getHotelRoom(this.hotel_id).then(room=>{
       this.roomdata = room;
     })

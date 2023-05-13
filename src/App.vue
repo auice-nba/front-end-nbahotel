@@ -2,12 +2,13 @@
   <div id="app">
     <div class="content">
       <notifications></notifications>
-      <router-view :key="$route.fullPath"></router-view>
+      <router-view :key="$route.fullPath" ></router-view>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
   methods: {
     disableRTL() {
@@ -24,7 +25,7 @@ export default {
     this.$watch("$route", this.disableRTL, { immediate: true });
     this.$watch("$sidebar.showSidebar", this.toggleNavOpen);
 
-  },
+  }
 };
 </script>
 
