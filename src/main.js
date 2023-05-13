@@ -65,10 +65,10 @@ import routes from './router';
   Vue.use(Vuex)
 
 
-  const userservice = new User();
-
+  
   router.beforeEach(async (to,from,next) => {
     
+    const userservice = new User();
     await userservice.Me().then(user=>{
       
       store.commit('setUser',user.data);
