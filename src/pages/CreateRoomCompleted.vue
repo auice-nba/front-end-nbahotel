@@ -218,7 +218,6 @@ export default {
             if (result) {
 
                 this.r = result;
-                console.log(this.r);
                 this.loading = true;
                 this.active_image = this.r.imageURl[0];
             }

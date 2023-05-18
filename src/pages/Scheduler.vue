@@ -183,7 +183,7 @@ import { Room } from "@/functions/roomservice";
 import { DateService } from "@/functions/dateservice";
 import { Card } from "@/components/index";
 import CalendarScheduler from "@/components/CalendarScheduler";
-
+import store from "@/stores";
 
 export default {
   setup() {
@@ -193,20 +193,44 @@ export default {
 
 
     return {
-      bookingservice, roomservice, dateservice
+      bookingservice, roomservice, dateservice,store
     }
+  },
+  data() {
+    return {
+      hotel_id: null,
+      today: null,
+      backing_day: -3,
+      first_day: null,
+      last_day: null,
+      this_month: null,
+      days: [],
+      rooms: null,
+      room_number: null,
+      booking: [],
+      body_cell: [],
+      popBook: '',//bookid
+      event: [],
+      bookingClass: 'booked-cell',
+      months_th: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",],
+      moreDetail: false,
+      booking_detail:null,
+      calendar:false,
+      loading:false,
+      datepicker:null,
+    };
   },
   components: {
     Card,CalendarScheduler
   },
 
   async mounted() {
-
+    this.hotel_id = this.store.state.user.service_id;
     this.today = await this.dateservice.getToday();
 
     //get all booking data;
     await this.bookingservice.getBooking(this.hotel_id).then(result => {
-
+      console.log(result.data);
       this.booking = result.data;
     });
 
@@ -334,30 +358,7 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      hotel_id: "643e55439c48ebe52204a5a2",
-      today: null,
-      backing_day: -3,
-      first_day: null,
-      last_day: null,
-      this_month: null,
-      days: [],
-      rooms: null,
-      room_number: null,
-      booking: [],
-      body_cell: [],
-      popBook: '',//bookid
-      event: [],
-      bookingClass: 'booked-cell',
-      months_th: ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม",],
-      moreDetail: false,
-      booking_detail:null,
-      calendar:false,
-      loading:false,
-      datepicker:null,
-    };
-  },
+  
 };
 </script>
 

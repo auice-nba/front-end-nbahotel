@@ -139,29 +139,6 @@
         </template>
       </sidebar-link>
 
-      <!-- <sidebar-link to="/dashboard?enableRTL=true">
-        <i class="tim-icons icon-world"></i>
-
-        <template v-if="!isRTL">
-          <p>RTL Support</p>
-        </template>
-
-        <template v-else>
-          <p>دعم RTL</p>
-        </template>
-      </sidebar-link> -->
-
-      <!-- <sidebar-link to="/upgradeToPro" class="active-pro">
-        <i class="tim-icons icon-spaceship"></i>
-
-        <template v-if="!isRTL">
-          <p>Upgrade to PRO</p>
-        </template>
-
-        <template v-else>
-          <p>التطور للاحترافية</p>
-        </template>
-      </sidebar-link> -->
     </side-bar>
 
     <sidebar-share :background-color.sync="backgroundColor"></sidebar-share>

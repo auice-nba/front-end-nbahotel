@@ -38,7 +38,6 @@
             </td>
             <td>
               <base-button type="info" @click="$router.push(`/updateroom/${item._id}`)">แก้ไข</base-button>
-              <base-button class="ml-2" type="danger" @click="deleteRoom(item._id)">ลบห้อง</base-button>
             </td>
           </slot>
         </template>

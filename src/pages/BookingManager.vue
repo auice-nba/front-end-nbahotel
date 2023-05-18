@@ -25,15 +25,12 @@
   import { Card } from "@/components/index";
   import {Booking} from "@/functions/bookingservice"
   import BookingTable from '@/components/BookingTable'
-  
+  import store from '@/stores';
+
   const tableColumns = [
     "วันที่",
     "refNumber",
-    "จำนวนห้อง",
-    "จำนวนผู้เข้าพักทั้งหมด",
-    "จำนวนเด็ก",
-    "วันที่เข้าพัก",
-    "พักถึงวันที่",
+    "ชื่อลูกค้า",
     "ราคารวม",
     "สถาณะ",
   ];
@@ -42,7 +39,7 @@
     setup(){
       const bookingservice = new Booking();
       return {
-        bookingservice
+        bookingservice,store
       }
     },
     components: {
@@ -50,9 +47,11 @@
       BookingTable
     },
     async mounted(){
+ 
+      this.hotel_id = this.store.state.user.service_id;
       await this.bookingservice.getBooking(this.hotel_id).then(result=>{
         if(result.status==="ok"){
-      
+       
             this.table.data=result.data;
             this.loading = true;
         }
@@ -60,7 +59,7 @@
     },
     data() {
       return {
-        hotel_id:'643e55439c48ebe52204a5a2',
+        hotel_id:null,
         loading:false,
         table: {
           title: "Booking Table",

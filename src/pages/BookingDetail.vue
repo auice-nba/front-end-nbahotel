@@ -15,7 +15,7 @@
                         <div class="col-md-3 text-left">
                             วันที่
                         </div>
-                        <div class="col-md-9 text-left">{{ dateFormat(booking.createdAt)}}</div>
+                        <div class="col-md-9 text-left">{{ new Date(booking.createdAt).toLocaleDateString('th-TH',{day:'numeric',month:'2-digit',year:'numeric'})}}</div>
                     </div>
                     <div class="row">
                         <div class="col-md-3 text-left">
@@ -31,32 +31,41 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3 text-left">
-                            วันที่จอง
+                            วันที่ต้องการเช็คอิน
                         </div>
-                        <div class="col-md-9 text-left">{{ dateFormat(booking.date_from)}} - {{ dateFormat(booking.date_to) }}</div>
+                        <div class="col-md-9 text-left">{{ dateFormat(booking.date_from)}} </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-3 text-left">
+                            วันที่ต้องการเช็คเอาท์
+                        </div>
+                        <div class="col-md-9 text-left"> {{ dateFormat(booking.date_to) }}</div>
+                    </div>
+                    <div class="row mt-3">
                         <div class="col-md-3 text-left">
                             จำนวนผุ้เข้าพัก
                         </div>
                         <div class="col-md-9 text-left">{{ booking.num_guess}} คน</div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-3 text-left">
-                            ผู้ติดตามที่อายุต่ำกว่า 6 ปี
-                        </div>
-                        <div class="col-md-9 text-left">{{ booking.num_children?booking.num_children+" คน":'ไม่มี'}}</div>
-                    </div>
+                   
                     <div class="row">
                         <div class="col-md-3 text-left">
                             ห้องพักที่ได้จอง
                         </div>
                         <div class="col-md-9 text-left">
                             <ul>
-                                <li v-for="(room,index) in booking.room" :key=index>
-                               ห้อง {{ room.room_number }} ราคา {{ room.price }} บาท/คืน
+                                <li v-for="(room,index) in booking.rooms" :key=index>
+                               ห้อง {{ room.room.type.name_th }} จำนวน {{ room.amount }} ห้อง ราคา {{ room.room.price}} บาท/ห้อง
                                 </li>
                             </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 text-left">
+                           จำนวนคืนที่พัก
+                        </div>
+                        <div class="col-md-9 text-left">
+                            {{ booking.total_day}} คืน
                         </div>
                     </div>
                     <div class="row">
@@ -67,19 +76,20 @@
                             {{ booking.total_price }} บาท
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-
+                    <div class="row mt-3">
+                        <div class="col-md-3 text-left"> 
+                            สถาณะ
                         </div>
-                        <div class="col-md-9">
-
+                        <div class="col-md-9 text-left">
+                            {{ booking.status[booking.status.length-1].name }}
                         </div>
                     </div>
                     
                 </Card>
                 <div class="text-left px-3">
 
-                    <base-button type="primary" class="back-button" @click="$router.push('/bookingmanager')">กลับ</base-button>
+                    <base-button  text class="back-button" @click="$router.push('/bookingmanager')">กลับ</base-button>
+                    <base-button type="primary" class="mx-3" >ตอบรับการจอง</base-button>
                 </div>
             </div>
             <div class="col-md-4">
@@ -93,12 +103,14 @@
 <script>
 import { Booking } from "@/functions/bookingservice";
 import { Card } from "@/components/index";
+import store from '@/stores';
+
 export default {
 
     setup() {
         const bookingservice = new Booking();
         return {
-            bookingservice
+            bookingservice,store
         }
     },
     components: {
@@ -107,24 +119,26 @@ export default {
     async mounted() {
 
         this.id = this.$route.params.id;
-       
+        this.hotelId = this.store.state.user.service_id;
         await this.bookingservice.getBookingById(this.hotelId, this.id).then(result => {
-            
-            this.booking = result.data;
-            this.loading = true;
+            if(result && result.status==="ok"){
+
+                this.booking = result.data;
+                this.loading = true;
+            }
         })
     },
     data() {
         return {
             loading:false,
-            hotelId: "643e55439c48ebe52204a5a2",
+            hotelId: null,
             id: '',
             booking: null
         }
     },
     methods: {
         dateFormat(date){
-            return new Date(date).toLocaleDateString();
+            return new Date(date).toLocaleDateString('th-TH',{weekday:'short',day:"numeric",month:"long",year:'numeric'});
         }
     }
 

@@ -3,7 +3,7 @@ export class Booking {
   context;
 
   baseUrl = process.env.VUE_APP_API;
-
+  #token = localStorage.getItem('token');
   constructor(context) {
     this.context = context;
   }
@@ -14,8 +14,9 @@ export class Booking {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          token:this.#token
         },
-        Credential:"includes"
+        credentials: 'include',
       };
 
       await fetch(`${this.baseUrl}booking/${hotel_id}`,initdata)
@@ -33,8 +34,9 @@ export class Booking {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          token:this.#token
         },
-        Credential:"includes"
+        credentials: 'include',
       };
 
       await fetch(`${this.baseUrl}booking/${hotelId}/${id}`,initdata)

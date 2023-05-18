@@ -12,35 +12,27 @@
 
             <tbody :class="tbodyClasses">
                 <tr v-for="(item, index) in data" :id="`room-${item.room_number}`" :key="index"
-                    v-on:click="rowClick(item._id)">
+                    v-on:click="rowClick(item.booking_id)">
                     <template>
                         <slot :row="item">
                             <td>
-                                {{ dateFormat(item.updatedAt) }}
+                                {{ dateFormat(item.date) }}
                             </td>
                             <td>
                                 {{ item.ref_number }}
                             </td>
                             <td>
-                                {{ item.room.length }}
+                                {{ item.customer_name }}
                             </td>
-                            <td>
-                                {{ item.num_guess }}
-                            </td>
-                            <td>
-                                {{ item.num_chidren ? item.num_chidren : "-" }}
-                            </td>
-                            <td>
-                                {{ dateFormat(item.date_from) }}
-                            </td>
-                            <td>
-                                {{ dateFormat(item.date_to) }}
-                            </td>
+       
                             <td>
                                 {{ item.total_price }}
                             </td>
                             <td>
-                                {{ setStatus(item) }}
+                                <div class="px-2 text-white rounded" :style="`background-color:${setColor(item.status[item.status.length-1].name)};width:fit-content`">
+
+                                    {{ item.status[item.status.length-1].name }}
+                                </div>
                             </td>
 
 
@@ -94,6 +86,7 @@ export default {
     },
     data() {
         return {
+          
         }
     },
     methods: {
@@ -101,20 +94,17 @@ export default {
         rowClick(id) {
             this.$router.push(`/bookingdetail/${id}`)
         },
-        setStatus(data) {
-            if (data.check_in_date === null) {
-                return "รอเช็คอิน"
-            }
-            else if (data.check_in_date !== null && data.check_out_date === null) {
-                return "เช็คอิน"
-            }
-            else if (data.check_out_date !== null) {
-                return "เช็คเอาท์"
-            }
-            else {
-                return "รอตรวจสอบ"
+        setColor(status){
+            switch (status) {
+                case 'รอโรงแรมรับการจอง':
+                    
+                    return 'var(--info)'
+            
+                default:
+                    break;
             }
         }
+       
     },
 };
 </script>
