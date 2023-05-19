@@ -12,7 +12,7 @@
       </thead>
 
       <tbody :class="tbodyClasses">
-        <tr v-for="(item, index) in data" :id="`room-${item.room_number}`" :key="index" v-on:click="rowClick(item._id)">
+        <tr v-for="(item, index) in data" :id="`room-${item._id}`" :key="index" v-on:click="rowClick(item._id)">
           <template>
             <slot :row="item">
               <td>
@@ -37,6 +37,7 @@
               <base-button type="info" @click="$router.push(`/updateroom/${item._id}`)">แก้ไข</base-button>
             </td>
           </slot>
+        
         </template>
         </tr>
       </tbody>
