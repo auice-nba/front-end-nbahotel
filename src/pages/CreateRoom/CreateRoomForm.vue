@@ -110,8 +110,11 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-6 col-md-4">
-            <base-input label="ราคา" v-model="data.price" placeholder="บาท" />
+          <div class="col-6 col-md-3">
+            <base-input label="ราคาปกติ" v-model="data.price" placeholder="บาท" />
+          </div>
+          <div class="col-6 col-md-3">
+            <base-input label="ราคา NBA" v-model="data.cost" placeholder="บาท" />
           </div>
           <div class="col-6 col-md-2">
             <base-input label="หน่วย">
@@ -239,29 +242,30 @@ export default {
       children_type:false,
       roomstatustype:null,
       data: {
-        hotel_id: "",
-        room_type: "",
+        hotel_id: '',
+        room_type: null,
         imageURl: [],
-        detail: "",
-        price: 0,
-        quota:0,
-        unit:"",
-        size: 0,
-        bed_type: "",
-        aircondition:"",
-        max_person: 0,
-        children: "",
-        view_type: "",
-        bath_type: "",
+        detail: null,
+        price: null,
+        cost:null,
+        quota:null,
+        unit:null,
+        size: null,
+        bed_type: null,
+        aircondition:null,
+        max_person: null,
+        children: null,
+        view_type: null,
+        bath_type: null,
         smoke_type: false,
         furniture: [],
         room_service: [],
         amenities: [],
         wifi: false,
         entertainment: [],
-        security: "",
+        security: null,
         promotions: [],
-        status: "",
+        status: null,
       },
     };
   },
