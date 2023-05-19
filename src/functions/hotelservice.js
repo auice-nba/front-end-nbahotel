@@ -23,7 +23,7 @@ export class Hotel {
     await fetch(`${this.baseUrl}hotel/${userId}`,initdata)
     .then((response) => response.json())
     .then((result)=> hotel= result)
-    .catch((error) => hotel = {status:false,error:error});
+    .catch((error) => hotel = error);
     return hotel;
   }
 

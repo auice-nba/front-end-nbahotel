@@ -63,26 +63,24 @@ import { BaseInput } from "@/components/index";
 import { User } from "@/functions/userservice";
 import { Hotel } from '@/functions/hotelservice';
 import { Province } from '@/functions/provinceservice';
+import store from '@/stores'
 
 export default {
     setup() {
         const userservice = new User();
         const hotelservice = new Hotel();
         const provinceservice = new Province();
-        return { hotelservice, provinceservice,userservice }
+        return { hotelservice, provinceservice,userservice,store }
     },
     components: {
         BaseInput
     },
    async mounted() {
-        await this.userservice.Me().then(result=>{
-            if(result){
 
-                this.user=result.data;
-                this.hotel.host_id=this.user.user_id;
-            }
-        })
+        this.hotel.host_id=this.store.state.user.user_id;
+ 
         await this.getCategories();
+        this.hotel.category_id = this.categories[0]._id
 
         this.province = this.provinceservice.getProvince();
         this.amphure = this.province[0].amphure
@@ -94,11 +92,12 @@ export default {
         this.hotel.amphure = this.amphure[0].name_th;
         this.hotel.tambon = this.tambon[0].name_th;
 
+        console.log(this.hotel);
+
     },
     data() {
         return {
             loading: false,
-            user:null,
             province: null,
             amphure: null,
             tambon: null,
@@ -133,7 +132,7 @@ export default {
             }
             await this.hotelservice.createHotel(this.hotel,this.hotel.host_id).then(result => {
     
-                if(result){
+                if(result && result.status===true){
 
                     this.$router.push(`/landingpage/hotel-service-detail/${result.data._id}?host=${this.hotel.host_id}`);
                 }
