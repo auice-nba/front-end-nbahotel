@@ -130,6 +130,7 @@ export default {
                 this.error_message = 'กรุณากรอกที่อยู่';
                 return;
             }
+
             await this.hotelservice.createHotel(this.hotel,this.hotel.host_id).then(result => {
     
                 if(result && result.status===true){

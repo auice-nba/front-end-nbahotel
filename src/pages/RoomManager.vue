@@ -33,12 +33,11 @@ import RoomTable from "@/components/RoomTable";
 import store from "@/stores"
 
 const tableColumns = [
-  "เลขที่ห้อง",
   "ห้อง",
   "เตียง",
   "ราคา",
   "จำนวนผู้เข้าพักสูงสุด",
-  "เด็กพักฟรี",
+  "โควต้า",
   "สถาณะ",
 ];
 

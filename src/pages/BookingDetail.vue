@@ -1,9 +1,9 @@
 <!-- eslint-disable prettier/prettier -->
 <template>
     <div class="content">
-        <div class="row">
+        <div class="row" v-if="loading">
             <div class="col-md-8">
-                <Card v-if="loading">
+                <Card >
                     <h3 class="text-left">รายละเอียดใบจอง</h3>
                     <div class="row">
                         <div class="col-md-3 text-left">
@@ -89,7 +89,7 @@
                 <div class="text-left px-3">
 
                     <base-button  text class="back-button" @click="$router.push('/bookingmanager')">กลับ</base-button>
-                    <base-button type="primary" class="mx-3" @click="AcceptBooking" >ตอบรับการจอง</base-button>
+                    <base-button v-if="booking.status[booking.status.length-1].name ==='รอโรงแรมรับการจอง'" type="primary" class="mx-3" @click="AcceptBooking" >ตอบรับการจอง</base-button>
                 </div>
             </div>
             <div class="col-md-4">
@@ -143,7 +143,9 @@ export default {
         async AcceptBooking(){
   
             await this.bookingservice.acceptBooking(this.hotelId,this.booking._id).then(result => {
-                console.log(result);
+                if(result && result.status === 'ok'){
+                    this.booking=result.data;
+                }
             });
         }
     }

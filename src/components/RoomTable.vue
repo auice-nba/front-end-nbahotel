@@ -16,9 +16,6 @@
           <template>
             <slot :row="item">
               <td>
-                {{ item.room_number }}
-              </td>
-              <td>
                 {{ item.type.name_th}}
               </td>
               <td>
@@ -31,7 +28,7 @@
                 {{ item.max_person }}
               </td>
               <td>
-                {{ item.children }}
+                {{ item.quota }}
               </td>
               <td>
               {{ item.status.name }}

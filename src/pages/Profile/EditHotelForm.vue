@@ -64,10 +64,12 @@
 
     </div>
     <div class="row">
-      <div class="col-md-4 pr-md-1 text-left">
-        <base-input label="เบอร์โทรศัพท์" v-for="(item, index) in model.phone_number" :key="index" :value="item" disabled>
+      <div class="col-md-4 pr-md-1 text-left" v-for="(item, index) in model.phone_number" :key="index" >
+        <base-input label="เบอร์โทรศัพท์" :value="item" disabled>
         </base-input>
       </div>
+
+
     </div>
 
     <div class="row">
@@ -85,25 +87,25 @@
     <Card>
       <h4 class="text-left">ลักษณะพิเศษ</h4>
       <div class="row">
-        <div class="col-md-4 text-left mb-3">
+        <div class="col-lg-3 col-md-4 text-left mb-3">
           <h5>ไฮไลท์</h5>
           <base-checkbox v-for="(item, index) in highlight" :key="index" v-model="item.check">
             {{ item.name }}
           </base-checkbox>
         </div>
-        <div class="col-md-4 text-left mb-3">
+        <div class="col-lg-3 col-md-4 text-left mb-3">
           <h5>เครื่องอำนวยความสะดวก</h5>
           <base-checkbox v-for="(amen, index) in amenities" :key="index" v-model="amen.check">
             {{ amen.name }}
           </base-checkbox>
         </div>
-        <div class="col-md-4 text-left mb-3">
+        <div class="col-lg-3 col-md-4 text-left mb-3">
           <h5>ใบรับรอง</h5>
           <base-checkbox v-for="(cert, index) in certificate" :key="index" v-model="cert.check">
             {{ cert.name }}
           </base-checkbox>
         </div>
-        <div class="col-md-4 text-left mb-3">
+        <div class="col-lg-3 col-md-4 text-left mb-3">
           <h5>ที่จอดรถ</h5>
           <base-checkbox v-model="hotel.parking">
             ที่จอดรถ

@@ -5,7 +5,7 @@
     <side-bar :background-color="backgroundColor">
       <!-- <mobile-menu slot="content"></mobile-menu> -->
 
-      <sidebar-link to="/dashboard">
+      <!-- <sidebar-link to="/dashboard">
         <i class="tim-icons icon-chart-pie-36"></i>
 
         <template v-if="!isRTL">
@@ -25,7 +25,7 @@
         <template v-else>
           <p>Scheduler</p>
         </template>
-      </sidebar-link>
+      </sidebar-link> -->
 
       <sidebar-link to="/bookingmanager">
         <i class="tim-icons icon-book-bookmark"></i>
@@ -67,7 +67,7 @@
         </template>
       </sidebar-link>
 
-      <sidebar-link to="/icons">
+      <!-- <sidebar-link to="/icons">
         <i class="tim-icons icon-atom"></i>
 
         <template v-if="!isRTL">
@@ -77,9 +77,9 @@
         <template v-else>
           <p>الرموز</p>
         </template>
-      </sidebar-link>
+      </sidebar-link> -->
 
-      <sidebar-link to="/maps">
+      <!-- <sidebar-link to="/maps">
         <i class="tim-icons icon-pin"></i>
 
         <template v-if="!isRTL">
@@ -89,8 +89,8 @@
         <template v-else>
           <p>خرائط</p>
         </template>
-      </sidebar-link>
-
+      </sidebar-link> -->
+<!-- 
       <sidebar-link to="/notifications">
         <i class="tim-icons icon-bell-55"></i>
 
@@ -137,7 +137,7 @@
         <template v-else>
           <p>طباعة</p>
         </template>
-      </sidebar-link>
+      </sidebar-link> -->
 
     </side-bar>
 
