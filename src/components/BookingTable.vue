@@ -99,6 +99,9 @@ export default {
                 case 'รอโรงแรมรับการจอง':
                     
                     return 'var(--info)'
+                    case 'จองแล้ว':
+                    
+                    return 'var(--primary)'
             
                 default:
                     break;

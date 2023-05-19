@@ -89,7 +89,7 @@
                 <div class="text-left px-3">
 
                     <base-button  text class="back-button" @click="$router.push('/bookingmanager')">กลับ</base-button>
-                    <base-button type="primary" class="mx-3" >ตอบรับการจอง</base-button>
+                    <base-button type="primary" class="mx-3" @click="AcceptBooking" >ตอบรับการจอง</base-button>
                 </div>
             </div>
             <div class="col-md-4">
@@ -139,6 +139,12 @@ export default {
     methods: {
         dateFormat(date){
             return new Date(date).toLocaleDateString('th-TH',{weekday:'short',day:"numeric",month:"long",year:'numeric'});
+        },
+        async AcceptBooking(){
+  
+            await this.bookingservice.acceptBooking(this.hotelId,this.booking._id).then(result => {
+                console.log(result);
+            });
         }
     }
 
