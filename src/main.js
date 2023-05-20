@@ -67,6 +67,10 @@ import routes from './router';
 
   
   router.beforeEach(async (to,from,next) => {
+
+    if(to.meta && to.meta.public){
+      next();
+    }
     
     const userservice = new User();
     await userservice.Me().then(user=>{

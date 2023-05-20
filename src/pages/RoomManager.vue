@@ -43,8 +43,10 @@ const tableColumns = [
 
 export default {
   setup(){
+
     const room = new Room();
     const userservice = new User();
+
 
     return {
       room,userservice,store
@@ -54,13 +56,12 @@ export default {
     Card,
     RoomTable,
   },
+
   async mounted(){
 
       this.hotel_id = store.state.user.service_id;
-
-    await this.room.getHotelRoom(this.hotel_id).then(room=>{
-      this.roomdata = room;
-    })
+    await this.GetRoom();
+    
   },
   data() {
     return {
@@ -73,6 +74,13 @@ export default {
       },
     };
   },
+  methods:{
+    async GetRoom(){
+      await this.room.getHotelRoom(this.hotel_id).then(room=>{
+      this.roomdata = room;
+    })
+    }
+  }
 };
 </script>
 

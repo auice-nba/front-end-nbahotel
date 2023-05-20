@@ -130,11 +130,11 @@ export default {
                 this.error_message = 'กรุณากรอกที่อยู่';
                 return;
             }
-
+            console.log(this.hotel);
             await this.hotelservice.createHotel(this.hotel,this.hotel.host_id).then(result => {
     
                 if(result && result.status===true){
-
+      
                     this.$router.push(`/landingpage/hotel-service-detail/${result.data._id}?host=${this.hotel.host_id}`);
                 }
             })
@@ -142,8 +142,6 @@ export default {
         async getCategories() {
             await this.hotelservice.getCatetory().then(result => {
                 this.categories = result;
-             
-                
 
             })
         },
@@ -158,7 +156,9 @@ export default {
 
                 const data = e.target.options[e.target.options.selectedIndex].innerHTML;
                 this.amphure = this.province.find(el => el.name_th == data).amphure;
+                this.hotel.amphure = this.amphure[0].name_th;
                 this.tambon = this.amphure[0].tambon;
+                this.hotel.tambon = this.tambon[0].name_th;
 
 
                 return data;
@@ -168,7 +168,7 @@ export default {
             if (e.target.options.selectedIndex > -1) {
                 const data = e.target.options[e.target.options.selectedIndex].innerHTML;
                 this.tambon = this.amphure.find(el => el.name_th == data).tambon;
-
+                this.hotel.tambon = this.tambon[0].name_th;
 
                 return data;
             }

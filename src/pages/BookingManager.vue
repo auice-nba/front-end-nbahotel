@@ -22,6 +22,7 @@
   </template>
 <!-- eslint-disable prettier/prettier -->
   <script>
+  import { io } from "socket.io-client";
   import { Card } from "@/components/index";
   import {Booking} from "@/functions/bookingservice"
   import BookingTable from '@/components/BookingTable'
@@ -37,25 +38,28 @@
   
   export default {
     setup(){
+      const socket = io(process.env.VUE_APP_API);
       const bookingservice = new Booking();
       return {
-        bookingservice,store
+        bookingservice,store,socket
       }
     },
     components: {
       Card,
       BookingTable
     },
+    created(){
+      this.socket.on('newbooking',async (data)=>{
+ 
+          console.log(data);
+          await this.GetBooking();
+        
+      })
+    },
     async mounted(){
  
       this.hotel_id = this.store.state.user.service_id;
-      await this.bookingservice.getBooking(this.hotel_id).then(result=>{
-        if(result.status==="ok"){
-       
-            this.table.data=result.data;
-            this.loading = true;
-        }
-      })
+      await this.GetBooking()
     },
     data() {
       return {
@@ -68,6 +72,17 @@
         },
       };
     },
+    methods:{
+      async GetBooking(){
+        await this.bookingservice.getBooking(this.hotel_id).then(result=>{
+        if(result.status==="ok"){
+       
+            this.table.data=result.data.reverse();
+            this.loading = true;
+        }
+      })
+      }
+    }
   };
   </script>
   

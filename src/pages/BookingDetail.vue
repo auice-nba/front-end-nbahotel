@@ -101,6 +101,7 @@
 </template>
 <!-- eslint-disable prettier/prettier -->
 <script>
+import { io } from "socket.io-client";
 import { Booking } from "@/functions/bookingservice";
 import { Card } from "@/components/index";
 import store from '@/stores';
@@ -108,13 +109,19 @@ import store from '@/stores';
 export default {
 
     setup() {
+        const socket = io(process.env.VUE_APP_API);
         const bookingservice = new Booking();
         return {
-            bookingservice,store
+            bookingservice,store,socket
         }
     },
     components: {
         Card
+    },
+    created(){
+        this.socket.on('bookingUpdate',data=>{
+            console.log(data);
+        })
     },
     async mounted() {
 
@@ -145,8 +152,12 @@ export default {
             await this.bookingservice.acceptBooking(this.hotelId,this.booking._id).then(result => {
                 if(result && result.status === 'ok'){
                     this.booking=result.data;
+                    this.socket.emit('sendUpdateBooking',{update:'booking'})
                 }
             });
+        },
+        sendIo(){
+            this.socket.emit('sendUpdateBooking',{update:'booking'})
         }
     }
 
