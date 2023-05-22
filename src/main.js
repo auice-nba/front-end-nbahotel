@@ -74,7 +74,10 @@ import routes from './router';
     
     const userservice = new User();
     await userservice.Me().then(user=>{
-      
+
+      if(to.name!=='Login' && !user){
+        return next({name:'LandingPage'});
+      }
       store.commit('setUser',user.data);
 
 

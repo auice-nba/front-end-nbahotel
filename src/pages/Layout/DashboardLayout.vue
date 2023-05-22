@@ -26,6 +26,12 @@
           <p>Scheduler</p>
         </template>
       </sidebar-link> -->
+      <sidebar-link to="/checkin">
+        <i class="tim-icons icon-calendar-60"></i>
+        <template>
+          <p>Check in and check out</p>
+        </template>
+      </sidebar-link>
 
       <sidebar-link to="/bookingmanager">
         <i class="tim-icons icon-book-bookmark"></i>
@@ -67,7 +73,7 @@
         </template>
       </sidebar-link>
 
-      <!-- <sidebar-link to="/icons">
+      <sidebar-link to="/icons">
         <i class="tim-icons icon-atom"></i>
 
         <template v-if="!isRTL">
@@ -77,7 +83,7 @@
         <template v-else>
           <p>الرموز</p>
         </template>
-      </sidebar-link> -->
+      </sidebar-link>
 
       <!-- <sidebar-link to="/maps">
         <i class="tim-icons icon-pin"></i>

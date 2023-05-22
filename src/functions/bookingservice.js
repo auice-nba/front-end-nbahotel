@@ -69,5 +69,26 @@ export class Booking {
       return data;
       
     }
+
+    //verify checkin user
+    async VerifyCheckInUser(userData){
+      var data;
+      const initdata = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token:this.#token
+        },
+        credentials: 'include',
+        body:JSON.stringify(userData)
+      };
+
+      await fetch(`${this.baseUrl}booking/verifycheckinuser`,initdata)
+      .then(response => response.json())
+      .then(result => data = {status:"ok",data:result})
+      .catch(err=>data = {status:false,error:err})
+
+      return data;
+    }
   
 }

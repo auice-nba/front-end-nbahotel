@@ -35,6 +35,18 @@ const routes = [
         component: Scheduler,
       },
       {
+        path: "checkin",
+        name: "Checkin",
+        meta:{public:false},
+        component: () => import("@/pages/Checkin.vue"),
+      },
+      {
+        path: "checkout",
+        name: "Checkout",
+        meta:{public:false},
+        component: () => import("@/pages/Checkout.vue"),
+      },
+      {
         path:"bookingmanager",
         name: "BookingManager",
         meta:{public:false},

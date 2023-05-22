@@ -8,8 +8,9 @@
               <h4 class="card-title">Booking managemant</h4>
             </template>
             <div v-if="loading==true" class="table-responsive text-left">
+              <base-input v-model="refnumber" label="ค้นหา" style="max-width:14rem;" placeholder="REFNUMBER"/>
               <booking-table
-                :data="table.data"
+                :data="filterBooking"
                 :columns="table.columns"
                 thead-classes="text-primary"
               >
@@ -24,6 +25,7 @@
   <script>
   import { io } from "socket.io-client";
   import { Card } from "@/components/index";
+  import { BaseInput} from "@/components/index";
   import {Booking} from "@/functions/bookingservice"
   import BookingTable from '@/components/BookingTable'
   import store from '@/stores';
@@ -46,6 +48,7 @@
     },
     components: {
       Card,
+      BaseInput,
       BookingTable
     },
     created(){
@@ -56,11 +59,6 @@
         
       })
     },
-    async mounted(){
- 
-      this.hotel_id = this.store.state.user.service_id;
-      await this.GetBooking()
-    },
     data() {
       return {
         hotel_id:null,
@@ -69,8 +67,27 @@
           title: "Booking Table",
           columns: [...tableColumns],
           data: [],
+         
         },
+        refnumber:''
       };
+    },
+    async mounted(){
+ 
+      this.hotel_id = this.store.state.user.service_id;
+      await this.GetBooking()
+    },
+    computed: {
+      filterBooking(){
+        if(this.refnumber !==''){
+
+          return this.table.data.filter(el=> el.ref_number.includes(this.refnumber))
+        }
+        else{
+
+          return this.table.data;
+        }
+      }
     },
     methods:{
       async GetBooking(){
