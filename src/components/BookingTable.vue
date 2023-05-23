@@ -102,6 +102,10 @@ export default {
                     case 'จองแล้ว':
                     
                     return 'var(--primary)'
+
+                    case 'เช็คอิน':
+                    
+                    return 'var(--success)'
             
                 default:
                     break;

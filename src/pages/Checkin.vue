@@ -6,12 +6,13 @@
                     <base-button type="primary">Check In</base-button>
                     <base-button @click="$router.push('/checkout')">Check Out</base-button>
                     <h1 class="mt-4">Check In</h1>
-                    <base-input v-model="customer.ref_number" label="Booking Ref Number" style="max-width:14rem"/>
+                    <base-input v-model="customer.ref_number" label="Booking Ref Number" style="max-width:14rem" @change="error_message=null"/>
                  
                     <div class="flex flex-row">
                      
                         <base-input v-model="customer.customer_tel" type="text" label="เบอร์โทรศัพท์" style="max-width:14rem"/>
                         <base-button type="primary" class="mt-3" @click="VerifyCheckInUser">ตรวจสอบ</base-button>
+                        <p class="text-danger mt-3">{{ error_message || null }}</p>
                     </div>
 
                 </Card>
@@ -42,22 +43,36 @@ export default {
         Card,BaseInput
     },
     mounted(){
-        this.customer.host_id=this.store.state.user.service_id;
+        this.customer.host_id=this.store.state.user.user_id;
+        console.log(this.customer);
     },
     data(){
         return{
             customer:{
                 host_id:null,
-                ref_number:null,
-                customer_tel:null,
-            }
+                ref_number:'',
+                customer_tel:'',
+            },
+            error_message:null,
         }   
     },
     methods:{
          async VerifyCheckInUser(){
-            await this.bookingservices.VerifyCheckInUser(this.customer).then(result=>{
-                if(result && result.status==='ok'){
-                    console.log(result);
+
+            //validate customer
+            const checkdata = {
+                host_id:this.customer.host_id,
+                ref_number:this.customer.ref_number.split(" ").toString(),
+                customer_tel:this.customer.customer_tel.split(" ").toString(),
+            }
+          
+            await this.bookingservices.VerifyCheckInUser(checkdata).then(response=>{
+
+                if(response && response.data.data.detail==='OK.'){
+                    this.$router.push(`/checkin-otp?id=${response.data.booking_id}&token=${response.data.data.result.token}`)
+                }
+                else{
+                    this.error_message='เลขที่ใบจองหรือหมายเลขโทรศัพท์ไม่ถูกต้อง'
                 }
             })
         }

@@ -83,10 +83,31 @@ export class Booking {
         body:JSON.stringify(userData)
       };
 
-      await fetch(`${this.baseUrl}booking/verifycheckinuser`,initdata)
+      await fetch(`${this.baseUrl}checkin/verifycheckinuser`,initdata)
       .then(response => response.json())
       .then(result => data = {status:"ok",data:result})
       .catch(err=>data = {status:false,error:err})
+
+      return data;
+    }
+
+    //confirm checkin with otp
+    async ConfirmCheckInUser(userData){
+      var data;
+      const initdata = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token:this.#token
+        },
+        credentials: 'include',
+        body:JSON.stringify(userData)
+      };
+
+      await fetch(`${this.baseUrl}checkin/confirm-otp`,initdata)
+      .then(response => response.json())
+      .then(result => data = result)
+      .catch(err=> data = err)
 
       return data;
     }

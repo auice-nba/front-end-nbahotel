@@ -41,6 +41,11 @@ const routes = [
         component: () => import("@/pages/Checkin.vue"),
       },
       {
+        path:"checkin-otp",
+        name: "CheckinOTP",
+        component: () => import("@/pages/CheckinOTP.vue")
+      },
+      {
         path: "checkout",
         name: "Checkout",
         meta:{public:false},
