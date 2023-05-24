@@ -44,7 +44,7 @@ export default {
     },
     mounted(){
         this.customer.host_id=this.store.state.user.user_id;
-        console.log(this.customer);
+  
     },
     data(){
         return{

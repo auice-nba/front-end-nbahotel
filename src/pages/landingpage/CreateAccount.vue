@@ -106,7 +106,7 @@ export default {
         },
         validatePassword(){
             const pw = this.user.password;
-            return ('ch', (/[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw)) && pw.length>8 )
+            return ('ch', (/[A-Z]/.test(pw) && /[a-z]/.test(pw) && /[0-9]/.test(pw)) && pw.length>=8 )
         },
         togglePassword(){
 

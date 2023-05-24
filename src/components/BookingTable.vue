@@ -106,6 +106,10 @@ export default {
                     case 'เช็คอิน':
                     
                     return 'var(--success)'
+
+                    case 'เช็คเอาท์':
+                    
+                    return 'gray'
             
                 default:
                     break;

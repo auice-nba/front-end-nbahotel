@@ -111,5 +111,34 @@ export class Booking {
 
       return data;
     }
+
+    //checkout
+    async CheckOut(hotelId,bookingId){
+      var data;
+      const initdata = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          token:this.#token
+        },
+        credentials: 'include',
+        body:JSON.stringify({booking_id:bookingId})
+      };
+
+      await fetch(`${this.baseUrl}checkin/checkout/${hotelId}`,initdata)
+      .then(response => {
+        if(response.status === 200){
+          return response.json()
+        }
+        else{
+          return {error:response}
+        }
+        }
+        )
+      .then(result => data = result)
+      .catch(err=> data = err)
+
+      return data;
+    }
   
 }

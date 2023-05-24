@@ -6,25 +6,15 @@
           <template slot="header">
             <div class="row">
               <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
-                <template v-if="!isRTL">
-                  <h5 class="card-category">Total Shipments</h5>
+                <template >
+                  <h5 class="card-category">จำนวนใบจองทั้งหมด</h5>
                 </template>
-                <template v-else>
-                  <h5 class="card-category">مجموع الشحنات</h5>
-                </template>
-                <template v-if="!isRTL">
+
+                <template>
                   <h2 class="card-title">Performance</h2>
                 </template>
-                <template v-else>
-                  <h2 class="card-title">أداء</h2>
-                </template>
+              
               </div>
-
-
-
-
-
-
 
               
               <div class="col-sm-6">
@@ -86,13 +76,15 @@
         </card>
       </div>
     </div>
+
+    <!-- weekly chart -->
     <div class="row">
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart" cardCol>
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.totalShipments") }}</h5>
+            <h5 class="card-category">{{ $t("สัปดาห์ล่าสุด") }}</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-bell-55 text-primary"></i> 763,215
+              <i class="tim-icons icon-bell-55 text-primary"></i> 763 <small style="color:gray; font-size:small">การจอง</small>
             </h3>
           </template>
           <line-chart
@@ -109,9 +101,9 @@
       <div class="col-lg-4">
         <card type="chart" cardCol>
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.dailySales") }}</h5>
+            <h5 class="card-category">{{ $t("รายได้สัปดาห์นี้") }}</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-delivery-fast text-info"></i> 3,500€
+              <i class="tim-icons icon-money-coins text-info"></i> 3,500 <small style="color:gray; font-size:small">บาท</small>
             </h3>
           </template>
           <bar-chart
@@ -127,9 +119,9 @@
       <div class="col-lg-4">
         <card type="chart" cardCol>
           <template slot="header">
-            <h5 class="card-category">{{ $t("dashboard.completedTasks") }}</h5>
+            <h5 class="card-category">{{ $t("เช็คอินสัปดาห์นี้") }}</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-send text-success"></i> 12,100K
+              <i class="tim-icons icon-send text-success"></i> 12 <small style="color:gray; font-size:small">ห้อง</small>
             </h3>
           </template>
           <line-chart
@@ -148,13 +140,13 @@
         <card type="tasks">
           <template slot="header">
             <template v-if="!isRTL">
-              <h6 class="title d-inline">Tasks(5)</h6>
+              <h6 class="title d-inline">ข้อความใหม่(5)</h6>
             </template>
             <template v-else>
               <h6 class="title d-inline">الشحنات</h6>
             </template>
             <template v-if="!isRTL">
-              <p class="card-category d-inline">Today</p>
+              <p class="card-category d-inline">วันนี้</p>
             </template>
             <drop-down tag="div" :class="isRTL ? 'float-left' : ''">
               <button
@@ -180,7 +172,7 @@
       <div class="col-lg-6 col-md-12">
         <card class="card">
           <h4 slot="header" class="card-title">
-            <template >Booking</template>
+            <template >ใบจองใหม่</template>
           </h4>
           <div class="table-responsive">
             <room-table/>
@@ -192,15 +184,22 @@
 </template>
 <script>
 import { Card } from "@/components/index";
-
 import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
 import * as chartConfigs from "@/components/Charts/config";
 import TaskList from "./Dashboard/TaskList";
 import RoomTable from "@/components/RoomTable.vue";
 import config from "@/config";
+import store from "@/stores";
+import { Report } from "@/functions/reportservice"
 
 export default {
+  setup(){
+    const reportservice = new Report();
+    return {
+      reportservice,store
+    }
+  },
   components: {
     Card,
     LineChart,
@@ -210,13 +209,15 @@ export default {
   },
   data() {
     return {
+      hotel_id:null,
+      report:null,
       bigLineChartCategories: ["Accounts", "Purchases", "Sessions"],
       bigLineChartCategoriesAr: ["حسابات", "المشتريات", "جلسات"],
       bigLineChart: {
         allData: [
-          [100, 70, 90, 70, 85, 60, 75, 60, 90, 80, 110, 100],
-          [80, 120, 105, 110, 95, 105, 90, 100, 80, 95, 70, 120],
-          [60, 80, 65, 130, 80, 105, 90, 130, 70, 115, 60, 130],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         ],
         activeIndex: 0,
         chartData: { datasets: [{}] },
@@ -228,7 +229,7 @@ export default {
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
         chartData: {
-          labels: ["JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+          labels: ["จันทร", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์","อาทิตย์"],
           datasets: [
             {
               label: "Data",
@@ -318,8 +319,8 @@ export default {
             fill: true,
             borderColor: config.colors.primary,
             borderWidth: 2,
-            borderDash: [],
-            borderDashOffset: 0.0,
+            borderDash: [5],
+            borderDashOffset: 1,
             pointBackgroundColor: config.colors.primary,
             pointBorderColor: "rgba(255,255,255,0)",
             pointHoverBackgroundColor: config.colors.primary,
@@ -331,18 +332,7 @@ export default {
           },
         ],
         labels: [
-          "JAN",
-          "FEB",
-          "MAR",
-          "APR",
-          "MAY",
-          "JUN",
-          "JUL",
-          "AUG",
-          "SEP",
-          "OCT",
-          "NOV",
-          "DEC",
+        "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
         ],
       };
       this.$refs.bigChart.updateGradients(chartData);
@@ -350,12 +340,24 @@ export default {
       this.bigLineChart.activeIndex = index;
     },
   },
-  mounted() {
+  async mounted() {
     this.i18n = this.$i18n;
+    console.log(this.$t)
     if (this.enableRTL) {
       this.i18n.locale = "ar";
       this.$rtl.enableRTL();
     }
+
+   this.hotel_id = this.store.state.user.service_id;
+
+    await this.reportservice.getBookingReport(this.hotel_id).then(result=>{
+      if(result && result.status === 'ok'){
+
+        console.log(result.data);
+        this.bigLineChart.allData[0] = result.data.year;
+      }
+ 
+    })
     this.initBigChart(0);
   },
   beforeDestroy() {

@@ -5,7 +5,7 @@
     <side-bar :background-color="backgroundColor">
       <!-- <mobile-menu slot="content"></mobile-menu> -->
 
-      <!-- <sidebar-link to="/dashboard">
+      <sidebar-link to="/dashboard">
         <i class="tim-icons icon-chart-pie-36"></i>
 
         <template v-if="!isRTL">
@@ -16,7 +16,7 @@
           <p>لوحة القيادة</p>
         </template>
       </sidebar-link>
-      <sidebar-link to="/scheduler">
+      <!-- <sidebar-link to="/scheduler">
         <i class="tim-icons icon-calendar-60"></i>
 
         <template v-if="!isRTL">
