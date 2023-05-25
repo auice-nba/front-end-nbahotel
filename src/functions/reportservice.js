@@ -35,4 +35,30 @@ export class Report {
       return data;
     }
 
+    //get Hotel task
+    async getTask(hotelId){
+      var data;
+    const initdata = {
+        method: "GET",
+        headers: {
+          token:this.#token
+        },
+        credentials: 'include',
+      };
+
+      await fetch(`${this.baseUrl}task/${hotelId}`,initdata)
+      .then(response =>{
+        if(response.status === 200){
+            return response.json();
+        }
+        else{
+            data = {status:false, data:response.json()}
+           
+        }})
+      .then(result => data = {status:"ok",data:result})
+      .catch(err=>data = {status:false,error:err})
+
+      return data;
+    }
+
 }

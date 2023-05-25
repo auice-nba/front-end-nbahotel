@@ -7,11 +7,11 @@
             <div class="row">
               <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
                 <template >
-                  <h5 class="card-category">จำนวนใบจองทั้งหมด</h5>
+                  <h5 class="card-category">ยอดจองรายปี</h5>
                 </template>
 
                 <template>
-                  <h2 class="card-title">Performance</h2>
+                  <h2 class="card-title">Performance {{active_year}}</h2>
                 </template>
               
               </div>
@@ -28,6 +28,7 @@
                       v-for="(option, index) in bigLineChartCategories"
                       :key="option"
                       class="btn btn-success btn-sm btn-simple"
+                      style="min-width:5rem"
                       :class="{ active: bigLineChart.activeIndex === index }"
                       :id="index"
                     >
@@ -63,7 +64,7 @@
               </div>
             </div>
           </template>
-          <line-chart
+          <line-chart v-if="loading"
             class="chart-area"
             ref="bigChart"
             chart-id="big-line-chart"
@@ -82,12 +83,12 @@
       <div class="col-lg-4" :class="{ 'text-right': isRTL }">
         <card type="chart" cardCol>
           <template slot="header">
-            <h5 class="card-category">{{ $t("สัปดาห์ล่าสุด") }}</h5>
+            <h5 class="card-category">ยอดใบจองใหม่ใน 7 วันที่ผ่านมา</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-bell-55 text-primary"></i> 763 <small style="color:gray; font-size:small">การจอง</small>
+              <i class="tim-icons icon-bell-55 text-primary"></i> {{ booking7day }} <small style="color:gray; font-size:small">การจอง</small>
             </h3>
           </template>
-          <line-chart
+          <line-chart v-if="loading"
             class="chart-area"
             chart-id="green-line-chart"
             :chart-data="greenLineChart.chartData"
@@ -101,12 +102,12 @@
       <div class="col-lg-4">
         <card type="chart" cardCol>
           <template slot="header">
-            <h5 class="card-category">{{ $t("รายได้สัปดาห์นี้") }}</h5>
+            <h5 class="card-category">รายได้สัปดาห์นี้</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-money-coins text-info"></i> 3,500 <small style="color:gray; font-size:small">บาท</small>
+              <i class="tim-icons icon-money-coins text-info"></i> {{ weekly_income }} <small style="color:gray; font-size:small">บาท</small>
             </h3>
           </template>
-          <bar-chart
+          <bar-chart v-if="loading"
             class="chart-area"
             chart-id="blue-bar-chart"
             :chart-data="blueBarChart.chartData"
@@ -119,12 +120,12 @@
       <div class="col-lg-4">
         <card type="chart" cardCol>
           <template slot="header">
-            <h5 class="card-category">{{ $t("เช็คอินสัปดาห์นี้") }}</h5>
+            <h5 class="card-category">เช็คอินสัปดาห์นี้</h5>
             <h3 class="card-title">
               <i class="tim-icons icon-send text-success"></i> 12 <small style="color:gray; font-size:small">ห้อง</small>
             </h3>
           </template>
-          <line-chart
+          <line-chart v-if="loading"
             class="chart-area"
             chart-id="purple-line-chart"
             :chart-data="purpleLineChart.chartData"
@@ -140,7 +141,7 @@
         <card type="tasks">
           <template slot="header">
             <template v-if="!isRTL">
-              <h6 class="title d-inline">ข้อความใหม่(5)</h6>
+              <h6 class="title d-inline">ข้อความใหม่({{ newtask }})</h6>
             </template>
             <template v-else>
               <h6 class="title d-inline">الشحنات</h6>
@@ -165,7 +166,7 @@
             </drop-down>
           </template>
           <div class="table-full-width table-responsive">
-            <task-list></task-list>
+            <task-list @task="(data)=>task=data"/>
           </div>
         </card>
       </div>
@@ -183,6 +184,7 @@
   </div>
 </template>
 <script>
+import { io } from "socket.io-client";
 import { Card } from "@/components/index";
 import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
@@ -195,9 +197,10 @@ import { Report } from "@/functions/reportservice"
 
 export default {
   setup(){
+    const socket = io(process.env.VUE_APP_API);
     const reportservice = new Report();
     return {
-      reportservice,store
+      reportservice,store,socket
     }
   },
   components: {
@@ -211,7 +214,12 @@ export default {
     return {
       hotel_id:null,
       report:null,
-      bigLineChartCategories: ["Accounts", "Purchases", "Sessions"],
+      task:null,
+      newtask:0,
+      booking7day:0,
+      weekly_income:0,
+      active_year:new Date().getFullYear(),
+      bigLineChartCategories: ["ปีนี้", "ปีหน้า", "ปีถัดไป"],
       bigLineChartCategoriesAr: ["حسابات", "المشتريات", "جلسات"],
       bigLineChart: {
         allData: [
@@ -229,10 +237,10 @@ export default {
       greenLineChart: {
         extraOptions: chartConfigs.greenChartOptions,
         chartData: {
-          labels: ["จันทร", "อังคาร", "พุธ", "พฤหัสบดี", "ศุกร์", "เสาร์","อาทิตย์"],
+          labels: new Array(7),
           datasets: [
             {
-              label: "Data",
+              label: "จำนวน",
               fill: true,
               borderColor: config.colors.primary,
               borderWidth: 2,
@@ -245,7 +253,7 @@ export default {
               pointHoverRadius: 4,
               pointHoverBorderWidth: 15,
               pointRadius: 4,
-              data: [80, 100, 70, 80, 120, 80],
+              data: new Array(7),
             },
           ],
         },
@@ -255,10 +263,10 @@ export default {
       blueBarChart: {
         extraOptions: chartConfigs.barChartOptions,
         chartData: {
-          labels: ["USA", "GER", "AUS", "UK", "RO", "BR"],
+          labels: new Array(7),
           datasets: [
             {
-              label: "Countries",
+              label: "รายได้",
               fill: true,
               borderColor: config.colors.info,
               borderWidth: 2,
@@ -301,8 +309,19 @@ export default {
         ],
         gradientStops: [1, 0.4, 0],
       },
+      loading: false
     };
   },
+  created(){
+      this.socket.on('newbooking',async ()=>{
+    
+          await this.getReport();
+        
+    
+      })
+      
+    
+    },
   computed: {
     enableRTL() {
       return this.$route.query.enableRTL;
@@ -310,6 +329,21 @@ export default {
     isRTL() {
       return this.$rtl.isRTL;
     },
+  },
+  async mounted() {
+    this.i18n = this.$i18n;
+ 
+    if (this.enableRTL) {
+      this.i18n.locale = "ar";
+      this.$rtl.enableRTL();
+    }
+
+   this.hotel_id = this.store.state.user.service_id;
+
+    await this.getReport();
+   
+    this.newtask = this.task.filter(el=>el.done===false).length;
+
   },
   methods: {
     initBigChart(index) {
@@ -335,31 +369,42 @@ export default {
         "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."
         ],
       };
-      this.$refs.bigChart.updateGradients(chartData);
-      this.bigLineChart.chartData = chartData;
-      this.bigLineChart.activeIndex = index;
+        this.active_year = new Date().getFullYear() + index
+        // this.$refs.bigChart.updateGradients(chartData);
+        this.bigLineChart.chartData = chartData;
+        this.bigLineChart.activeIndex = index;
+      
     },
-  },
-  async mounted() {
-    this.i18n = this.$i18n;
-    console.log(this.$t)
-    if (this.enableRTL) {
-      this.i18n.locale = "ar";
-      this.$rtl.enableRTL();
-    }
-
-   this.hotel_id = this.store.state.user.service_id;
-
-    await this.reportservice.getBookingReport(this.hotel_id).then(result=>{
+    async getReport(){
+      await this.reportservice.getBookingReport(this.hotel_id).then(result=>{
       if(result && result.status === 'ok'){
 
         console.log(result.data);
         this.bigLineChart.allData[0] = result.data.year;
+        this.bigLineChart.allData[1] = result.data.next_year;
+        this.bigLineChart.allData[2] = result.data.last_year;
+        
+        
+        //last 7 days
+        this.greenLineChart.chartData.labels=result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit'}));
+        this.greenLineChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.count);
+        this.booking7day = result.data.last7day.reduce((accumulator, currentValue) => accumulator + currentValue.count,0);
+
+        //blue chart
+        const today = new Date();
+        const firstday = new Date(today.getFullYear(),today.getMonth(),today.getDate() - today.getDay());
+        console.log(new Date(firstday).toLocaleDateString('th-TH',{weekday:'short'}));
+        this.blueBarChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{weekday:'short',day:'2-digit'}));
+        this.blueBarChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.income);
+        this.weekly_income = result.data.last7day.filter(el=>new Date(el.day)>firstday).reduce((total,item)=>total+item.income,0);
+        this.loading = true;
+        this.initBigChart(0);
       }
  
     })
-    this.initBigChart(0);
+    }
   },
+ 
   beforeDestroy() {
     if (this.$rtl.isRTL) {
       this.i18n.locale = "en";

@@ -6,7 +6,8 @@
       </td>
       <td class="text-left">
         <p class="title">{{ row.title }}</p>
-        <p class="text-muted">{{ row.description }}</p>
+        <p class="text-muted">{{ row.subtitle }} เมื่อเวลา 
+          {{ new Date(row.createdAt).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'2-digit',hour:'numeric',minute:'numeric',second:'numeric'}) }}</p>
       </td>
       <td class="td-actions text-right">
         <base-button type="link" artia-label="edit button">
@@ -17,22 +18,61 @@
   </base-table>
 </template>
 <script>
+  import { io } from "socket.io-client";
 import BaseButton from "@/components/BaseButton";
 import BaseTable from "@/components/BaseTable";
 import BaseCheckbox from "@/components/BaseCheckbox";
+import {Report} from "@/functions/reportservice";
+import store from "@/stores"
 
 export default {
+  setup(){
+    const socket = io(process.env.VUE_APP_API);
+    const reportservice = new Report();
+    return {
+      reportservice,store,socket
+    }
+  },
   components: {
     BaseButton,
     BaseTable,
     BaseCheckbox,
   },
+  data(){
+    return {
+
+      hotel_id:null,
+      tasks:null,
+    }
+  },
+  emits: ['task'],
+  created(){
+      this.socket.on('newtask',async ()=>{
+
+        await this.getTask();
+        
+      })
+
+    },
 
   computed: {
     tableData() {
-      return this.$t("dashboard.taskList");
+      return this.tasks;
     },
   },
+  async mounted(){
+    this.hotel_id = this.store.state.user.service_id
+    await this.getTask();
+  },
+  methods:{
+    async getTask(){
+      await this.reportservice.getTask(this.hotel_id).then(result=>{
+        
+      this.tasks = result.data.reverse();
+      this.$emit('task',this.tasks);
+    })
+    }
+  }
 };
 </script>
 <style></style>
