@@ -104,7 +104,7 @@
           <template slot="header">
             <h5 class="card-category">รายได้สัปดาห์นี้</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-money-coins text-info"></i> {{ weekly_income }} <small style="color:gray; font-size:small">บาท</small>
+              <i class="tim-icons icon-wallet-43 text-info"></i> {{ weekly_income }} <small style="color:gray; font-size:small">บาท</small>
             </h3>
           </template>
           <bar-chart v-if="loading"
@@ -122,7 +122,7 @@
           <template slot="header">
             <h5 class="card-category">เช็คอินสัปดาห์นี้</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-send text-success"></i> 12 <small style="color:gray; font-size:small">ห้อง</small>
+              <i class="tim-icons icon-bulb-63 text-success"></i> {{ room_check_in }} <small style="color:gray; font-size:small">ห้อง</small>
             </h3>
           </template>
           <line-chart v-if="loading"
@@ -141,13 +141,13 @@
         <card type="tasks">
           <template slot="header">
             <template v-if="!isRTL">
-              <h6 class="title d-inline">ข้อความใหม่({{ newtask }})</h6>
+              <h6 class="new-task title d-inline" @click="getNewTask">ข้อความใหม่({{ task }})</h6>
             </template>
             <template v-else>
               <h6 class="title d-inline">الشحنات</h6>
             </template>
             <template v-if="!isRTL">
-              <p class="card-category d-inline">วันนี้</p>
+              <p class="card-category d-inline" @click="getTodayTask">วันนี้</p>
             </template>
             <drop-down tag="div" :class="isRTL ? 'float-left' : ''">
               <button
@@ -159,24 +159,24 @@
                 <i class="tim-icons icon-settings-gear-63"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-right">
-                <a href="#pablo" class="dropdown-item">Action</a>
-                <a href="#pablo" class="dropdown-item">Another Action</a>
-                <a href="#pablo" class="dropdown-item">Something else</a>
+                <a href="#pablo" class="dropdown-item">เลือกทั้งหมด</a>
+                <a href="#pablo" class="dropdown-item">อ่านทั้งหมดแล้ว</a>
+                <a href="#pablo" class="dropdown-item">ลบทั้งหมด</a>
               </ul>
             </drop-down>
           </template>
-          <div class="table-full-width table-responsive">
-            <task-list @task="(data)=>task=data"/>
+          <div v-if="loading" class="table-full-width table-responsive">
+            <task-list :today="today" @task="(data)=>task=data"/>
           </div>
         </card>
       </div>
       <div class="col-lg-6 col-md-12">
         <card class="card">
           <h4 slot="header" class="card-title">
-            <template >ใบจองใหม่</template>
+            <template >ใบจองมาใหม่({{ bookings.length }})</template>
           </h4>
-          <div class="table-responsive">
-            <room-table/>
+          <div v-if="loading" class="table-responsive">
+          <new-booking :bookings="bookings"/>
           </div>
         </card>
       </div>
@@ -190,7 +190,7 @@ import LineChart from "@/components/Charts/LineChart";
 import BarChart from "@/components/Charts/BarChart";
 import * as chartConfigs from "@/components/Charts/config";
 import TaskList from "./Dashboard/TaskList";
-import RoomTable from "@/components/RoomTable.vue";
+import NewBooking from "./Dashboard/NewBooking.vue";
 import config from "@/config";
 import store from "@/stores";
 import { Report } from "@/functions/reportservice"
@@ -208,16 +208,18 @@ export default {
     LineChart,
     BarChart,
     TaskList,
-    RoomTable,
+    NewBooking
   },
   data() {
     return {
       hotel_id:null,
       report:null,
-      task:null,
-      newtask:0,
+      task:0,
       booking7day:0,
       weekly_income:0,
+      bookings:[],
+      room_check_in:0,
+      today:false,
       active_year:new Date().getFullYear(),
       bigLineChartCategories: ["ปีนี้", "ปีหน้า", "ปีถัดไป"],
       bigLineChartCategoriesAr: ["حسابات", "المشتريات", "جلسات"],
@@ -282,10 +284,10 @@ export default {
       purpleLineChart: {
         extraOptions: chartConfigs.purpleChartOptions,
         chartData: {
-          labels: ["JUL", "AUG", "SEP", "OCT", "NOV"],
+          labels: new Array(7),
           datasets: [
             {
-              label: "My First dataset",
+              label: "เช็คอิน",
               fill: true,
               borderColor: config.colors.danger,
               borderWidth: 2,
@@ -317,6 +319,7 @@ export default {
     
           await this.getReport();
         
+          this.initBigChart(0);
     
       })
       
@@ -341,8 +344,8 @@ export default {
    this.hotel_id = this.store.state.user.service_id;
 
     await this.getReport();
-   
-    this.newtask = this.task.filter(el=>el.done===false).length;
+
+    this.initBigChart(0);
 
   },
   methods: {
@@ -370,7 +373,7 @@ export default {
         ],
       };
         this.active_year = new Date().getFullYear() + index
-        // this.$refs.bigChart.updateGradients(chartData);
+        this.$refs.bigChart.updateGradients(chartData);
         this.bigLineChart.chartData = chartData;
         this.bigLineChart.activeIndex = index;
       
@@ -379,7 +382,6 @@ export default {
       await this.reportservice.getBookingReport(this.hotel_id).then(result=>{
       if(result && result.status === 'ok'){
 
-        console.log(result.data);
         this.bigLineChart.allData[0] = result.data.year;
         this.bigLineChart.allData[1] = result.data.next_year;
         this.bigLineChart.allData[2] = result.data.last_year;
@@ -393,15 +395,24 @@ export default {
         //blue chart
         const today = new Date();
         const firstday = new Date(today.getFullYear(),today.getMonth(),today.getDate() - today.getDay());
-        console.log(new Date(firstday).toLocaleDateString('th-TH',{weekday:'short'}));
         this.blueBarChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{weekday:'short',day:'2-digit'}));
         this.blueBarChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.income);
+        this.purpleLineChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{weekday:'short',day:'2-digit'}));
+        this.purpleLineChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.checkin);
+        this.room_check_in = result.data.last7day.filter(el=>new Date(el.day)>firstday).reduce((total,item)=>total+item.checkin,0);
         this.weekly_income = result.data.last7day.filter(el=>new Date(el.day)>firstday).reduce((total,item)=>total+item.income,0);
+        this.bookings = result.data.new_booking;
         this.loading = true;
-        this.initBigChart(0);
+       
       }
  
     })
+    },
+    getTodayTask(){
+      this.today=true;
+    },
+    getNewTask(){
+      this.today=false;
     }
   },
  
@@ -413,4 +424,11 @@ export default {
   },
 };
 </script>
-<style></style>
+<style scoped>
+.card-category{
+  cursor: pointer;
+}
+.new-task{
+  cursor: pointer;
+}
+</style>

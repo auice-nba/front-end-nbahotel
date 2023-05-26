@@ -1,7 +1,7 @@
 <template>
     <div class="content">
         <div class="row">
-            <div class="col-8">
+            <div class="col-12 col-md-8">
                 <Card type="nav-tabs" class="text-left">
                     <template slot="header">
             <base-button  type="primary" @click="$router.push('/checkin')" >Check In</base-button>
@@ -51,27 +51,27 @@
        
                 </Card>
                 
+                <div v-if="confirm_dialog" id="confirm-checkout" class="confirm">
+                    <ConfirmDialog v-if="selectId!==''"
+                    :data="{id:selectId}"  
+                    @close="(close)=>confirm_dialog=close"
+                    @confirm="(data)=>ConfirmCheckOut(data)"
+                    >
+                    <template #header>
+                        <h2 class="text-dark">Checkout</h2>
+                        
+                    </template>
+                    <template #body>
+                        ยืนยันการเช็คเอาท์ของลูกค้า คุณ {{ selectCustomer }}
+                    </template>
+                    
+                </ConfirmDialog>
             </div>
-            <div class="col-4">
+        </div>
+        <div class="col-12 col-md-4">
                 <Card type="nav-tabs">
                     <img src="/images/hotel.jpg"/>
                 </Card>
-            </div>
-            <div v-if="confirm_dialog" id="confirm-checkout" class="confirm">
-                <ConfirmDialog v-if="selectId!==''"
-                :data="{id:selectId}"  
-                @close="(close)=>confirm_dialog=close"
-                @confirm="(data)=>ConfirmCheckOut(data)"
-                >
-                <template #header>
-                    <h2 class="text-dark">Checkout</h2>
-                    
-                </template>
-                <template #body>
-                    ยืนยันการเช็คเอาท์ของลูกค้า คุณ {{ selectCustomer }}
-                </template>
-                
-                </ConfirmDialog>
             </div>
         </div>
         

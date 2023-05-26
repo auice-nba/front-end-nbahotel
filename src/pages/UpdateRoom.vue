@@ -8,7 +8,7 @@
                 
                 <div v-if="dataloading" class="content">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12 col-md-6">
                             <div class="row image-gallery">
                                 <div class=" col-12 main">
                                     <div class="image-edit">
@@ -95,7 +95,7 @@
                                 </div>
                             </Card>
                         </div>
-                        <div class="col-6">
+                        <div class="col-12 col-md-6">
                             <form id="edit-form" name="edit-form" @submit="SubmitForm">
                             <Card>
                                 <div class="row">

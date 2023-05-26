@@ -27,6 +27,7 @@ import store from "@/stores"
 
 export default {
   setup(){
+
     const socket = io(process.env.VUE_APP_API);
     const reportservice = new Report();
     return {
@@ -38,11 +39,14 @@ export default {
     BaseTable,
     BaseCheckbox,
   },
+  props:{
+    today:Boolean,
+  },
   data(){
     return {
 
       hotel_id:null,
-      tasks:null,
+      tasks:[],
     }
   },
   emits: ['task'],
@@ -57,7 +61,13 @@ export default {
 
   computed: {
     tableData() {
-      return this.tasks;
+
+      if(this.today){
+
+        return this.tasks.filter(el=>new Date(el.createdAt).toLocaleDateString('th-TH')==new Date().toLocaleDateString('th-TH'));
+      }else{
+        return this.tasks
+      }
     },
   },
   async mounted(){
@@ -67,9 +77,8 @@ export default {
   methods:{
     async getTask(){
       await this.reportservice.getTask(this.hotel_id).then(result=>{
-        
       this.tasks = result.data.reverse();
-      this.$emit('task',this.tasks);
+      this.$emit('task',result.data.filter(el=>el.done===false ).length);
     })
     }
   }
