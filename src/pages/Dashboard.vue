@@ -122,7 +122,7 @@
           <template slot="header">
             <h5 class="card-category">เช็คอินสัปดาห์นี้</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-bulb-63 text-success"></i> {{ room_check_in }} <small style="color:gray; font-size:small">ห้อง</small>
+              <i class="tim-icons icon-bulb-63 text-success"></i> {{ room_check_in }} <small style="color:gray; font-size:small">ใบจอง</small>
             </h3>
           </template>
           <line-chart v-if="loading"
@@ -159,23 +159,28 @@
                 <i class="tim-icons icon-settings-gear-63"></i>
               </button>
               <ul class="dropdown-menu dropdown-menu-right">
-                <a href="#pablo" class="dropdown-item">เลือกทั้งหมด</a>
-                <a href="#pablo" class="dropdown-item">อ่านทั้งหมดแล้ว</a>
-                <a href="#pablo" class="dropdown-item">ลบทั้งหมด</a>
+                <li class="dropdown-item">ลบที่เลือกทั้งหมด</li>
               </ul>
             </drop-down>
           </template>
           <div v-if="loading" class="table-full-width table-responsive">
-            <task-list :today="today" @task="(data)=>task=data"/>
+            <task-list :today="today" :checkall="checkall" @task="(data)=>task=data"/>
           </div>
         </card>
       </div>
       <div class="col-lg-6 col-md-12">
-        <card class="card">
-          <h4 slot="header" class="card-title">
-            <template >ใบจองมาใหม่({{ bookings.length }})</template>
-          </h4>
-          <div v-if="loading" class="table-responsive">
+        <card type="tasks">
+      
+            <template slot="header">
+              <template>
+                
+                <h6 class="new-task title d-inline">
+                  ใบจองมาใหม่({{ bookings.length }})
+                </h6>
+              </template>
+            </template>
+        
+          <div v-if="loading" class="table-full-width table-responsive mt-1">
           <new-booking :bookings="bookings"/>
           </div>
         </card>
@@ -220,9 +225,10 @@ export default {
       bookings:[],
       room_check_in:0,
       today:false,
+      checkall:false,
       active_year:new Date().getFullYear(),
       bigLineChartCategories: ["ปีนี้", "ปีหน้า", "ปีถัดไป"],
-      bigLineChartCategoriesAr: ["حسابات", "المشتريات", "جلسات"],
+      bigLineChartCategoriesAr: ["","",""],
       bigLineChart: {
         allData: [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -381,7 +387,7 @@ export default {
     async getReport(){
       await this.reportservice.getBookingReport(this.hotel_id).then(result=>{
       if(result && result.status === 'ok'){
-
+        console.log(result.data);
         this.bigLineChart.allData[0] = result.data.year;
         this.bigLineChart.allData[1] = result.data.next_year;
         this.bigLineChart.allData[2] = result.data.last_year;
@@ -394,7 +400,8 @@ export default {
 
         //blue chart
         const today = new Date();
-        const firstday = new Date(today.getFullYear(),today.getMonth(),today.getDate() - today.getDay());
+        const firstday = new Date(today.getFullYear(),today.getMonth(),(today.getDate() - today.getDay()));
+      
         this.blueBarChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{weekday:'short',day:'2-digit'}));
         this.blueBarChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.income);
         this.purpleLineChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{weekday:'short',day:'2-digit'}));
@@ -413,6 +420,9 @@ export default {
     },
     getNewTask(){
       this.today=false;
+    },
+    selectAll(){
+      this.checkall = true;
     }
   },
  
@@ -425,10 +435,16 @@ export default {
 };
 </script>
 <style scoped>
+.table-full-width{
+  max-height: 30rem !important;
+}
 .card-category{
   cursor: pointer;
 }
 .new-task{
+  cursor: pointer;
+}
+.dropdown-item{
   cursor: pointer;
 }
 </style>

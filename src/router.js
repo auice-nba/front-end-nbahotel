@@ -130,6 +130,12 @@ const routes = [
         component: Notifications,
       },
       {
+        path:"billing",
+        name: "Billing",
+        meta:{public:false},
+        component:()=>import("@/pages/BillingView.vue")
+      },
+      {
         path: "user",
         name: "User Profile",
         meta:{public:false},

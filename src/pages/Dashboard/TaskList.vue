@@ -10,9 +10,17 @@
           {{ new Date(row.createdAt).toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'2-digit',hour:'numeric',minute:'numeric',second:'numeric'}) }}</p>
       </td>
       <td class="td-actions text-right">
-        <base-button type="link" artia-label="edit button">
+        <drop-down>
+
+          <base-button type="link" artia-label="edit button">
           <i class="tim-icons icon-pencil"></i>
         </base-button>
+        <ul class="dropdown-menu dropdown-menu-right">
+                <li class="dropdown-item">บันทึกว่าอ่านแล้ว</li>
+                <li class="dropdown-item">ลบ</li>
+              </ul>
+      </drop-down>
+       
       </td>
     </template>
   </base-table>
@@ -41,6 +49,7 @@ export default {
   },
   props:{
     today:Boolean,
+    checkall:Boolean,
   },
   data(){
     return {
@@ -69,6 +78,7 @@ export default {
         return this.tasks
       }
     },
+   
   },
   async mounted(){
     this.hotel_id = this.store.state.user.service_id
@@ -84,4 +94,8 @@ export default {
   }
 };
 </script>
-<style></style>
+<style scoped>
+ li{
+  list-style: none;
+ }
+</style>

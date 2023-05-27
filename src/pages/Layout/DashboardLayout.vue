@@ -72,6 +72,24 @@
           <p>Hotel profile</p>
         </template>
       </sidebar-link>
+      <sidebar-link to="/billing">
+        <i class="tim-icons icon-money-coins"></i>
+        <template>
+          <p>Billing</p>
+        </template>
+      </sidebar-link>
+
+      <sidebar-link to="/user">
+        <i class="tim-icons icon-badge"></i>
+
+        <template v-if="!isRTL">
+          <p>User Profile</p>
+        </template>
+
+        <template v-else>
+          <p>ملف تعريفي للمستخدم</p>
+        </template>
+      </sidebar-link>
 
       <sidebar-link to="/icons">
         <i class="tim-icons icon-atom"></i>
@@ -84,6 +102,7 @@
           <p>الرموز</p>
         </template>
       </sidebar-link>
+      
 
       <!-- <sidebar-link to="/maps">
         <i class="tim-icons icon-pin"></i>
@@ -109,17 +128,7 @@
         </template>
       </sidebar-link>
 
-      <sidebar-link to="/user">
-        <i class="tim-icons icon-single-02"></i>
-
-        <template v-if="!isRTL">
-          <p>User Profile</p>
-        </template>
-
-        <template v-else>
-          <p>ملف تعريفي للمستخدم</p>
-        </template>
-      </sidebar-link>
+      
 
       <sidebar-link to="/table">
         <i class="tim-icons icon-puzzle-10"></i>
