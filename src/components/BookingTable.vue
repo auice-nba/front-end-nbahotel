@@ -19,6 +19,12 @@
                                 {{ dateFormat(item.date) }}
                             </td>
                             <td>
+                                {{ dateFormat(item.check_in_date) }}
+                            </td>
+                            <td>
+                                {{ dateFormat(item.check_out_date) }}
+                            </td>
+                            <td>
                                 {{ item.ref_number }}
                             </td>
                             <td>

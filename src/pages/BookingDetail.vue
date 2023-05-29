@@ -90,6 +90,7 @@
 
                     <base-button  text class="back-button" @click="$router.push('/bookingmanager')">กลับ</base-button>
                     <base-button v-if="booking.status[booking.status.length-1].name ==='รอโรงแรมรับการจอง'" type="primary" class="mx-3" @click="AcceptBooking" >ตอบรับการจอง</base-button>
+                    
                 </div>
             </div>
             <div class="col-md-4">

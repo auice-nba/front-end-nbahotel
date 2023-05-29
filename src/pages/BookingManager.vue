@@ -32,6 +32,8 @@
 
   const tableColumns = [
     "วันที่",
+    "วันที่เช็คอิน",
+    "วันที่เช็คเอาท์",
     "refNumber",
     "ชื่อลูกค้า",
     "ราคารวม",
@@ -93,7 +95,7 @@
       async GetBooking(){
         await this.bookingservice.getBooking(this.hotel_id).then(result=>{
         if(result.status==="ok"){
-       
+          
             this.table.data=result.data.reverse();
             this.loading = true;
         }

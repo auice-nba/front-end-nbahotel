@@ -174,18 +174,28 @@
             <template slot="header">
               <template>
                 
-                <h6 class="new-task title d-inline">
+                <h6 class="new-task title d-inline" @click="tab='รอโรงแรมรับการจอง'">
                   ใบจองมาใหม่({{ bookings.length }})
                 </h6>
               </template>
+              <template >
+              <p class="card-category d-inline" @click="tab='เช็คอินวันนี้'" >เช็คอินวันนี้</p>
+            </template>
+            <template >
+              <p class="card-category d-inline mx-3" @click="tab='เช็คเอาท์วันนี้'" >เช็คเอาท์วันนี้</p>
+            </template>
             </template>
         
           <div v-if="loading" class="table-full-width table-responsive mt-1">
-          <new-booking :bookings="bookings"/>
+          <new-booking :bookings="bookings" :tab="tab"/>
           </div>
         </card>
+     
       </div>
+      
+    
     </div>
+ 
   </div>
 </template>
 <script>
@@ -227,6 +237,7 @@ export default {
       today:false,
       checkall:false,
       active_year:new Date().getFullYear(),
+      tab:'รอโรงแรมรับการจอง',
       bigLineChartCategories: ["ปีนี้", "ปีหน้า", "ปีถัดไป"],
       bigLineChartCategoriesAr: ["","",""],
       bigLineChart: {

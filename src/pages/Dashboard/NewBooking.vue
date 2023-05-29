@@ -1,5 +1,5 @@
 <template>
-    <base-table :data="bookings" thead-classes="text-primary">
+    <base-table :data="checkinState" thead-classes="text-primary">
       <template slot-scope="{ row }">
         <td class="text-left">
           <p class="title">{{ row.customer_name}}</p>
@@ -7,9 +7,11 @@
           <p class="text-muted">{{dateformat(row.createdAt) }} </p>
         </td>
         <td class="text-left">
-            <base-button type="primary" size="sm" @click="$router.push(`/bookingdetail/${row._id}`)">รับการจอง</base-button>
-        </td>
-       
+            <base-button :type="setBtn" size="sm" @click="$router.push(`/bookingdetail/${row._id}`)">{{ tab }}</base-button>
+        </td>  
+      </template>
+      <template #empty>
+       <p>ไม่มีรายการคงค้าง</p>
       </template>
     </base-table>
   </template>
@@ -30,9 +32,55 @@
         BaseTable
     },
     props:{
-        bookings:Array
+        bookings:Array,
+        tab:String,
+    },
+    data(){
+      return {
+        btn:'primary'
+      }
+    },
+    computed:{
+      checkinState(){
+        switch (this.tab) {
+          case "รอโรงแรมรับการจอง":       
+           return this.bookings.filter(el=>el.status[el.status.length-1].name==='รอโรงแรมรับการจอง')
+
+            case "เช็คอินวันนี้":
+            
+            return this.bookings.filter(el=>new Date(el.date_from).toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}) === new Date().toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}) && el.status[el.status.length-1].name !=='เช็คอิน')
+        
+            case "เช็คเอาท์วันนี้":
+            
+            return this.bookings.filter(el=>new Date(el.date_to).toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}) === new Date().toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}) && el.status[el.status.length-1].name !=='เช็คเอาท์' )
+        
+          default:
+            return this.bookings.filter(el=>el.status[el.status.length-1].name==='รอโรงแรมรับการจอง')
+        }
+      },
+      setBtn(){
+        switch (this.tab) {
+          case "รอโรงแรมรับการจอง":       
+          return 'primary'
+           
+
+            case "เช็คอินวันนี้":
+            
+            return'info'
+
+           
+            case "เช็คเอาท์วันนี้":
+            
+            return 'danger'
+        
+            
+          default:
+            return 'primary'
+        }
+      }
     },
     methods:{
+      
         
     }
   };

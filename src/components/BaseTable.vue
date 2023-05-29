@@ -21,7 +21,17 @@
             {{ itemValue(item, column) }}
           </td>
         </slot>
+        
       </tr>
+      <tr  v-if="data && data.length<=0">
+        <td class="text-left">
+          <slot name="empty">
+      <p>Empty</p>
+      </slot>
+        </td>
+      </tr>
+      
+      
     </tbody>
   </table>
 </template>
