@@ -398,7 +398,7 @@ export default {
     async getReport(){
       await this.reportservice.getBookingReport(this.hotel_id).then(result=>{
       if(result && result.status === 'ok'){
-        console.log(result.data);
+        // console.log(result.data);
         this.bigLineChart.allData[0] = result.data.year;
         this.bigLineChart.allData[1] = result.data.next_year;
         this.bigLineChart.allData[2] = result.data.last_year;
@@ -447,7 +447,7 @@ export default {
 </script>
 <style scoped>
 .table-full-width{
-  max-height: 30rem !important;
+  max-height: 410px ;
 }
 .card-category{
   cursor: pointer;

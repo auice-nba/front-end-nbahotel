@@ -2,24 +2,36 @@
     <base-table :data="tableData" :columns="columns" thead-classes="text-primary">
     <template slot="columns">
         
-          <th class="text-left">วันที่</th>
-          <th class="text-center">รายละเอียด</th>
-          <th class="text-right">รายได้(บาท)</th>
+          
+            <th class="text-left">วันที่</th>
+          <th class="text-center">รายการ</th>
+          <th class="text-right">รายได้</th>
         
+  
         </template>  
-      <template slot-scope="{ row }">
+      <template slot-scope="{row}">
         
-
-          <td class="text-left">
-            <p>{{ formateDate(row.date) }}</p>
-          </td>
+          
+            <td class="text-left">{{ formateDate(row.date) }}</td>
           <td class="text-center">
-            <p v-for="(item,index) in row.booking" :key="index"> <small> ( {{ item.ref_number }} ราคา {{ item.total }} บาท ) </small></p>
+            {{ row.ref_number }}
           </td>
-          <td class="text-right">{{ row.total }}</td>
+          <td class="text-right">
+            {{ row.total_cost }}
+          </td>
+    
+      
       
        
       </template>
+      <template #summary >
+     
+    
+          <td class="text-left">รวมทั้งหมด</td>
+        <td></td>
+        <td class="text-right"><strong>{{ total }}</strong></td>
+      </template>
+     
     </base-table>
   </template>
   <script>
@@ -45,7 +57,8 @@
     },
     props:{
       today:Boolean,
-      tableData:Array
+      tableData:Array,
+      total:Number,
     },
     data(){
       return {

@@ -34,6 +34,10 @@
                             <td>
                                 {{ item.total_price }}
                             </td>
+                            
+                            <td>
+                                {{ item.total_cost }}
+                            </td>
                             <td>
                                 <div class="px-2 text-white rounded" :style="`background-color:${setColor(item.status[item.status.length-1].name)};width:fit-content`">
 

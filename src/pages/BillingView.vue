@@ -1,9 +1,9 @@
-<template>
-    <div class="content">
-      <div class="row">
-        <div class="col-12">
-          <card type="chart">
-            <template slot="header">
+<template >
+    <div class="content" >
+      <div class="row" >
+        <div class="col-12" >
+          <card type="chart" >
+            <template slot="header" v-if="loading">
               <div class="row">
                 <div class="col-sm-6" :class="isRTL ? 'text-right' : 'text-left'">
                   <template >
@@ -81,7 +81,7 @@
       </div>
   
       <!-- weekly chart -->
-      <div class="row">
+      <div class="row" v-if="loading">
         <div class="col-lg-4" :class="{ 'text-right': isRTL }">
           <card type="chart" cardCol>
             <template slot="header">
@@ -102,7 +102,7 @@
           </card>
         </div>
         <div class="col-lg-4">
-          <card type="chart" cardCol>
+          <card type="chart" cardCol v-if="loading">
             <template slot="header">
               <h5 class="card-category">รายได้เดือนนี้</h5>
               <h3 class="card-title">
@@ -120,7 +120,7 @@
           </card>
         </div>
         <div class="col-lg-4">
-          <card type="chart" cardCol>
+          <card type="chart" cardCol v-if="loading">
             <template slot="header">
               <h5 class="card-category">รายได้เฉลี่ยต่อ 7 วัน</h5>
               <h3 class="card-title">
@@ -140,16 +140,16 @@
       </div>
       <div class="row">
         <div class="col-lg-6 col-md-12">
-          <card type="tasks">
+          <card type="tasks" v-if="loading">
             <template slot="header">
               <template v-if="!isRTL">
-                <h6 class="new-task title d-inline" @click="getNewTask">ข้อความใหม่({{ task }})</h6>
+                <h6 class="new-task title d-inline" >รอบบิลล่าสุด({{ previous_month_name }})</h6>
               </template>
               <template v-else>
                 <h6 class="title d-inline">الشحنات</h6>
               </template>
               <template v-if="!isRTL">
-                <p class="card-category d-inline" @click="getTodayTask">วันนี้</p>
+                <p class="card-category d-inline" >รอบบิลปัจุบัน</p>
               </template>
               <drop-down tag="div" :class="isRTL ? 'float-left' : ''">
                 <button
@@ -166,12 +166,12 @@
               </drop-down>
             </template>
             <div v-if="loading" class="table-full-width table-responsive">
-          
+              <InvoiceView :tableData="previous_month" :total="previous_month_total"/>
             </div>
           </card>
         </div>
         <div class="col-lg-6 col-md-12">
-          <card type="tasks">
+          <card type="tasks" v-if="loading">
         
               <template slot="header">
                 <template>
@@ -181,15 +181,15 @@
                   </h6>
                 </template>
                 <template >
-                <p class="card-category d-inline" @click="getTodayTask">รายสัปดาห์</p>
+                <p class="card-category d-inline" >รายสัปดาห์</p>
               </template>
               <template >
-                <p class="card-category d-inline mx-3" @click="getTodayTask">รายเดือน</p>
+                <p class="card-category d-inline mx-3" >รายเดือน</p>
               </template>
               </template>
           
             <div v-if="loading" class="table-full-width table-responsive mt-1">
-            <billing-list />
+            <billing-list :tableData="summary"/>
             </div>
           </card>
         </div>
@@ -203,6 +203,7 @@
   import BarChart from "@/components/Charts/BarChart";
   import * as chartConfigs from "@/components/Charts/config";
   import BillingList from "./Billing/BillingList";
+  import InvoiceView from "./Billing/InvoiceView.vue";
 
   import config from "@/config";
   import store from "@/stores";
@@ -222,7 +223,7 @@
       LineChart,
       BarChart,
       BillingList,
-
+      InvoiceView
     },
     data() {
       return {
@@ -231,11 +232,16 @@
         task:0,
         booking7day:0,
         weekly_income:0,
+        weekly_data:[],
         monthly_income :0,
+        previous_month_name:new Date(new Date().getFullYear(),new Date().getMonth()-1,1).toLocaleDateString('th-TH',{month:'long'}),
+        previous_month:[],
+        previous_month_total:0,
         yearly_income:0,
         estimate_yearly_income:0,
         everage:0,
         bookings:[],
+        summary:[],
         room_check_in:0,
         today:false,
         checkall:false,
@@ -366,6 +372,7 @@
      this.hotel_id = this.store.state.user.service_id;
   
       await this.getReport();
+      await this.getSummary();
   
       this.initBigChart(0);
   
@@ -405,18 +412,23 @@
         await this.billingservice.getBillingReport(this.hotel_id).then(result=>{
 
         if(result){
-          console.log(result);
+          
+          // console.log(result);
           this.bigLineChart.allData[0] = result.this_year.map(el=>el.total);
           this.bigLineChart.allData[1] = result.last_year.map(el=>el.total);
           this.yearly_income = result.this_year.reduce((total,item)=>total+item.total,0);
           //estimate yearly income
           this. estimate_yearly_income = result.this_year_estimate.reduce((total,item)=>total+item.total,0);
           
+          //previous month
+          this.previous_month = result.previous_month;
+          this.previous_month_total = this.previous_month.reduce((total,item)=>total+item.total_cost,0)
           
           //last 7 days
           this.greenLineChart.chartData.labels=result.last7day.map(el=>new Date(el.date).toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit'})).reverse();
           this.greenLineChart.chartData.datasets[0].data = result.last7day.map(el=>el.income).reverse();
           this.booking7day = result.last7day.reduce((accumulator, currentValue) => accumulator + currentValue.income,0);
+          this.weekly_data = result.last7day;
   
           //blue chart
        
@@ -439,15 +451,18 @@
    
       })
       },
-      getTodayTask(){
-        this.today=true;
+      async getSummary(){
+        await this.billingservice.getBillingSummary(this.hotel_id).then(result=>{
+       
+          if(result){
+            this.summary=result.reverse();
+          }
+        })
       },
-      getNewTask(){
-        this.today=false;
-      },
-      selectAll(){
-        this.checkall = true;
+      setBillingPeriod(){
+
       }
+    
     },
    
     beforeDestroy() {
@@ -460,7 +475,7 @@
   </script>
   <style scoped>
   .table-full-width{
-    max-height: 30rem !important;
+    max-height: 410px !important;
   }
   .card-category{
     cursor: pointer;

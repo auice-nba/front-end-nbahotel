@@ -30,6 +30,13 @@
       </slot>
         </td>
       </tr>
+      <tr style="background-color: rgba(200, 171, 255, 0.918);border-bottom: solid 1px rgb(202, 202, 202);">
+        <slot name="summary" >
+         
+
+          </slot>
+
+      </tr>
       
       
     </tbody>
