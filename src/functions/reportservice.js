@@ -52,7 +52,7 @@ export class Report {
             return response.json();
         }
         else{
-            data = {status:false, data:response.json()}
+            data = {status:false, data:response}
            
         }})
       .then(result => data = {status:"ok",data:result})
@@ -61,4 +61,69 @@ export class Report {
       return data;
     }
 
+    //delete hotel task
+    async deleteTask(hotelId,taskId){
+      var data;
+
+      var raw = JSON.stringify({
+  "task_id": taskId
+});
+ 
+    const initdata = {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          token:this.#token
+        },
+        credentials: 'include',
+        body:raw
+      };
+
+      await fetch(`${this.baseUrl}task/${hotelId}`,initdata)
+      .then(response =>{
+        if(response.status === 200){
+            return response.json();
+        }
+        else{
+          return response.json();
+           
+        }})
+      .then(result => data = {status:"ok",data:result})
+      .catch(err=>data = {status:false,error:err})
+
+      return data;
+    }
+
+    //update done task
+    async doneTask(hotelId,taskId){
+      var data;
+
+      var raw = JSON.stringify({
+  "task_id": taskId
+});
+ 
+    const initdata = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          token:this.#token
+        },
+        credentials: 'include',
+        body:raw
+      };
+
+      await fetch(`${this.baseUrl}task/${hotelId}/done`,initdata)
+      .then(response =>{
+        if(response.status === 200){
+            return response.json();
+        }
+        else{
+          return response.json();
+           
+        }})
+      .then(result => data = {status:"ok",data:result})
+      .catch(err=>data = {status:false,error:err})
+
+      return data;
+    }
 }

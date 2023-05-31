@@ -52,6 +52,12 @@ const routes = [
         component: () => import("@/pages/Checkout.vue"),
       },
       {
+        path:"calendar",
+        name:"Calendar",
+        meta:{public:false},
+        component:() => import("@/pages/Calendar.vue")
+      },
+      {
         path:"bookingmanager",
         name: "BookingManager",
         meta:{public:false},

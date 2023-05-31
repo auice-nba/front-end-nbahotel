@@ -40,6 +40,7 @@
         btn:'primary'
       }
     },
+   
     computed:{
       checkinState(){
         switch (this.tab) {
@@ -48,8 +49,8 @@
 
             case "เช็คอินวันนี้":
             
-            return this.bookings.filter(el=>new Date(el.date_from).toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}) === new Date().toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}) && el.status[el.status.length-1].name !=='เช็คอิน')
-        
+            return this.bookings.filter(el=>new Date(el.date_from).toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'})===new Date().toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}))
+
             case "เช็คเอาท์วันนี้":
             
             return this.bookings.filter(el=>new Date(el.date_to).toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}) === new Date().toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}) && el.status[el.status.length-1].name !=='เช็คเอาท์' )
@@ -79,10 +80,7 @@
         }
       }
     },
-    methods:{
-      
-        
-    }
+    
   };
   </script>
   <style></style>

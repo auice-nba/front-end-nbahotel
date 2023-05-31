@@ -141,13 +141,13 @@
         <card type="tasks">
           <template slot="header">
             <template v-if="!isRTL">
-              <h6 class="new-task title d-inline" @click="getNewTask">ข้อความใหม่({{ task }})</h6>
+              <h6 class="new-task title d-inline" :style="newtask_active" @click="getNewTask">ข้อความใหม่({{ task }})</h6>
             </template>
             <template v-else>
               <h6 class="title d-inline">الشحنات</h6>
             </template>
             <template v-if="!isRTL">
-              <p class="card-category d-inline" @click="getTodayTask">วันนี้</p>
+              <p class="card-category d-inline" :style="todaytask_active" @click="getTodayTask">วันนี้</p>
             </template>
             <drop-down tag="div" :class="isRTL ? 'float-left' : ''">
               <button
@@ -164,7 +164,7 @@
             </drop-down>
           </template>
           <div v-if="loading" class="table-full-width table-responsive">
-            <task-list :today="today" :checkall="checkall" @task="(data)=>task=data"/>
+            <task-list :today="today"  @task="(data)=>task=data"/>
           </div>
         </card>
       </div>
@@ -174,15 +174,15 @@
             <template slot="header">
               <template>
                 
-                <h6 class="new-task title d-inline" @click="tab='รอโรงแรมรับการจอง'">
+                <h6 class="new-task title d-inline" :style="new_active" @click="tab='รอโรงแรมรับการจอง';new_active='color:black';checkin_active='color:gray';checkout_active='color:gray'">
                   ใบจองมาใหม่({{ bookings.length }})
                 </h6>
               </template>
               <template >
-              <p class="card-category d-inline" @click="tab='เช็คอินวันนี้'" >เช็คอินวันนี้</p>
+              <p class="card-category d-inline" @click="tab='เช็คอินวันนี้';checkin_active='color:black';checkout_active='color:gray';new_active='color:gray'" :style="checkin_active" >เช็คอินวันนี้</p>
             </template>
             <template >
-              <p class="card-category d-inline mx-3" @click="tab='เช็คเอาท์วันนี้'" >เช็คเอาท์วันนี้</p>
+              <p class="card-category d-inline mx-3" @click="tab='เช็คเอาท์วันนี้';checkout_active='color:black';checkin_active='color:gray';new_active='color:gray'" :style="checkout_active">เช็คเอาท์วันนี้</p>
             </template>
             </template>
         
@@ -190,10 +190,7 @@
           <new-booking :bookings="bookings" :tab="tab"/>
           </div>
         </card>
-     
       </div>
-      
-    
     </div>
  
   </div>
@@ -238,6 +235,12 @@ export default {
       checkall:false,
       active_year:new Date().getFullYear(),
       tab:'รอโรงแรมรับการจอง',
+      new_active:'',
+      newtask_active:'',
+      todaytask_active:'',
+      checkin_active:'',
+      checkout_active:'',
+      selected:[],
       bigLineChartCategories: ["ปีนี้", "ปีหน้า", "ปีถัดไป"],
       bigLineChartCategoriesAr: ["","",""],
       bigLineChart: {
@@ -349,6 +352,7 @@ export default {
     isRTL() {
       return this.$rtl.isRTL;
     },
+ 
   },
   async mounted() {
     this.i18n = this.$i18n;
@@ -398,7 +402,7 @@ export default {
     async getReport(){
       await this.reportservice.getBookingReport(this.hotel_id).then(result=>{
       if(result && result.status === 'ok'){
-        // console.log(result.data);
+       
         this.bigLineChart.allData[0] = result.data.year;
         this.bigLineChart.allData[1] = result.data.next_year;
         this.bigLineChart.allData[2] = result.data.last_year;
@@ -427,14 +431,19 @@ export default {
     })
     },
     getTodayTask(){
+      this.newtask_active='color:gray';
+      this.todaytask_active='color:black';
       this.today=true;
     },
     getNewTask(){
+      this.newtask_active='color:black';
+      this.todaytask_active='color:gray';
       this.today=false;
     },
     selectAll(){
       this.checkall = true;
-    }
+    },
+    
   },
  
   beforeDestroy() {
@@ -451,9 +460,17 @@ export default {
 }
 .card-category{
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.card-title{
+  user-select: none;
+  -webkit-user-select: none;
 }
 .new-task{
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
 }
 .dropdown-item{
   cursor: pointer;

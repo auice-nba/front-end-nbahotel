@@ -27,9 +27,15 @@
         </template>
       </sidebar-link> -->
       <sidebar-link to="/checkin">
-        <i class="tim-icons icon-calendar-60"></i>
+        <i class="tim-icons icon-watch-time"></i>
         <template>
           <p>Check in and check out</p>
+        </template>
+      </sidebar-link>
+      <sidebar-link to="/calendar">
+        <i class="tim-icons icon-calendar-60"></i>
+        <template>
+          <p>Calendar</p>
         </template>
       </sidebar-link>
 
@@ -79,7 +85,7 @@
         </template>
       </sidebar-link>
 
-      <sidebar-link to="/user">
+      <!-- <sidebar-link to="/user">
         <i class="tim-icons icon-badge"></i>
 
         <template v-if="!isRTL">
@@ -89,7 +95,7 @@
         <template v-else>
           <p>ملف تعريفي للمستخدم</p>
         </template>
-      </sidebar-link>
+      </sidebar-link> -->
 
       <sidebar-link to="/icons">
         <i class="tim-icons icon-atom"></i>
