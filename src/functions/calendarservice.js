@@ -12,7 +12,7 @@ export class Calendar {
 
     //get calendar
 
-  async getCalendar() {
+  async getCalendar(year,month) {
     var data;
     const initdata = {
         method: "GET",
@@ -22,7 +22,7 @@ export class Calendar {
         credentials: 'include',
       };
 
-      await fetch(`${this.baseUrl}calendar/${this.#hotel}`,initdata)
+      await fetch(`${this.baseUrl}calendar/${this.#hotel}?year=${year}&month=${month}`,initdata)
       .then(response =>response.json())
       .then(result => data = {status:"ok",data:result})
       .catch(err=>data = {status:false,error:err})

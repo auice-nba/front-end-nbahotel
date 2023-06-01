@@ -59,7 +59,7 @@
         </template>
       </sidebar-link>
 
-      <sidebar-link to="/createroom">
+      <!-- <sidebar-link to="/createroom">
         <i class="tim-icons icon-pencil"></i>
         <template v-if="!isRTL">
           <p>Create room</p>
@@ -67,7 +67,7 @@
         <template v-else>
           <p>Create room</p>
         </template>
-      </sidebar-link>
+      </sidebar-link> -->
 
       <sidebar-link to="/hotelprofile">
         <i class="tim-icons icon-istanbul"></i>

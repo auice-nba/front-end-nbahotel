@@ -14,7 +14,7 @@ import Scheduler from "@/pages/Scheduler.vue";
 import BookingManager from "@/pages/BookingManager.vue";
 import BookingDetail from "@/pages/BookingDetail.vue";
 import RoomManager from "@/pages/RoomManager.vue";
-import CreateRoom from "@/pages/CreateRoom.vue";
+// import CreateRoom from "@/pages/CreateRoom.vue";
 import HotelProfile from "@/pages/HotelProfile.vue";
 import AddRoomFeature from "@/pages/AddRoomFeature.vue";
 import UpdateRoomPicture from "@/pages/UpdateRoomPicture.vue";
@@ -75,12 +75,12 @@ const routes = [
         meta:{public:false},
         component: RoomManager,
       },
-      {
-        path: "createroom",
-        name: "CreateRoom",
-        meta:{public:false},
-        component: CreateRoom,
-      },
+      // {
+      //   path: "createroom",
+      //   name: "CreateRoom",
+      //   meta:{public:false},
+      //   component: CreateRoom,
+      // },
       {
         path: "addroomfeature/:hotelId",
         name: "AddRoomFeature",

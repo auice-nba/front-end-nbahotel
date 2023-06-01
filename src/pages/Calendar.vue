@@ -2,7 +2,7 @@
     <div class="content">
         <div class="row">
             <div class="col-12">
-                <card type="chart">
+                <card >
                     <template slot="header">
                         <template>
                             
@@ -11,29 +11,51 @@
                         
                         <template>
                             <h2 class="card-title">Calendar  {{active_year}}</h2>
-                            <h4>{{ active_month }}</h4>
+                            <h4>{{ active_month }}
+                            
+                            </h4>
                         </template>
-                        <div
-                  class="btn-group btn-group-toggle"
-                  data-toggle="buttons"
-                  :class="'float-right'"
-                >
-                <template>
-                    <label class="btn-success px-3 py-1 rounded text-white">Next</label>
-                </template>
-            </div>
+                 
+                <div class="row w-100">
+                    <div class="col">
+                        <drop-down tag="div">
+     <base-button type="primary" aria-label="Primary" data-toggle="dropdown" size="sm" >
+      <i class="tim-icons icon-calendar-60" ></i> ปฏิทิน
+     </base-button>
+     <ul class="dropdown-menu">
+       <li  class="dropdown-item">ปีนี้</li>
+       <li  class="dropdown-item">ปีถัดไป</li>
+       <div class="dropdown-divider"></div>
+       <li  class="dropdown-item">เริ่มใหม่</li>
+     </ul>
+   </drop-down>
+                        
+                    </div>
+                    <div class="col ">
+                        <div class="right">
+                         
+                            <base-button type="info" size="sm"  @click="backMonth">กลับเดือนก่อนหน้า</base-button>
+                            <base-button type="primary" size="sm"  @click="nextMonth">ไปเดือนถัดไป</base-button>
+                        </div>
+          
+                    </div>
+                </div>
+                
+           
                     </template>
                     <template slot="raw-content">
 
-                        <table class="table table-hover">
+                        <div class="scheduler mt-3">
+          <div>
+            <div class="nav">
+              <!-- scheduler -->
+              <div class="table-scheduler">
+                        <table class="table">
                             <thead>
-                                <tr>
-                                    <th></th>
-                                    <td>วันที่</td>
-                                </tr>
+                            
                                 <tr>
 
-                                    <th >Rooms Type</th>
+                                    <th class="caption" scope="col" >Rooms Type \ วันที่</th>
                                     <th  v-for="(item,index) in period" :key="index">{{ dateFormat(item.date) }}</th>
                                 </tr>
                                     
@@ -41,14 +63,28 @@
                             <tbody>
                                 <tr v-for="(id,index) in calendar" :key="index">
 
-                                <th >{{ id.id }}</th>
-                                <td  v-for="(item,index) in id.collection" :key="index">{{ item.used_quota}}</td>
+                                <th scope="row" class="caption">{{ id.id }}</th>
+                                <td  v-for="(item,index) in id.collection" :key="index">
+                                    <p class="quota" :style="item.remainding_quota<=0?full_style:null">
+
+                                        {{ checkFullQuota(item.remainding_quota ) }}
+                                    </p>
+                                </td>
                               
 
                                 </tr>
 
                             </tbody>
                         </table>
+                        </div>
+                        </div>
+                        </div>
+                        <blockquote class="blockquote text-left">
+  <p class="mb-0 ">รายละเอียดตาราง</p>
+  <footer class="blockquote-footer">F <cite title="Source Title">ยอดจองเต็ม</cite></footer>
+  <footer class="blockquote-footer">10 <cite title="Source Title">ยอดโควต้าคงเหลือ 10 ห้อง</cite></footer>
+</blockquote>
+                        </div>
 
                     </template>
               
@@ -72,15 +108,29 @@ export default {
             return new Date(date).toLocaleDateString('th-TH',{day:'2-digit'})
         }
 
+        const checkFullQuota = (quota) =>{
+            if(quota<=0){
+                return 'F';
+            }
+            else{
+                return quota;
+            }
+        }
+
         return {
-            calendarservice,dateFormat,socket
+            calendarservice,dateFormat,socket,checkFullQuota
         }
     },
     components: {
         Card
     },
     created(){
-      this.socket.on('newbooking',async (data)=>{
+
+        this.selected_month= new Date().getMonth();
+        this.selected_year= new Date().getFullYear();
+        this.active_year = this.selected_year;
+        this.setActiveMonth();
+        this.socket.on('newbooking',async (data)=>{
  
           console.log(data);
           await this.getCalendar();
@@ -95,29 +145,94 @@ export default {
             selected_year:0,
             calendar:[],
             period:[],
+            full_style:'background:var(--success)',
         }
     },
     async mounted(){
-        this.selected_month= new Date().getMonth();
-        this.selected_year= new Date().getFullYear();
-        this.active_month = new Date(this.selected_year,this.selected_month,1).toLocaleDateString('th-TH',{month:'long'});
-        this.active_year = this.selected_year;
+        
         await this.getCalendar()
     },
     methods:{
         async getCalendar(){
-            await this.calendarservice.getCalendar().then(result=>{
+            await this.calendarservice.getCalendar(this.selected_year,this.selected_month).then(result=>{
                 if(result && result.status==='ok'){
 
                     this.calendar=result.data;
-                    this.period = result.data[0].collection
+                    this.period = result.data[0].collection;
+                    this.setActiveMonth();
                     console.log(result);
                 }
             })
-        }
+        },
+        setActiveMonth(){
+            this.active_month = new Date(this.selected_year,this.selected_month,1).toLocaleDateString('th-TH',{month:'long'});
+        },
+        async nextMonth(){
+            this.selected_month=this.selected_month+1;
+            if(this.selected_month>=12){
+                this.selected_month = 0;
+            }
+            await this.getCalendar();
+
+        },
+        async backMonth(){
+            this.selected_month=this.selected_month-1;
+            if(this.selected_month<0){
+                this.selected_month = 11;
+            }
+            await this.getCalendar();
+        },
+        
     }
 }
 </script>
 <style scoped>
+.card{
+    overflow: hidden;
+    padding: 1rem;
+}
+.scheduler {
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+}
 
+.nav {
+  display: flex;
+  width: 100%;
+}
+.table-scheduler {
+
+  width: 100%;
+}
+
+.table{
+    width: 100%;
+}
+.caption {
+  text-align: left;
+  background-color: white;
+  color: black;
+  width: 10rem;
+  height: 100%;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+.right{
+    float: right;
+}
+.row{
+    padding: 0;
+    margin: 0;
+}
+.col{
+    padding: 0;
+}
+.quota{
+    color:gray;
+    border-radius: 0.3rem;
+    
+}
 </style>

@@ -49,7 +49,7 @@
 
             case "เช็คอินวันนี้":
             
-            return this.bookings.filter(el=>new Date(el.date_from).toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'})===new Date().toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}))
+            return this.bookings.filter(el=>el.status[el.status.length-1].name !=='เช็คอิน' && new Date(el.date_from).toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'})===new Date().toLocaleDateString('th-TH',{year:'numeric',month:'2-digit',day:'2-digit'}))
 
             case "เช็คเอาท์วันนี้":
             

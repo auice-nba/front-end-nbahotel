@@ -8,7 +8,7 @@
             <h4 class="card-title">Room managemant</h4>
           </template>
           <div class="manager-button text-left">
-      <base-button type="primary" @click="$router.push('/createroom')">สร้างห้อง</base-button>
+      <!-- <base-button type="primary" @click="$router.push('/createroom')">สร้างห้อง</base-button> -->
     </div>
           <div class="table-responsive text-left">
             <room-table
