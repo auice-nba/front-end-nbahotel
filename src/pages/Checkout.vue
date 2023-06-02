@@ -44,6 +44,9 @@
 
           </td>
         </template>    
+        <template #empty>
+            ไม่มีรายการเช็คเอาท์ในวันนี้
+        </template>
                 </base-table>
             
 
@@ -113,7 +116,7 @@ export default {
         this.hotel_id = this.store.state.user.service_id;
         await this.bookingservice.getBooking(this.hotel_id).then(result =>{
            
-            this.bookings=result.data.filter(el=>el.status[el.status.length-1].name==='เช็คอิน')
+            this.bookings=result.data.filter(el=>el.status[el.status.length-1].name==='เช็คอิน' && new Date(el.check_out_date).toLocaleDateString('th-TH',{year:'numeric',month:'numeric',day:'numeric'})===new Date().toLocaleDateString('th-TH',{year:'numeric',month:'numeric',day:'numeric'}))
       
             this.table.data =this.bookings.map(el=>({
                 booking_id:el.booking_id,

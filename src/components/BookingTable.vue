@@ -120,6 +120,10 @@ export default {
                     case 'เช็คเอาท์':
                     
                     return 'gray'
+
+                    case 'โรงแรมปฏิเสธการจอง':
+                    
+                    return 'var(--danger)'
             
                 default:
                     break;

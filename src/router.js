@@ -70,6 +70,12 @@ const routes = [
         component: BookingDetail,
       },
       {
+        path:"reject-booking/:id",
+        name:"RejectBooking",
+        meta:{public:false},
+        component:()=> import("@/pages/RejectBooking.vue")
+      },
+      {
         path: "roommanager",
         name: "RoomManager",
         meta:{public:false},

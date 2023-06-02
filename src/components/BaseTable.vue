@@ -24,7 +24,7 @@
         
       </tr>
       <tr  v-if="data && data.length<=0">
-        <td class="text-left">
+        <td class="text-left" :colspan="columns.length">
           <slot name="empty">
       <p>Empty</p>
       </slot>

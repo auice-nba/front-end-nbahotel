@@ -1,4 +1,3 @@
-<!-- eslint-disable prettier/prettier -->
 <template>
     <div class="content">
         <div class="row" v-if="loading">
@@ -88,9 +87,16 @@
                 </Card>
                 <div class="text-left px-3">
 
-                    <base-button  text class="back-button" @click="$router.push('/bookingmanager')">กลับ</base-button>
-                    <base-button v-if="booking.status[booking.status.length-1].name ==='รอโรงแรมรับการจอง'" type="primary" class="mx-3" @click="AcceptBooking" >ตอบรับการจอง</base-button>
+                    <base-button  link class="back-button" @click="$router.push('/bookingmanager')">กลับ</base-button>
+                    <base-button v-if="booking.status[booking.status.length-1].name ==='รอโรงแรมรับการจอง'" type="success" class="mx-3" @click="AcceptBooking" >ตอบรับการจอง</base-button>
+                    <base-button v-if="booking.status[booking.status.length-1].name ==='รอโรงแรมรับการจอง'" type="danger" @click="RejectBooking" >ปฏิเสธการจอง</base-button>
                     
+                    <base-button v-if="
+                        booking.status[booking.status.length-1].name ==='เช็คอิน' 
+                        && dateFormat(booking.date_to) === dateFormat(new Date())" 
+                        type="primary"
+                        @click="Checkout"
+                        >เช็คเอาท์</base-button>
                 </div>
             </div>
             <div class="col-md-4">
@@ -130,7 +136,7 @@ export default {
         this.hotelId = this.store.state.user.service_id;
         await this.bookingservice.getBookingById(this.hotelId, this.id).then(result => {
             if(result && result.status==="ok"){
-
+                // console.log(result);
                 this.booking = result.data;
                 this.loading = true;
             }
@@ -159,6 +165,12 @@ export default {
         },
         sendIo(){
             this.socket.emit('sendUpdateBooking',{update:'booking'})
+        },
+        async Checkout(){
+            await this.bookingservice.CheckOut(this.hotelId,this.booking._id);
+        },
+        RejectBooking(){
+            this.$router.push(`/reject-booking/${this.booking._id}`)
         }
     }
 

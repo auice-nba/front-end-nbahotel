@@ -1,9 +1,11 @@
-/* eslint-disable prettier/prettier */
+import store from '@/stores';
 export class Booking {
   context;
 
   baseUrl = process.env.VUE_APP_API;
   #token = localStorage.getItem('token');
+  #hotelId=store.state.user.service_id;
+
   constructor(context) {
     this.context = context;
   }
@@ -62,6 +64,29 @@ export class Booking {
       };
 
       await fetch(`${this.baseUrl}booking/accept/${hotelId}/${bookingId}`,initdata)
+      .then(response => response.json())
+      .then(result => data = {status:"ok",data:result})
+      .catch(err=>data = {status:false,error:err})
+
+      return data;
+      
+    }
+
+    //reject booking
+    async rejectBooking(bookingId,reason){
+      var data;
+      const dataupdate = {statusname:'โรงแรมปฏิเสธการจอง',reason:reason};
+      const initdata = {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          token:this.#token
+        },
+        credentials: 'include',
+        body:JSON.stringify(dataupdate)
+      };
+
+      await fetch(`${this.baseUrl}booking/reject/${this.#hotelId}/${bookingId}`,initdata)
       .then(response => response.json())
       .then(result => data = {status:"ok",data:result})
       .catch(err=>data = {status:false,error:err})

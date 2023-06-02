@@ -68,8 +68,14 @@ export default {
           
             await this.bookingservices.VerifyCheckInUser(checkdata).then(response=>{
 
-                if(response && response.data.data.detail==='OK.'){
-                    this.$router.push(`/checkin-otp?id=${response.data.booking_id}&token=${response.data.data.result.token}`)
+                if(response ){
+                    if(response.data.data.detail==='OK.'){
+
+                        this.$router.push(`/checkin-otp?id=${response.data.booking_id}&token=${response.data.data.result.token}`)
+                    }
+                    else{
+                        console.log(response.data);
+                    }
                 }
                 else{
                     this.error_message='เลขที่ใบจองหรือหมายเลขโทรศัพท์ไม่ถูกต้อง'
