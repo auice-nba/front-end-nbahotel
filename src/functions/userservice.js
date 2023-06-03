@@ -35,9 +35,10 @@ export class User {
         };
         await fetch(this.baseUrl + "signin", initdata)
           .then((response) => response.json())
-          .then((result) => user = result)
+          .then((result) => {user = result})
           .catch((err) => user = err);
           this.user = user;
+          console.log(this.user);
           return user;
     }
     //logout
@@ -64,6 +65,7 @@ export class User {
      if(!this.token){
       return {status:false,message:'No Authentication'};
      }
+     console.log(this.token);
       let user;
         const initdata = {
           method: "POST",
@@ -77,7 +79,7 @@ export class User {
           .then(response => response.json())
           .then((result) => user = result)
           .catch((err) => user = {status:false,message:err.message});
-    
+        console.log(user);
           return user;
     }
 
