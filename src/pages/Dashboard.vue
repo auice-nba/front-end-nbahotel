@@ -409,7 +409,7 @@ export default {
         
         
         //last 7 days
-        this.greenLineChart.chartData.labels=result.data.last7day.map(el=>el.day);
+        this.greenLineChart.chartData.labels=result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{month:'short',day:'2-digit'}));
         this.greenLineChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.count);
         this.booking7day = result.data.last7day.reduce((accumulator, currentValue) => accumulator + currentValue.count,0);
 
@@ -419,9 +419,9 @@ export default {
         console.log('res',result.data.last7day);
         
    
-        this.blueBarChart.chartData.labels = result.data.last7day.map(el=>el.day);
+        this.blueBarChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{month:'short',day:'2-digit'}));
         this.blueBarChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.income);
-        this.purpleLineChart.chartData.labels = result.data.last7day.map(el=>el.day);
+        this.purpleLineChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{month:'short',day:'2-digit'}));
         this.purpleLineChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.checkin);
         this.room_check_in = result.data.last7day.filter(el=>new Date(el.day)>firstday).reduce((total,item)=>total+item.checkin,0);
         this.weekly_income = result.data.last7day.filter(el=>new Date(el.day)>firstday).reduce((total,item)=>total+item.income,0);
