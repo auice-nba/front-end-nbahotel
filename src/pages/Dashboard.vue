@@ -416,7 +416,10 @@ export default {
         //blue chart
         const today = new Date();
         const firstday = new Date(today.getFullYear(),today.getMonth(),(today.getDate() - today.getDay()));
-      
+        console.log('res',result.data.last7day);
+        const last7daydata = result.data.last7day.map(el=>el);
+        
+        console.log(last7daydata,last7daydata.map(el=>new Date(el.day).toLocaleDateString('th-TH',{weekday:'short',day:'2-digit'}) ))
         this.blueBarChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{weekday:'short',day:'2-digit'}));
         this.blueBarChart.chartData.datasets[0].data = result.data.last7day.map(el=>el.income);
         this.purpleLineChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{weekday:'short',day:'2-digit'}));
