@@ -65,7 +65,7 @@ export class User {
      if(!this.token){
       return {status:false,message:'No Authentication'};
      }
-     console.log(this.token);
+
       let user;
         const initdata = {
           method: "POST",
