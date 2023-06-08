@@ -167,7 +167,11 @@ export default {
             this.socket.emit('sendUpdateBooking',{update:'booking'})
         },
         async Checkout(){
-            await this.bookingservice.CheckOut(this.hotelId,this.booking._id);
+            await this.bookingservice.CheckOut(this.hotelId,this.booking._id).then(result => {
+                if(result){
+                    this.$router.push('/bookingmanager')
+                }
+            });
         },
         RejectBooking(){
             this.$router.push(`/reject-booking/${this.booking._id}`)
