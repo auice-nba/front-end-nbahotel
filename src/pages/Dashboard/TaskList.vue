@@ -37,7 +37,7 @@ import store from "@/stores"
 export default {
   setup(){
 
-    const socket = io(process.env.VUE_APP_API);
+    const socket = io(process.env.VUE_APP_SOCKET);
     const reportservice = new Report();
     return {
       reportservice,store,socket

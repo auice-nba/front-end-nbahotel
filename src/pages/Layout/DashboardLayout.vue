@@ -97,7 +97,7 @@
         </template>
       </sidebar-link> -->
 
-      <sidebar-link to="/icons">
+      <!-- <sidebar-link to="/icons">
         <i class="tim-icons icon-atom"></i>
 
         <template v-if="!isRTL">
@@ -107,7 +107,7 @@
         <template v-else>
           <p>الرموز</p>
         </template>
-      </sidebar-link>
+      </sidebar-link> -->
       
 
       <!-- <sidebar-link to="/maps">

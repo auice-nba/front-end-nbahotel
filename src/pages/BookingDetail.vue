@@ -116,7 +116,7 @@ import store from '@/stores';
 export default {
 
     setup() {
-        const socket = io(process.env.VUE_APP_API);
+        const socket = io(process.env.VUE_APP_SOCKET);
         const bookingservice = new Booking();
         return {
             bookingservice,store,socket

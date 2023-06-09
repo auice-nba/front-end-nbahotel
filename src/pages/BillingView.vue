@@ -211,7 +211,7 @@
   
   export default {
     setup(){
-      const socket = io(process.env.VUE_APP_API);
+      const socket = io(process.env.VUE_APP_SOCKET);
       const billingservice = new Billing();
 
       return {
