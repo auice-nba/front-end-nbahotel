@@ -32,11 +32,11 @@
                             </td>
        
                             <td>
-                                {{ item.total_price }}
+                                {{ format(item.total_price) }}
                             </td>
                             
                             <td>
-                                {{ item.total_cost }}
+                                {{ format(item.total_cost) }}
                             </td>
                             <td>
                                 <div class="px-2 text-white rounded" :style="`background-color:${setColor(item.status[item.status.length-1].name)};width:fit-content`">
@@ -58,6 +58,8 @@
 <!-- eslint-disable prettier/prettier -->
 <script>
 import { Room } from "@/functions/roomservice"
+import format from '@/functions/format';
+
 export default {
     setup() {
         const room = new Room();
@@ -67,7 +69,7 @@ export default {
         }
 
         return {
-            room, dateFormat
+            room, dateFormat,format
         }
     },
     name: "room-table",

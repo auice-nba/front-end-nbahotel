@@ -23,10 +23,10 @@
       <i class="tim-icons icon-calendar-60" ></i> ปฏิทิน
      </base-button>
      <ul class="dropdown-menu">
-       <li  class="dropdown-item">ปีนี้</li>
-       <li  class="dropdown-item">ปีถัดไป</li>
-       <div class="dropdown-divider"></div>
-       <li  class="dropdown-item">เริ่มใหม่</li>
+       <li  class="dropdown-item pointer" @click="setThisYear">ปีนี้</li>
+       <li  class="dropdown-item pointer" @click="setNextYear">ปีถัดไป</li>
+       <div class="dropdown-divider "></div>
+       <li  class="dropdown-item pointer" @click="reset">เริ่มใหม่</li>
      </ul>
    </drop-down>
                         
@@ -148,6 +148,9 @@ export default {
             full_style:'background:var(--success)',
         }
     },
+    computed:{
+
+    },
     async mounted(){
         
         await this.getCalendar()
@@ -160,7 +163,7 @@ export default {
                     this.calendar=result.data;
                     this.period = result.data[0].collection;
                     this.setActiveMonth();
-                    console.log(result);
+                 
                 }
             })
         },
@@ -182,11 +185,37 @@ export default {
             }
             await this.getCalendar();
         },
+        async setThisYear(){
+            console.log("setThisYear:");
+            this.selected_year=new Date().getFullYear();
+            this.active_year  = this.selected_year;
+            await this.getCalendar();
+        },
+        async setNextYear(){
+            console.log("setNextYear");
+            this.selected_year=this.active_year+1;
+            this.active_year = this.selected_year;
+            await this.getCalendar();
+            console.log(this.selected_year);
+        },
+        async reset(){
+            console.log("reset");
+            this.selected_year=new Date().getFullYear();
+            this.active_year=this.selected_year;
+            await this.getCalendar();
+        }
         
     }
 }
 </script>
 <style scoped>
+.pointer{
+    cursor: pointer;
+}
+.pointer:hover{
+    background-color: var(--primary);
+    color:white;
+}
 .card{
     overflow: hidden;
     padding: 1rem;

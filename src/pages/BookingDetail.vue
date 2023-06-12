@@ -54,7 +54,7 @@
                         <div class="col-md-9 text-left">
                             <ul>
                                 <li v-for="(room,index) in booking.rooms" :key=index>
-                               ห้อง {{ room.room.type.name_th }} จำนวน {{ room.amount }} ห้อง ราคา {{ room.room.price}} บาท/ห้อง
+                               ห้อง {{ room.room.type.name_th }} จำนวน {{ room.amount }} ห้อง ราคา {{ format( room.room.price )}} บาท/ห้อง
                                 </li>
                             </ul>
                         </div>
@@ -72,7 +72,7 @@
                            ค่าที่พักรวม
                         </div>
                         <div class="col-md-9 text-left">
-                            {{ booking.total_price }} บาท
+                            {{ format( booking.total_price ) }} บาท
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -112,6 +112,7 @@ import { io } from "socket.io-client";
 import { Booking } from "@/functions/bookingservice";
 import { Card } from "@/components/index";
 import store from '@/stores';
+import format from '@/functions/format';
 
 export default {
 
@@ -119,7 +120,7 @@ export default {
         const socket = io(process.env.VUE_APP_SOCKET);
         const bookingservice = new Booking();
         return {
-            bookingservice,store,socket
+            bookingservice,store,socket,format
         }
     },
     components: {

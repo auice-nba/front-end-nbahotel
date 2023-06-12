@@ -104,7 +104,7 @@
           <template slot="header">
             <h5 class="card-category">รายได้สัปดาห์นี้</h5>
             <h3 class="card-title">
-              <i class="tim-icons icon-wallet-43 text-info"></i> {{ weekly_income }} <small style="color:gray; font-size:small">บาท</small>
+              <i class="tim-icons icon-wallet-43 text-info"></i> {{ format(weekly_income) }} <small style="color:gray; font-size:small">บาท</small>
             </h3>
           </template>
           <bar-chart v-if="loading"
@@ -206,13 +206,14 @@ import NewBooking from "./Dashboard/NewBooking.vue";
 import config from "@/config";
 import store from "@/stores";
 import { Report } from "@/functions/reportservice"
+import format from '@/functions/format';
 
 export default {
   setup(){
     const socket = io(process.env.VUE_APP_SOCKET);
     const reportservice = new Report();
     return {
-      reportservice,store,socket
+      reportservice,store,socket,format
     }
   },
   components: {
@@ -416,7 +417,7 @@ export default {
         //blue chart
         const today = new Date();
         const firstday = new Date(today.getFullYear(),today.getMonth(),(today.getDate() - today.getDay()));
-        console.log('res',result.data.last7day);
+    
         
    
         this.blueBarChart.chartData.labels = result.data.last7day.map(el=>new Date(el.day).toLocaleDateString('th-TH',{month:'short',day:'2-digit',timeZone:'Asia/Bangkok'}));

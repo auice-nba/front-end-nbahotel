@@ -116,7 +116,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="name_th" @change="roomUpdate.type=setData($event)">
+                                            <select disabled class="form-control" name="name_th" @change="roomUpdate.type=setData($event)">
                                                 <option v-for="(room, index) in roomType" :key="index" :value="room._id" :selected="(room._id===dataUpdate.type._id?true:false)">
                                                     {{ room.name_th }}</option>
                                             </select>
@@ -130,7 +130,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="bed_type" @change="roomUpdate.bed_type=setData($event)">
+                                            <select disabled class="form-control" name="bed_type" @change="roomUpdate.bed_type=setData($event)">
                                                 <option v-for="(bed, index) in bedType" :key="index" :value="bed._id" :selected="(bed._id===dataUpdate.bed_type._id?true:false)">
                                                     {{ bed.name }}</option>
                                             </select>
@@ -143,7 +143,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="bath_type" @change="roomUpdate.bath_type=setData($event)">
+                                            <select disabled class="form-control" name="bath_type" @change="roomUpdate.bath_type=setData($event)">
                                                 <option v-for="(bath, index) in bathType" :key="index" :value="bath._id" :selected="(bath._id===dataUpdate.bath_type._id?true:false)">
                                                     {{ bath.name }}</option>
                                             </select>
@@ -156,7 +156,7 @@
                                     </div>
                                     <div class="col-6 d">
                                         <base-input>
-                                            <select class="form-control" name="aircondition" @change="roomUpdate.aircondition=setData($event)">
+                                            <select disabled class="form-control" name="aircondition" @change="roomUpdate.aircondition=setData($event)">
                                                 <option v-for="(air, index) in airType" :key="index" :value="air._id" :selected="(air._id===dataUpdate.aircondition._id?true:false)">
                                                     {{ air.name }}</option>
                                             </select>
@@ -229,7 +229,7 @@
                                             </span>จำนวนผู้เข้าพักสูงสุด </p>
                                     </div>
                                     <div class="col-6 d">   
-                                        <base-input :value ="roomUpdate.max_person!=null?roomUpdate.max_person:dataUpdate.max_person" name="max_person" @input="roomUpdate.max_person=Number(setInputData($event))"/>
+                                        <base-input disabled :value ="roomUpdate.max_person!=null?roomUpdate.max_person:dataUpdate.max_person" name="max_person" @input="roomUpdate.max_person=Number(setInputData($event))"/>
                                     </div>
                                     <div class="col-6">
                                         <p><span class="material-symbols-outlined">
@@ -238,7 +238,7 @@ child_care
                                     </div>
                                     <div class="col-6 d">   
                                         <base-input>
-                                            <select class="form-control" name="children" @change="roomUpdate.children=setData($event)">
+                                            <select disabled class="form-control" name="children" @change="roomUpdate.children=setData($event)">
                                                 <option value="true" :selected="(dataUpdate.children==true?true:false)">เด็กพักฟรี</option>
                                                 <option value="false" :selected="(dataUpdate.children==true?true:false)">มีค่าบริการสำหรับเด็ก</option>
                                             </select>
@@ -259,7 +259,15 @@ child_care
                                             </span>ราคา </p>
                                     </div>
                                     <div class="col-6 d">
-                                        <base-input :value="roomUpdate.price!=null?roomUpdate.price:dataUpdate.price" name="price" @input="roomUpdate.price = Number(setInputData($event))"/>
+                                        <base-input :value="r.price" name="price" disabled />
+                                    </div>
+                                    <div class="col-6">
+                                        <p><span class="material-symbols-outlined">
+                                                sell
+                                            </span>ราคา NBA </p>
+                                    </div>
+                                    <div class="col-6 d">
+                                        <base-input :value="r.cost" name="price" disabled />
                                     </div>
                                     <div class="col-6">
                                         <p><span class="material-symbols-outlined">
@@ -374,7 +382,7 @@ export default {
         await this.room.getRoomById(this.hotel_id,this.id).then(result => {
             this.dataloading=false;
             if (result) {
-
+        
                 this.r = result;
                 this.loading = true;
                 this.active_image = this.r.imageURl[0];
@@ -593,7 +601,6 @@ export default {
             roomUpdate:{
                 
             "detail":null, //string
-            "price": null, //number 
             "quota":null,
             "size" : null,  //number
             "bed_type": null, //id

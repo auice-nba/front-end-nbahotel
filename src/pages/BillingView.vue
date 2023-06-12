@@ -12,7 +12,7 @@
                 
                 <template>
                     <h2 class="card-title">Financial {{active_year}}</h2>
-                    <h4 class="card-category">ประมาณการรายได้รายปี {{ estimate_yearly_income }} บาท รายได้สะสม ณ ปัจจุบัน {{ yearly_income }} บาท </h4>
+                    <h4 class="card-category">ประมาณการรายได้รายปี {{ formateCurrency( estimate_yearly_income ) }} บาท รายได้สะสม ณ ปัจจุบัน {{ formateCurrency( yearly_income ) }} บาท </h4>
                 
                   </template>
                 
@@ -87,7 +87,7 @@
             <template slot="header">
               <h5 class="card-category">รายได้ 7 วันที่ผ่านมา</h5>
               <h3 class="card-title">
-                <i class="tim-icons icon-bell-55 text-primary"></i> {{ booking7day }} <small style="color:gray; font-size:small"> บาท</small>
+                <i class="tim-icons icon-bell-55 text-primary"></i> {{ formateCurrency( booking7day )}} <small style="color:gray; font-size:small"> บาท</small>
               </h3>
             </template>
             <line-chart v-if="loading"
@@ -106,7 +106,7 @@
             <template slot="header">
               <h5 class="card-category">รายได้เดือนนี้</h5>
               <h3 class="card-title">
-                <i class="tim-icons icon-wallet-43 text-info"></i> {{ monthly_income  }} <small style="color:gray; font-size:small">บาท</small>
+                <i class="tim-icons icon-wallet-43 text-info"></i> {{ formateCurrency( monthly_income )  }} <small style="color:gray; font-size:small">บาท</small>
               </h3>
             </template>
             <bar-chart v-if="loading"
@@ -124,7 +124,7 @@
             <template slot="header">
               <h5 class="card-category">รายได้เฉลี่ยต่อ 7 วัน</h5>
               <h3 class="card-title">
-                <i class="tim-icons icon-bulb-63 text-success"></i> {{ everage }} <small style="color:gray; font-size:small">บาท/วัน</small>
+                <i class="tim-icons icon-bulb-63 text-success"></i> {{ formateCurrency( everage ) }} <small style="color:gray; font-size:small">บาท/วัน</small>
               </h3>
             </template>
             <line-chart v-if="loading"
@@ -143,30 +143,18 @@
           <card type="tasks" v-if="loading">
             <template slot="header">
               <template v-if="!isRTL">
-                <h6 class="new-task title d-inline" >รอบบิลล่าสุด({{ previous_month_name }})</h6>
+                <h6 class="new-task title d-inline" :style="this_month_active?'color:gray':'color:black'" @click="setPreviousBillingPeriod" >รอบบิลล่าสุด({{ previous_month_name }})</h6>
               </template>
               <template v-else>
                 <h6 class="title d-inline">الشحنات</h6>
               </template>
               <template v-if="!isRTL">
-                <p class="card-category d-inline" >รอบบิลปัจุบัน</p>
+                <p class="card-category d-inline" :style="this_month_active?'color:black':'color:gray'" @click="setLastBillingPeriod">รอบบิลปัจุบัน</p>
               </template>
-              <drop-down tag="div" :class="isRTL ? 'float-left' : ''">
-                <button
-                  aria-label="Settings menu"
-                  data-toggle="dropdown"
-                  class="dropdown-toggle btn-rotate btn btn-link btn-icon"
-                  :class="isRTL ? 'pl-5' : ''"
-                >
-                  <i class="tim-icons icon-settings-gear-63"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <li class="dropdown-item">ลบที่เลือกทั้งหมด</li>
-                </ul>
-              </drop-down>
+              
             </template>
             <div v-if="loading" class="table-full-width table-responsive">
-              <InvoiceView :tableData="previous_month" :total="previous_month_total"/>
+              <InvoiceView  :tableData="invoice_view" :total="invoice_view_total"/>
             </div>
           </card>
         </div>
@@ -176,20 +164,17 @@
               <template slot="header">
                 <template>
                   
-                  <h6 class="new-task title d-inline">
+                  <h6 class="new-task title d-inline" :style="billing_period==='รายวัน'?'color:black':'color:gray' " @click="billing_period='รายวัน'">
                     รายการสรุปรายได้รายวัน({{ bookings.length }})
                   </h6>
                 </template>
-                <template >
-                <p class="card-category d-inline" >รายสัปดาห์</p>
-              </template>
               <template >
-                <p class="card-category d-inline mx-3" >รายเดือน</p>
+                <p class="card-category d-inline mx-3" :style="billing_period==='รายเดือน'?'color:black':'color:gray'" @click="billing_period='รายเดือน'" >รายเดือน</p>
               </template>
               </template>
           
             <div v-if="loading" class="table-full-width table-responsive mt-1">
-            <billing-list :tableData="summary"/>
+            <billing-list :period="billing_period" :tableData="summary"/>
             </div>
           </card>
         </div>
@@ -214,8 +199,12 @@
       const socket = io(process.env.VUE_APP_SOCKET);
       const billingservice = new Billing();
 
+      const formateCurrency = (value) => {
+        return new Intl.NumberFormat('th-TH').format(value);
+      }
+
       return {
-        store,socket,billingservice 
+        store,socket,billingservice,formateCurrency
       }
     },
     components: {
@@ -235,13 +224,23 @@
         weekly_data:[],
         monthly_income :0,
         previous_month_name:new Date(new Date().getFullYear(),new Date().getMonth()-1,1).toLocaleDateString('th-TH',{month:'long'}),
+
+        invoice_view:[],
+        invoice_view_total:0,
+
+        this_month:[],
+        this_month_total:0,
+        this_month_active:false,
         previous_month:[],
         previous_month_total:0,
         yearly_income:0,
         estimate_yearly_income:0,
         everage:0,
         bookings:[],
-        summary:[],
+        billing_period:'รายวัน',
+        summary:{},
+        summary_day:[],
+        summary_month:[],
         room_check_in:0,
         today:false,
         checkall:false,
@@ -360,6 +359,7 @@
       isRTL() {
         return this.$rtl.isRTL;
       },
+
     },
     async mounted() {
       this.i18n = this.$i18n;
@@ -373,6 +373,10 @@
   
       await this.getReport();
       await this.getSummary();
+
+      this.invoice_view= this.previous_month,
+      this.invoice_view_total = this.previous_month_total
+
   
       this.initBigChart(0);
   
@@ -412,14 +416,19 @@
         await this.billingservice.getBillingReport(this.hotel_id).then(result=>{
 
         if(result){
-          
-          // console.log(result);
+      
+          console.log(result);
           this.bigLineChart.allData[0] = result.this_year.map(el=>el.total);
           this.bigLineChart.allData[1] = result.last_year.map(el=>el.total);
           this.yearly_income = result.this_year.reduce((total,item)=>total+item.total,0);
+
           //estimate yearly income
           this. estimate_yearly_income = result.this_year_estimate.reduce((total,item)=>total+item.total,0);
-          
+
+          //this month
+          this.this_month = result.lastmonth_billing;
+          this.this_month_total = result.lastmonth_billing.reduce((total,item)=>total+item.total_cost,0)
+ 
           //previous month
           this.previous_month = result.previous_month;
           this.previous_month_total = this.previous_month.reduce((total,item)=>total+item.total_cost,0)
@@ -431,8 +440,7 @@
           this.weekly_data = result.last7day;
   
           //blue chart
-       
-        
+
           this.blueBarChart.chartData.labels = result.lastmonth.map(el=>new Date(el.date).toLocaleDateString('th-TH',{day:'2-digit'}));
           this.blueBarChart.chartData.datasets[0].data = result.lastmonth.map(el=>el.income);
           this.monthly_income = result.lastmonth.reduce((total,item)=>total+item.income,0);
@@ -453,17 +461,28 @@
       },
       async getSummary(){
         await this.billingservice.getBillingSummary(this.hotel_id).then(result=>{
-       
+  
           if(result){
-            this.summary=result.reverse();
+        
+            this.summary=result;
+
+       
           }
         })
       },
-      setBillingPeriod(){
-
-      }
+      setLastBillingPeriod(){
+        this.invoice_view = this.this_month;
+        this.invoice_view_total = this.this_month_total;
+        this.this_month_active=true;
+      },
+      setPreviousBillingPeriod(){
+      this.invoice_view = this.previous_month;
+        this.invoice_view_total = this.previous_month_total;
+        this.this_month_active=false;
+    },
     
     },
+    
    
     beforeDestroy() {
       if (this.$rtl.isRTL) {

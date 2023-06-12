@@ -17,7 +17,7 @@
             {{ row.ref_number }}
           </td>
           <td class="text-right">
-            {{ row.total_cost }}
+            {{ formateCurrency( row.total_cost ) }}
           </td>
     
       
@@ -29,7 +29,7 @@
     
           <td class="text-left">รวมทั้งหมด</td>
         <td></td>
-        <td class="text-right"><strong>{{ total }}</strong></td>
+        <td class="text-right"><strong>{{ formateCurrency( total )}}</strong></td>
       </template>
      
     </base-table>
@@ -46,8 +46,13 @@
       const formateDate = (date) =>{
         return new Date(date).toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'2-digit'})
       }
+
+      const formateCurrency = (value) => {
+        return new Intl.NumberFormat('th-TH').format(value);
+      }
+
       return {
-        formateDate
+        formateDate,formateCurrency
       }
     },
     components: {
@@ -62,7 +67,7 @@
     },
     data(){
       return {
-        columns: ["วันที่", "รายได้",],
+        columns: ["วันที่","รายการ", "รายได้",],
       }
     },
 

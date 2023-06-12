@@ -30,6 +30,7 @@
   import BookingTable from '@/components/BookingTable'
   import store from '@/stores';
 
+
   const tableColumns = [
     "วันที่",
     "วันที่เช็คอิน",

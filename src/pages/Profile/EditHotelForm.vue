@@ -27,7 +27,7 @@
     <div class="row">
       <div class="col-md-4 pr-md-1 text-left">
         <base-input label="ตำบล">
-          <select class="form-control" @change="hotel.tambon = setTambon($event)">
+          <select disabled class="form-control" @change="hotel.tambon = setTambon($event)">
             <option v-for="(item, index) in tambon" :key="index" :value="item.id"
               :selected="item.name_th === model.tambon ? true : false">{{ item.name_th }}</option>
           </select>
@@ -35,7 +35,7 @@
       </div>
       <div class="col-md-4 px-md-1 text-left">
         <base-input label="อำเภอ">
-          <select class="form-control" @change="hotel.amphure = setAmphure($event)">
+          <select disabled class="form-control" @change="hotel.amphure = setAmphure($event)">
             <option v-for="(item, index) in amphure" :key="index" :value="item.id"
               :selected="item.name_th === model.amphure ? true : false">{{ item.name_th }}</option>
           </select>
@@ -43,7 +43,7 @@
       </div>
       <div class="col-md-4 pl-md-1 text-left">
         <base-input label="จังหวัด">
-          <select class="form-control" @change="hotel.province = setProvince($event)">
+          <select disabled class="form-control" @change="hotel.province = setProvince($event)">
             <option v-for="(item, index) in province" :key="index" :value="item.id"
               :selected="item.name_th === model.province ? true : false">{{ item.name_th }}</option>
           </select>
@@ -123,6 +123,7 @@
     <!-- End hotel feature -->
     <template slot="footer">
       <base-button type="success" fill @click="editHotel">บันทึก</base-button>
+      <notifications></notifications>
     </template>
   </card>
 </template>
@@ -308,8 +309,9 @@ export default {
       this.hotel.zipcode = this.hotel.zipcode;
 
       this.hotelservice.updateHotel(this.model._id,this.hotel).then(result => {
-        if(result.status==="ok"){
-          this.$notify({type: 'success',verticalAlign: 'bottom', horizontalAlign: 'center', message: 'บันทึกสำเร็จ'});
+  
+        if(result){
+          this.$notify({type:'success',verticalAlign: 'bottom', horizontalAlign: 'center', message: 'บันทึกสำเร็จ'});
         }
         else{
           this.$notify({type:'danger',verticalAlign: 'bottom', horizontalAlign: 'center', message: result.error});
