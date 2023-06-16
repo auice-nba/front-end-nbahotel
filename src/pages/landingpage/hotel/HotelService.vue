@@ -92,8 +92,6 @@ export default {
         this.hotel.amphure = this.amphure[0].name_th;
         this.hotel.tambon = this.tambon[0].name_th;
 
-        console.log(this.hotel);
-
     },
     data() {
         return {
@@ -130,7 +128,7 @@ export default {
                 this.error_message = 'กรุณากรอกที่อยู่';
                 return;
             }
-            console.log(this.hotel);
+
             await this.hotelservice.createHotel(this.hotel,this.hotel.host_id).then(result => {
     
                 if(result && result.status===true){

@@ -63,15 +63,13 @@ import routes from './router';
   Vue.use(BootstrapVue)
   Vue.use(IconsPlugin);
   Vue.use(Vuex)
-
-
   
-  router.beforeEach(async (to,from,next) => {
+  router.beforeResolve(async (to,from,next) => {
 
-    if(to.meta && to.meta.public){
+    if(to.meta.public){
       next();
-    }
-    
+    }else{
+
     const userservice = new User();
     await userservice.Me().then(user=>{
 
@@ -102,6 +100,9 @@ import routes from './router';
         }
      
            })
+
+    }
+
                 
                 })
 

@@ -78,7 +78,7 @@ export class User {
         await fetch(this.baseUrl + "users/me", initdata)
           .then(response => response.json())
           .then((result) => user = result)
-          .catch((err) => user = {status:false,message:err.message});
+          .catch((err) => user = err);
 
           return user;
     }

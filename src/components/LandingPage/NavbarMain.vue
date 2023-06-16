@@ -53,10 +53,10 @@
                             </li>
                             <li class="menu-item bg-primary btn-login">
                                 <div v-if="loading" class="row text-white">
-                                        <div v-if="!user.status" class="col-8 text-left bg">
+                                        <div v-if="user===null" class="col-8 text-left bg">
                                             <base-button class="mx-2 text-white" link  @click="login">เข้าสู่ระบบ</base-button>
                                         </div>
-                                        <div v-if="user.status" class="col-8 text-left bg">
+                                        <div v-else class="col-8 text-left bg">
                                             <base-button class="mx-2 text-white" link  @click="logout">ออกจากระบบ</base-button>
                                         </div>
                                         <div class="col-3 text-right ">
@@ -76,18 +76,19 @@
 
 <script>
 import { User } from '@/functions/userservice';
+import store from '@/stores'
 
 
 export default {
     setup(){
         const userservice = new User();
         return {
-            userservice
+            userservice,store
         }
     },
     mounted(){
+        this.user = this.store.state.user;
 
-        this.getUser();
     },
     data(){
         return{
@@ -122,16 +123,7 @@ export default {
         }
     },
     methods: {
-        async getUser(){
-            await this.userservice.Me().then(result=>{
-                if(result){
-
-                    this.user = result;
-    
-                    this.loading = true;
-                }
-            })
-        },
+   
         login() {
             this.$router.push("/landingpage/login");
         },
