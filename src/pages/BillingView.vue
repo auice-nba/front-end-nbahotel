@@ -178,6 +178,16 @@
             </div>
           </card>
         </div>
+        <div class="col">
+          <card type="tasks"> 
+            <template slot="header">
+              <template>
+                <h6 class="text-left text-dark">รายงานการจ่ายค่าห้อง</h6>
+              </template>
+            </template>
+            <PayInSlip/>
+          </card>
+        </div>
       </div>
     </div>
   </template>
@@ -189,10 +199,11 @@
   import * as chartConfigs from "@/components/Charts/config";
   import BillingList from "./Billing/BillingList";
   import InvoiceView from "./Billing/InvoiceView.vue";
-
+  import PayInSlip from './Billing/PayInSlip.vue';
   import config from "@/config";
   import store from "@/stores";
   import { Billing } from "@/functions/billingservice";
+  
   
   export default {
     setup(){
@@ -212,7 +223,8 @@
       LineChart,
       BarChart,
       BillingList,
-      InvoiceView
+      InvoiceView,
+      PayInSlip
     },
     data() {
       return {
@@ -417,7 +429,6 @@
 
         if(result){
       
-          console.log(result);
           this.bigLineChart.allData[0] = result.this_year.map(el=>el.total);
           this.bigLineChart.allData[1] = result.last_year.map(el=>el.total);
           this.yearly_income = result.this_year.reduce((total,item)=>total+item.total,0);
@@ -494,7 +505,7 @@
   </script>
   <style scoped>
   .table-full-width{
-    max-height: 410px !important;
+    height: 410px !important;
   }
   .card-category{
     cursor: pointer;

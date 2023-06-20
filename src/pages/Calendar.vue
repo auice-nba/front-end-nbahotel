@@ -56,7 +56,11 @@
                                 <tr>
 
                                     <th class="caption" scope="col" >Rooms Type \ วันที่</th>
-                                    <th  v-for="(item,index) in period" :key="index">{{ dateFormat(item.date) }}</th>
+                                    <th  
+                                    v-for="(item,index) in period" :key="index"
+                                    :style="dateFormat2(item.date) === dateFormat2(Date.now())?'background-color:red;color:white':null"
+                                    
+                                    >{{ dateFormat(item.date) }}</th>
                                 </tr>
                                     
                             </thead>
@@ -107,6 +111,10 @@ export default {
         const dateFormat = (date) => {
             return new Date(date).toLocaleDateString('th-TH',{day:'2-digit'})
         }
+        //dd/mm/yyyy
+        const dateFormat2 = (date) => {
+            return new Date(date).toLocaleDateString('th-TH',{day:'2-digit',month:'2-digit',year:'numeric'})
+        }
 
         const checkFullQuota = (quota) =>{
             if(quota<=0){
@@ -118,7 +126,7 @@ export default {
         }
 
         return {
-            calendarservice,dateFormat,socket,checkFullQuota
+            calendarservice,dateFormat,socket,checkFullQuota,dateFormat2
         }
     },
     components: {
@@ -263,5 +271,9 @@ export default {
     color:gray;
     border-radius: 0.3rem;
     
+}
+.quota:hover{
+    background-color: aquamarine;
+    cursor: pointer;
 }
 </style>

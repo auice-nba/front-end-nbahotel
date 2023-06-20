@@ -47,11 +47,7 @@
         <template #empty>
             ไม่มีรายการเช็คเอาท์ในวันนี้
         </template>
-                </base-table>
-            
-
-                    
-       
+                </base-table>  
                 </Card>
                 
                 <div v-if="confirm_dialog" id="confirm-checkout" class="confirm">
@@ -81,6 +77,7 @@
     </div>
 </template>
 <script>
+import { io } from "socket.io-client";
 import { Card,BaseInput} from "@/components/index";
 import ConfirmDialog from "@/components/Dialogs/ConfirmDialog.vue";
 import BaseTable from "@/components/BaseTable";
@@ -90,9 +87,18 @@ import store from "@/stores"
 export default {
     setup(){
         const bookingservice = new Booking();
+        const socket = io(process.env.VUE_APP_SOCKET);
         return {
-            bookingservice,store
+            bookingservice,store,socket
         }
+    },
+    created(){
+      this.socket.on('newbooking',async (data)=>{
+ 
+          console.log(data);
+          await this.GetBooking();
+        
+      })
     },
     components:{
         Card,BaseInput,BaseTable,ConfirmDialog
@@ -114,18 +120,7 @@ export default {
     },
     async mounted(){
         this.hotel_id = this.store.state.user.service_id;
-        await this.bookingservice.getBooking(this.hotel_id).then(result =>{
-           
-            this.bookings=result.data.filter(el=>el.status[el.status.length-1].name==='เช็คอิน' && new Date(el.check_out_date).toLocaleDateString('th-TH',{year:'numeric',month:'numeric',day:'numeric'})===new Date().toLocaleDateString('th-TH',{year:'numeric',month:'numeric',day:'numeric'}))
-      
-            this.table.data =this.bookings.map(el=>({
-                booking_id:el.booking_id,
-                ref_number:el.ref_number,
-                customer:el.customer_name,
-                checkout:el.check_out_date,
-                status:el.status[el.status.length-1].name
-            }))
-        })
+        await this.GetBooking();
     },
     methods: {
         Checkout(id,customer){
@@ -136,16 +131,33 @@ export default {
         },
         async ConfirmCheckOut(data){
            
-            await this.bookingservice.CheckOut(this.hotel_id,data.data.id).then(result=>{
+            await this.bookingservice.CheckOut(this.hotel_id,data.data.id).then(async(result)=>{
                 if(result){
 
                     this.$notify({type: 'success', message: `เช็คเอาท์สำเร็จ`})
                     this.confirm_dialog=false;
+                    await this.GetBooking();
                 }
             })
         },
         popDetail(bookingid){
             this.selectId = bookingid;
+        },
+        async GetBooking(){
+            await this.bookingservice.getBooking(this.hotel_id).then(result =>{
+
+                const situation = ['เช็คอิน','จองแล้ว']
+           
+           this.bookings=result.data.filter(el=>situation.includes(el.status[el.status.length-1].name) && new Date(el.check_out_date).toLocaleDateString('th-TH',{year:'numeric',month:'numeric',day:'numeric'})<=new Date().toLocaleDateString('th-TH',{year:'numeric',month:'numeric',day:'numeric'}))
+     
+           this.table.data =this.bookings.map(el=>({
+               booking_id:el.booking_id,
+               ref_number:el.ref_number,
+               customer:el.customer_name,
+               checkout:el.check_out_date,
+               status:el.status[el.status.length-1].name
+           }))
+       })
         }
     }
 }

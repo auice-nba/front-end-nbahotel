@@ -148,6 +148,12 @@ const routes = [
         component:()=>import("@/pages/BillingView.vue")
       },
       {
+        path:'payment/:id',
+        name:"Payment",
+        meta:{public:false},
+        component: ()=>import("@/pages/PaymentDetail.vue")
+      },
+      {
         path: "user",
         name: "User Profile",
         meta:{public:false},
